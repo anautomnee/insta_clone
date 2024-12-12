@@ -6,7 +6,7 @@ import {Link} from "react-router";
 export const ResetPage = () => {
     return (
         <>
-            <img className="w-[97px] mx-11 my-5" src={logo} alt="Ichgram"/>
+            <Link to="/login"><img className="w-[97px] mx-11 my-5" src={logo} alt="Ichgram"/></Link>
             <hr className="text-gray"/>
             <div className="flex flex-col items-center justify-center w-full">
                 <div
