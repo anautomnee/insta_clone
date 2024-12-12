@@ -30,6 +30,15 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
         }
     };
 
+    let btnTitle;
+    if (type === "register") {
+        btnTitle = "Sign up"
+    } else if (type === "login") {
+        btnTitle = "Log in"
+    } else if (type === "reset") {
+        btnTitle = "Reset your password"
+    }
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -68,7 +77,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                             Policy</a> and <a className="text-darkblue cursor-pointer">Cookies Policy</a>.</p>
                 </>
             )}
-            <button className="mt-3.5" type="submit">{type === "register" ? "Sign up" : "Login"}</button>
+            <button className="mt-3.5" type="submit">{btnTitle}</button>
         </form>
     );
 }

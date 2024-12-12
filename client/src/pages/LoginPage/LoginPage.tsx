@@ -14,10 +14,10 @@ export const LoginPage = () => {
                     <AuthorizationForm type="login"/>
                     <div className="flex gap-4 justify-center items-center text-gray mb-[70px] mt-4">
                         <p>__________</p>
-                        <p className="pt-3.5 text-sm text-darkgray">OR</p>
+                        <p className="pt-3.5 text-xs text-darkgray">OR</p>
                         <p>__________</p>
                     </div>
-                    <Link className="text-darkblue text-xs" to="/">Forgot password?</Link>
+                    <Link className="text-darkblue text-xs" to="/reset">Forgot password?</Link>
                 </div>
                 <div className="flex items-center justify-center border border-gray py-[26px] mt-2.5 w-[350px]">
                     <p className="text-center text-sm">Don't have an account? <Link className="text-blue" to="/register">Sign up</Link>
