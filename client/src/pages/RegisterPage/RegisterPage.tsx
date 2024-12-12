@@ -12,7 +12,7 @@ export const RegisterPage = () => {
                 <AuthorizationForm type="register" />
             </div>
             <div className="flex items-center justify-center border border-gray py-[26px] px-[96px] mt-6">
-                <p className="text-center text-sm">Have an account? <Link className="text-blue" to="/">Log in</Link></p>
+                <p className="text-center text-sm">Have an account? <Link className="text-blue" to="/login">Log in</Link></p>
             </div>
         </div>
     )

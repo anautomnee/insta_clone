@@ -33,7 +33,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className={`${style.formContainer} flex flex-col gap-1.5 text-[darkgray]`}
+            className={`${style.formContainer} flex flex-col gap-1.5 text-[darkgray] w-full`}
         >
             {type === "register" && (
                 <>
@@ -50,7 +50,8 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                 <>
                     <input {...register("usernameOrEmail", {required: true, maxLength: 24})}
                            placeholder="Username, or email"/>
-                    errors.usernameOrEmail && <span className={style.error}>Username or email must be less that 24 characters</span>
+                    {errors.usernameOrEmail &&
+                        <span className={style.error}>Username or email must be less that 24 characters</span>}
                 </>)}
             {type !== "reset" && (<>
                 <input {...register("password", {required: true, minLength: 8})} placeholder="Password"/>
@@ -61,13 +62,13 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                     <p className="text-xs mt-2.5 mb-4">People who use our service may have uploaded your contact information to
                         Instagram. <a
                             className="text-darkblue cursor-pointer">Learn More</a></p>
-                    <p className="text-xs mb-6">By signing up, you agree to our <a
+                    <p className="text-xs mb-4">By signing up, you agree to our <a
                             className="text-darkblue cursor-pointer">Terms</a>, <a
                             className="text-darkblue cursor-pointer">Privacy
                             Policy</a> and <a className="text-darkblue cursor-pointer">Cookies Policy</a>.</p>
                 </>
             )}
-            <button type="submit">{type === "register" ? "Sign up" : "Login"}</button>
+            <button className="mt-3.5" type="submit">{type === "register" ? "Sign up" : "Login"}</button>
         </form>
     );
 }
