@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import connectToDb from "./db/index.js";
 import cors from "cors";
+import authRouter from "./routes/authRoutes.js";
 
 const port = process.env.PORT;
 let hostIp;
@@ -39,7 +40,7 @@ const corsOptions = {
         app.get('/', (req, res) => {
             res.render('index');
         })
-        //app.use('/auth', authRouter);
+        app.use('/auth', authRouter);
 
         app.listen(port, '0.0.0.0', () => {
             console.log('Server is running on port http://localhost:' + port);
