@@ -1,3 +1,3 @@
-import {RegisterPage} from './RegisterPage.tsx';
+import {RegisterPage} from './RegisterPage/RegisterPage.tsx';
 
 export {RegisterPage};
