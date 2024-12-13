@@ -1,5 +1,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import style from "./AuthorizationForm.module.css";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store.ts";
+import {useNavigate} from "react-router";
+import {registerUser, resetPassword, userLogin} from "../../store/selectors/actionCreators.ts";
+import {LoginDataType, RegisterDataType, ResetDataType} from "../../store/types/authTypes.ts";
 
 type FormInputs = {
     email?: string,
@@ -14,6 +19,10 @@ type AuthorizationFormProps = {
 }
 
 export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
+    const {error} = useSelector((state: RootState) => state.auth);
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
@@ -23,10 +32,35 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
     const onSubmit: SubmitHandler<FormInputs> = (data) => {
         if (type === "register") {
             console.log("register", data);
+            if(data.username && data.email && data.fullName) {
+                const dataRegister: RegisterDataType = {
+                    username: data.username,
+                    email: data.email,
+                    password: data.password,
+                    fullName: data.fullName,
+                }
+                dispatch(registerUser(dataRegister));
+                navigate("/login");
+            }
         } else if (type === "login") {
             console.log("login", data);
+            if(data.usernameOrEmail) {
+                const dataLogin: LoginDataType = {
+                    usernameOrEmail: data.usernameOrEmail,
+                    password: data.password,
+                };
+                dispatch(userLogin(dataLogin));
+                navigate("/");
+            }
         } else if (type === "reset") {
             console.log("reset", data);
+            if(data.usernameOrEmail) {
+                const dataReset: ResetDataType = {
+                    usernameOrEmail: data.usernameOrEmail
+                };
+                dispatch(resetPassword(dataReset));
+                navigate("/login");
+            }
         }
     };
 
@@ -44,6 +78,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
             onSubmit={handleSubmit(onSubmit)}
             className={`${style.formContainer} flex flex-col gap-1.5 text-[darkgray] w-full`}
         >
+            {error && <p className="text-red-600 mt-3">{error}</p>}
             {type === "register" && (
                 <>
                     <input {...register("email", {required: true})} placeholder="Email"/>
