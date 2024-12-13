@@ -3,8 +3,8 @@ import {Link} from "react-router";
 
 export const Footer = () => {
     return (
-        <footer className="flex flex-col gap-12 justify-center items-center w-[500px] mx-auto mb-16 mt-6">
-            <div className="flex gap-10">
+        <footer className="flex flex-col gap-12 justify-center items-center w-[500px] mx-auto mb-16 mt-auto">
+            <div className="flex gap-10 mt-6">
                 {links.map((link, index) => (
                     <Link
                         key={index}
