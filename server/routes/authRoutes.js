@@ -3,6 +3,7 @@ import User from '../db/models/User.js';
 import bcrypt from "bcrypt";
 import 'dotenv/config';
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 const router = express.Router();
 
@@ -14,7 +15,6 @@ router.post('/login', async (req, res) => {
         }
         // Check if user exists
         const user = await User.findOne({$or: [{username: usernameOrEmail}, {email: usernameOrEmail}]});
-        console.log(user);
         if (!user) {
             return res.status(404).send('User not found');
         }
@@ -46,6 +46,48 @@ router.post("/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         await User.create({ username, full_name: fullName, email, password: hashedPassword });
         res.status(200).send('Successfully registered!');
+    } catch (error) {
+        console.error('Error registering a user: ', error);
+        res.status(500).send('Error registering');
+    }
+});
+
+router.post("/reset", async (req, res) => {
+    try {
+        const { usernameOrEmail } = req.body;
+        if (!usernameOrEmail) {
+            return res.status(400).send('Username or email is required');
+        }
+        // Check if user exists
+        const user = await User.findOne({$or: [{username: usernameOrEmail}, {email: usernameOrEmail}]});
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        // Create a transporter object
+        const transporter = nodemailer.createTransport({
+            service: 'gmail', // You can use other services like Outlook, Yahoo, etc.
+            auth: {
+                user: process.env.EMAIL, // Replace with your email
+                pass: process.env.EMAIL_KEY, // Replace with your email password or app password
+            },
+        });
+
+        // Email options
+        const mailOptions = {
+            from: 'insta_clone@gmail.com', // Sender address
+            to: user.email, // Receiver address
+            subject: 'Reset password', // Subject line
+            text: '<b>Reset your password - </b> <a href="/">Link</a>', // Plain text body
+        };
+        const info = await transporter.sendMail(mailOptions);
+        return res.status(201).json(
+            {
+                msg: "Email sent",
+                info: info.messageId,
+                preview: nodemailer.getTestMessageUrl(info)
+            }
+        );
     } catch (error) {
         console.error('Error registering a user: ', error);
         res.status(500).send('Error registering');

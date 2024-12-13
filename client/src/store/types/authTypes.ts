@@ -16,6 +16,10 @@ export type RegisterDataType = {
     password: string,
 }
 
+export type ResetDataType = {
+    usernameOrEmail: string,
+}
+
 export type loginPayloadType = {
     message: string,
     data?: any,
