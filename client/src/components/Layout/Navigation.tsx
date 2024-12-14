@@ -1,11 +1,20 @@
 import links from "./navLinks.ts";
 import logo from "../../assets/logo.svg"
+import menu from "../../assets/nav_icons/menu.svg"
 import {Link} from "react-router";
 import {useState} from "react";
+import {useScreenWidth} from "../../uitls/customHooks.ts";
 
 export const Navigation = () => {
+    const screenWidth = useScreenWidth();
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     // }
+
+    if (screenWidth < 768) {
+        return (<div className="border-r border-gray p-3 ">
+            <img src={menu} alt="Menu"/>
+        </div>);
+    }
 
     return (
         <div className="flex flex-col gap-4 border-r border-gray py-[28px] px-6 w-[244px]">

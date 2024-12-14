@@ -15,7 +15,7 @@ export const ResetPage = ({token}:{token: string | null}) => {
             <hr className="text-gray"/>
             <div className="flex flex-col items-center justify-center w-full">
                 <div
-                    className="w-[390px] border border-gray flex flex-col items-center justify-center mt-[84px] px-10 py-10">
+                    className="w-[90%] sm:w-[390px] border border-gray flex flex-col items-center justify-center mt-[84px] px-10 py-10">
                     <img src={lock} alt="Lock"/>
                     <p className="font-semibold text-center mt-3.5">Trouble logging in?</p>
                     <p className="text-darkgray text-center mb-3 mt-3 text-sm">Enter your email, phone, or username and
@@ -29,7 +29,7 @@ export const ResetPage = ({token}:{token: string | null}) => {
                     </div>
                     <Link className="text-sm mb-12 font-semibold" to="/reset">Create new account</Link>
                 </div>
-                <div className="w-[390px] border border-gray bg-[#FAFAFA] border-t-0 flex items-center justify-center py-4">
+                <div className="w-[90%] sm:w-[390px] border border-gray bg-[#FAFAFA] border-t-0 flex items-center justify-center py-4">
                     <Link className="text-sm font-semibold" to="/login">Back to login</Link>
                 </div>
             </div>

@@ -28,3 +28,15 @@ export const useRedirectIfNotAuthenticated = (token: string | null, redirectPath
 
     return redirected; // Return the redirection state
 };
+
+export const useScreenWidth = () => {
+    const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return screenWidth;
+};
