@@ -1,5 +1,5 @@
 import {Route, Routes } from "react-router";
-import {ErrorPage, HomePage, LoginPage, RegisterPage, ResetPage} from "../pages";
+import {ErrorPage, HomePage, LoginPage, ProfilePage, RegisterPage, ResetPage} from "../pages";
 import {useSelector} from "react-redux";
 import {RootState} from "../store/store.js";
 import {useEffect, useState} from "react";
@@ -14,10 +14,11 @@ export const MainRouter = () => {
     }, [userToken]);
     return (
         <Routes>
-            <Route path="/register" element={<RegisterPage/>} />
-            <Route path="/login" element={<LoginPage/>} />
-            <Route path="/reset" element={<ResetPage/>} />
+            <Route path="/register" element={<RegisterPage token={token} />} />
+            <Route path="/login" element={<LoginPage token={token} />} />
+            <Route path="/reset" element={<ResetPage token={token} />} />
             <Route path="/" element={<HomePage token={token}/>} />
+            <Route path="/profile" element={<ProfilePage/>} />
             <Route path="*" element={<ErrorPage/>} />
         </Routes>
     );

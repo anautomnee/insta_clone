@@ -2,8 +2,13 @@ import {AuthorizationForm} from "../../components/AuthorizartionForm/Authorizati
 import style from "./RegisterPage.module.css";
 import logo from "../../assets/logo.svg"
 import {Link} from "react-router";
+import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
 
-export const RegisterPage = () => {
+export const RegisterPage = ({token}:{token: string | null}) => {
+    const redirected = useRedirectIfAuthenticated(token);
+
+    // Prevent rendering the register page while redirecting
+    if (redirected) return null;
     return (
         <div className="flex flex-col items-center justify-center w-full">
             <div className={`${style.container} flex flex-col items-center justify-center border px-10 py-10`}>

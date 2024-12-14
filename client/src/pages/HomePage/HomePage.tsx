@@ -1,11 +1,9 @@
-import {Navigate} from "react-router";
-import {Footer} from "../../components/Footer/Footer.tsx";
+import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 
 export const HomePage = ({token}:{token: string | null}) => {
-    if(!token){
-        return <Navigate to='/login' replace />
-    }
+    const redirected = useRedirectIfNotAuthenticated(token);
+    if (redirected) return null;
     return (<>
-        <Footer/>
+        <p>HOMEPAGE</p>
     </>);
 };

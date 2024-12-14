@@ -2,8 +2,13 @@ import logo from '../../assets/logo.svg';
 import lock from '../../assets/lock.svg';
 import {AuthorizationForm} from "../../components/AuthorizartionForm/AuthorizationForm.tsx";
 import {Link} from "react-router";
+import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
 
-export const ResetPage = () => {
+export const ResetPage = ({token}:{token: string | null}) => {
+    const redirected = useRedirectIfAuthenticated(token);
+
+    // Prevent rendering the reset page while redirecting
+    if (redirected) return null;
     return (
         <>
             <Link to="/login"><img className="w-[97px] mx-11 my-5" src={logo} alt="Ichgram"/></Link>

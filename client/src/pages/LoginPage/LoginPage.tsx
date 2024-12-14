@@ -2,8 +2,14 @@ import {Link} from "react-router";
 import logo from "../../assets/logo.svg";
 import login_back from "../../assets/login_back.png"
 import {AuthorizationForm} from "../../components/AuthorizartionForm/AuthorizationForm.tsx";
+import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
 
-export const LoginPage = () => {
+export const LoginPage = ({token}:{token: string | null}) => {
+    const redirected = useRedirectIfAuthenticated(token);
+
+    // Prevent rendering the login page while redirecting
+    if (redirected) return null;
+
     return (<div className="flex flex-col items-center justify-center w-full">
         <div className="flex gap-8 mt-20">
             <img src={login_back} alt="Ichgram screenshot"/>
