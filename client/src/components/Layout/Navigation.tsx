@@ -1,42 +1,38 @@
-import links from "./navLinks.ts";
 import logo from "../../assets/logo.svg"
-import menu from "../../assets/nav_icons/menu.svg"
-import {Link} from "react-router";
-import {useState} from "react";
+import menu from "../../assets/nav_icons/menu.svg";
 import {useScreenWidth} from "../../uitls/customHooks.ts";
+import {NavBar} from "./NavBar.tsx";
+import {MouseEventHandler, useRef} from "react";
 
 export const Navigation = () => {
     const screenWidth = useScreenWidth();
-    const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-    // }
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    const openMenu: MouseEventHandler<HTMLImageElement> = () => {
+        if (menuRef.current) {
+            menuRef.current.hidden = false;
+        }
+    };
+
+    const closeMenu: MouseEventHandler<HTMLImageElement> = () => {
+        if (menuRef.current) {
+            menuRef.current.hidden = true;
+        }
+    };
 
     if (screenWidth < 768) {
-        return (<div className="border-r border-gray p-3 ">
-            <img src={menu} alt="Menu"/>
+        return (<div className="flex justify-between py-4 p-6">
+            <img onClick={openMenu} src={menu} alt="Menu"/>
+            <img className="h-8" src={logo} alt="Ichgram"/>
+            <div
+                ref={menuRef}
+                className="absolute z-10 top-0 left-0 h-full"
+                hidden>
+                <NavBar style='px-6 w-[200px] h-full' type='Mobile' closeMenu={closeMenu}/>
+
+            </div>
         </div>);
     }
 
-    return (
-        <div className="flex flex-col gap-4 border-r border-gray py-[28px] px-6 w-[244px]">
-            <img className="w-24" src={logo} alt="Ichgram"/>
-            <div className="flex flex-col gap-4 mt-6">
-                {links.map((link, index) => (
-                    <Link
-                        key={index}
-                        to={link.href}
-                    >
-                        <div className="flex gap-4"
-                             onMouseOver={() => setHoveredLink(link.name)}
-                             onMouseLeave={() => setHoveredLink(null)}>
-                            <img
-                                src={hoveredLink === link.name ? link.logoFill : link.logo}
-                                alt={link.name}
-                            />
-                            {link.name}
-                        </div>
-                    </Link>
-                ))}
-            </div>
-        </div>
-    );
+    return <NavBar style='px-6 w-[244px]' type='Desktop'/>
 };
