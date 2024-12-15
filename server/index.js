@@ -38,7 +38,7 @@ const corsOptions = {
         app.use(express.urlencoded({ extended: true }));
 
         app.get('/', (req, res) => {
-            res.render('index');
+            res.send('index');
         })
         app.use('/auth', authRouter);
 
