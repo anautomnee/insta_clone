@@ -18,7 +18,7 @@ export const MainRouter = () => {
             <Route path="/login" element={<LoginPage token={token} />} />
             <Route path="/reset" element={<ResetPage token={token} />} />
             <Route path="/" element={<HomePage token={token}/>} />
-            <Route path="/profile" element={<ProfilePage/>} />
+            <Route path="/profile/:id" element={<ProfilePage token={token} />} />
             <Route path="*" element={<ErrorPage/>} />
         </Routes>
     );

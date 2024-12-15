@@ -3,6 +3,8 @@ import close from "../../assets/nav_icons/close.svg";
 import links from "./navLinks.ts";
 import {Link} from "react-router";
 import {MouseEventHandler, useState} from "react";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store.ts";
 
 interface Props {
     style: string,
@@ -12,6 +14,7 @@ interface Props {
 
 export const NavBar = ({style, type, closeMenu}: Props) => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+    const {userInfo} = useSelector((state:RootState) => state.auth);
     return (
         <div className={`flex flex-col gap-4 bg-white border-r border-gray py-[28px] ${style}`}>
             <div className="flex justify-between">
@@ -35,6 +38,17 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         </div>
                     </Link>
                 ))}
+                <Link
+                    to={`profile/${userInfo?.id}`}
+                >
+                    <div className="flex gap-4">
+                        {/*<img*/}
+                        {/*    src={hoveredLink === link.name ? link.logoFill : link.logo}*/}
+                        {/*    alt={link.name}*/}
+                        {/*/>*/}
+                        Profile
+                    </div>
+                </Link>
             </div>
         </div>
     )

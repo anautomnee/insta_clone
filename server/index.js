@@ -3,6 +3,7 @@ import 'dotenv/config';
 import connectToDb from "./db/index.js";
 import cors from "cors";
 import authRouter from "./routes/authRoutes.js";
+import usersRouter from "./routes/userRoutes.js";
 
 const port = process.env.PORT;
 let hostIp;
@@ -36,11 +37,13 @@ const corsOptions = {
         app.use(cors(corsOptions));
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
+        app.use('/auth', authRouter);
+        app.use('/users', usersRouter);
+
 
         app.get('/', (req, res) => {
             res.send('index');
         })
-        app.use('/auth', authRouter);
 
         app.listen(port, '0.0.0.0', () => {
             console.log('Server is running on port http://localhost:' + port);

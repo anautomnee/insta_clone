@@ -14,7 +14,6 @@ export const registerUser = createAsyncThunk(
     'auth/register',
     async ({ username, email, fullName, password }: RegisterDataType, { rejectWithValue }) => {
         try {
-            console.log(username, password);
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,10 +53,8 @@ export const userLogin = createAsyncThunk(
                 { usernameOrEmail, password },
                 config
             )
-            console.log(data)
             // store user's token in local storage
             localStorage.setItem('userToken', data.data.token)
-            localStorage.setItem('username', data.data.username)
             return data
         } catch (error: unknown) {
             // return custom error message from API if any

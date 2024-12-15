@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authStateType, loginPayloadType} from '../types/authTypes.ts';
-import {registerUser, resetPassword, userLogin} from '../selectors/actionCreators.ts';
+import {registerUser, resetPassword, userLogin} from "../actionCreators/authActionCreators.ts";
 
 const initialState:authStateType = {
     status: 'IDLE',
@@ -35,7 +35,7 @@ const authSlice = createSlice({
             state.status = 'SUCCEEDED';
             state.error = null;
             state.userToken = action.payload.data.token;
-            state.userInfo = action.payload.data.username;
+            state.userInfo = action.payload.data.info;
         }).addCase(userLogin.rejected, (state, action) => {
             state.status = 'FAILED';
             console.log(action);

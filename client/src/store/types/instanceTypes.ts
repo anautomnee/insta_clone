@@ -10,8 +10,15 @@ export type User = {
     username: string,
     email: string,
     fullName: string,
-    password: string,
-    posts: Post[],
+    posts: Post[] | [],
     followers: string[],
     followings: string[],
+}
+
+export type Comment = {
+    author: string;
+    content: string;
+    postId: number;
+    created_at: Date;
+    like_count: number;
 }

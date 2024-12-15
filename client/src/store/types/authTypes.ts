@@ -1,8 +1,13 @@
+type UserInfoAuthType = {
+    id: string,
+    username: string,
+}
+
 export type authStateType = {
     status: string,
     error: string | null,
     userToken: string | null,
-    userInfo: string | null
+    userInfo: UserInfoAuthType | null,
 }
 
 export type LoginDataType = {

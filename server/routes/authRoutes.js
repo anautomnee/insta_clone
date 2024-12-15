@@ -24,7 +24,11 @@ router.post('/login', async (req, res) => {
         }
         const token = await jwt.sign({username: user.username}, process.env.JWT_KEY, {expiresIn: "1h"});
         res.status(200).json({message: 'Successfully logged in with token ', data: {
-                token, username: user.username,
+                token,
+                info: {
+                    username: user.username,
+                    id: user.id
+                }
             }});
     } catch (error) {
         console.error('Error registering a user: ', error);
