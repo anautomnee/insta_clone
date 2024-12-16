@@ -27,7 +27,8 @@ router.post('/login', async (req, res) => {
                 token,
                 info: {
                     username: user.username,
-                    id: user.id
+                    id: user.id,
+                    profile_image: user.profile_image
                 }
             }});
     } catch (error) {

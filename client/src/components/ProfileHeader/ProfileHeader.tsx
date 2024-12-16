@@ -11,9 +11,9 @@ export const ProfileHeader= ({user}: {user: User}) => {
                     <button className="rounded-lg bg-[#EFEFEF] text-sm h-8 w-[190px]">Message</button>
                 </div>
                 <div className="flex gap-16 mb-5">
-                    <p>posts</p>
-                    <p>followers</p>
-                    <p>following</p>
+                    <p><b>{user?.posts.length}</b> posts</p>
+                    <p><b>{user?.followers.length}</b> followers</p>
+                    <p><b>{user?.followings.length}</b> following</p>
                 </div>
                 <p className="text-sm w-[434px]">{user?.bio}</p>
             </div>
