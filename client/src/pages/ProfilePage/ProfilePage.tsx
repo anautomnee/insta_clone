@@ -17,8 +17,6 @@ export const ProfilePage = ({token}: {token:string | null}) => {
     console.log(user)
     return (
         <>
-            <p>PROFILE {id}</p>
-
             <ProfileHeader user={user}/>
         </>
     );
