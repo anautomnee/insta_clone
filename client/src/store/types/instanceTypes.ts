@@ -10,6 +10,8 @@ export type User = {
     username: string,
     email: string,
     fullName: string,
+    profileImage: string,
+    bio: string,
     posts: Post[] | [],
     followers: string[],
     followings: string[],

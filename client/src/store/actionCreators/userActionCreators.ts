@@ -25,7 +25,13 @@ export const fetchUser = createAsyncThunk(
             `${backendURL}/users/${id}`,
             config
         );
-        return response.data;
+        const user = response.data.user;
+        user.fullName = user.full_name;
+        user.profileImage = user.profile_image;
+        delete user.profile_image;
+        delete user.full_name;
+        console.log(user);
+        return user;
     } catch (error: unknown) {
             // return custom error message from backend if present
             console.log(error)

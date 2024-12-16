@@ -8,6 +8,8 @@ const initialState: UserState = {
     username: '',
     email: '',
     fullName: '',
+    profileImage: '',
+    bio: '',
     posts: [],
     followers: [],
     followings: [],
@@ -30,6 +32,8 @@ const userSlice = createSlice({
             state.username = action.payload.username;
             state.email = action.payload.email;
             state.fullName = action.payload.fullName;
+            state.profileImage = action.payload.profileImage;
+            state.bio = action.payload.bio;
             state.posts = action.payload.posts;
             state.followers = action.payload.followers;
             state.followings = action.payload.followings;
