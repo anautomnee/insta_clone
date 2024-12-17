@@ -84,7 +84,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                     />
                     Notifications
                 </div>
-                <div className="flex gap-4 cursor-pointer relative"
+                <div className="flex gap-4 cursor-pointer"
                      onClick={showCreatePost}
                      onMouseOver={() => setHoveredLink(links[5].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
@@ -92,10 +92,10 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[5].name ? links[5].logoFill : links[5].logo}
                         alt={links[5].name}
                     />
-                    <div ref={createPostRef} hidden>
-                        <CreatePost divRef={createPostRef} />
-                    </div>
                     Create
+                    <div ref={createPostRef} hidden>
+                        <CreatePost userInfo={userInfo} divRef={createPostRef} />
+                    </div>
                 </div>
                 <Link
                     to={`profile/${userInfo?.id}`}
