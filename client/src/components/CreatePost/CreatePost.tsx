@@ -3,7 +3,9 @@ import {Link} from "react-router";
 import {UserInfoAuthType} from "../../store/types/authTypes.ts";
 import upload from '../../assets/upload.png';
 import arrow_back from '../../assets/arrow_back.svg';
+import smiley from '../../assets/smiley.png';
 import {SubmitHandler, useForm} from "react-hook-form";
+import Picker, {EmojiClickData} from "emoji-picker-react";
 
 interface CreatePostProps {
     divRef: RefObject<HTMLDivElement>;
@@ -17,18 +19,21 @@ type CreatePostFormInputs = {
 
 export const CreatePost = ({ divRef, userInfo }: CreatePostProps) => {
     const [preview, setPreview] = useState<string | null>(null);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-    const closeCreatePost = (e: MouseEvent<HTMLDivElement>) => {
-        if (divRef.current) {
-            e.stopPropagation();
-            divRef.current.hidden = true;
-        }
+    // Handle emoji click
+    const onEmojiClick = (emojiData: EmojiClickData) => {
+        const currentContent = watch("content") || ""; // Get current content value
+        const newContent = currentContent + emojiData.emoji; // Append emoji to content
+        setValue("content", newContent); // Update content using setValue
     };
 
     const {
         register,
         handleSubmit,
         watch,
+        setValue,
+        reset,
         formState: { isValid },
     } = useForm<CreatePostFormInputs>({mode: "onChange"});
 
@@ -49,7 +54,18 @@ export const CreatePost = ({ divRef, userInfo }: CreatePostProps) => {
         }
     };
 
+    const closeCreatePost = (e: MouseEvent<HTMLDivElement>) => {
+        if (divRef.current) {
+            e.stopPropagation();
+            divRef.current.hidden = true;
+            reset();
+            setPreview(null);
+            setValue("content", "");
+        }
+    };
+
     const photo = watch("photo");
+    const content = watch("content");
 
     return (
         <div
@@ -94,7 +110,7 @@ export const CreatePost = ({ divRef, userInfo }: CreatePostProps) => {
                                onChange={handleFileChange}/>
 
                     </div>
-                    <div className="flex flex-col px-4 py-6">
+                    <div className="flex flex-col px-4 py-6 md:w-[42%]">
                         <Link
                             to={`profile/${userInfo?.id}`}
                         >
@@ -107,7 +123,23 @@ export const CreatePost = ({ divRef, userInfo }: CreatePostProps) => {
                                 <p className="font-semibold">Profile</p>
                             </div>
                         </Link>
-                        <textarea {...register("content", {required: "Content is required", maxLength: 2200})}></textarea>
+                        <textarea
+                            {...register("content", {required: "Content is required", maxLength: 2200})}
+                            className="resize-none w-full h-32 lg:h-52 mt-4 p-3"
+                        ></textarea>
+                        <p className="text-gray self-end">{content?.length}/2 200</p>
+                        <div className="relative border-b border-b-gray pb-3 mt-6">
+                            <img src={smiley}
+                                 alt="Emoji"
+                                 className="cursor-pointer"
+                                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
+                            {showEmojiPicker && (
+                                <div className="absolute bottom-28 md:bottom-0 z-10
+                                -right-50 md:right-60 lg:right-80 xl:right-96">
+                                    <Picker onEmojiClick={onEmojiClick} />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
