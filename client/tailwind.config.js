@@ -17,6 +17,7 @@ export default {
       'gray': '#DBDBDB',
       'blue': '#0095F6',
       'white': '#FFFFFF',
+      'lightgray': '#FAFAFA',
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
