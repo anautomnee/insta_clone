@@ -10,6 +10,7 @@ import Picker, {EmojiClickData} from "emoji-picker-react";
 interface CreatePostProps {
     divRef: RefObject<HTMLDivElement>;
     userInfo: UserInfoAuthType | null;
+    token: string | null;
 }
 
 type CreatePostFormInputs = {
@@ -17,7 +18,7 @@ type CreatePostFormInputs = {
     content: string
 };
 
-export const CreatePost = ({ divRef, userInfo }: CreatePostProps) => {
+export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -38,7 +39,7 @@ export const CreatePost = ({ divRef, userInfo }: CreatePostProps) => {
     } = useForm<CreatePostFormInputs>({mode: "onChange"});
 
     const onSubmit: SubmitHandler<CreatePostFormInputs> = (data: CreatePostFormInputs) => {
-        console.log(data)
+        console.log(data, token)
     };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

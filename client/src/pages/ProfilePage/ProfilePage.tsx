@@ -14,7 +14,6 @@ export const ProfilePage = ({token}: {token:string | null}) => {
             dispatch(fetchUser({id, token}))
         }
     }, [user]);
-    console.log(user)
     return (
         <>
             <ProfileHeader user={user}/>

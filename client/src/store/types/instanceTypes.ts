@@ -1,8 +1,21 @@
-export type Post = {
-    id: number;
-    title: string;
-    content: string;
+export type Comment = {
     author: string;
+    content: string;
+    postId: string;
+    created_at: Date;
+    like_count: number;
+    likes: string[];
+}
+
+export type Post = {
+    id: string;
+    author: string;
+    photo: string;
+    content: string;
+    createdAt: Date;
+    like_count: number;
+    likes: string[];
+    comments: string[];
 }
 
 export type User = {
@@ -15,12 +28,4 @@ export type User = {
     posts: Post[] | [],
     followers: string[],
     followings: string[],
-}
-
-export type Comment = {
-    author: string;
-    content: string;
-    postId: number;
-    created_at: Date;
-    like_count: number;
 }

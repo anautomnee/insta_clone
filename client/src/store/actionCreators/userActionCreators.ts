@@ -18,7 +18,7 @@ export const fetchUser = createAsyncThunk(
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': `Bearer ${token}`,
             },
         }
         const response = await axios.get(

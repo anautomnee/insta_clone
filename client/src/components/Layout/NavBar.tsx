@@ -17,6 +17,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const {userInfo} = useSelector((state:RootState) => state.auth);
     const createPostRef = useRef<HTMLDivElement>(null);
+    const {userToken} = useSelector((state:RootState) => state.auth);
 
     const showCreatePost = () => {
         if(createPostRef.current) {
@@ -95,7 +96,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                     />
                     <p className="cursor-pointer">Create</p>
                     <div ref={createPostRef} hidden>
-                        <CreatePost userInfo={userInfo} divRef={createPostRef} />
+                        <CreatePost userInfo={userInfo} divRef={createPostRef} token={userToken} />
                     </div>
                 </div>
                 <Link
