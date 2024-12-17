@@ -4,6 +4,7 @@ import connectToDb from "./db/index.js";
 import cors from "cors";
 import authRouter from "./routes/authRoutes.js";
 import usersRouter from "./routes/userRoutes.js";
+import postsRouter from "./routes/postRoutes.js";
 
 const port = process.env.PORT;
 let hostIp;
@@ -39,7 +40,7 @@ const corsOptions = {
         app.use(express.urlencoded({ extended: true }));
         app.use('/auth', authRouter);
         app.use('/users', usersRouter);
-
+        app.use('/posts', postsRouter);
 
         app.get('/', (req, res) => {
             res.send('index');
