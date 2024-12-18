@@ -48,8 +48,7 @@ router.post('/:id/update_profile', upload.single('photo'), async (req, res) => {
 
         if (req.file) {
             const base64Image = req.file.buffer.toString('base64');
-            const base64EncodedImage = `data:image/${req.file.mimetype};base64,${base64Image}`;
-            user.profile_image = base64EncodedImage;
+            user.profile_image = `data:image/${req.file.mimetype};base64,${base64Image}`;
         }
         const updatedUser = await user.save();
         res.status(200).send(updatedUser);
