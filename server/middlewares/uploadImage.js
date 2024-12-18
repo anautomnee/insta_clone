@@ -5,14 +5,15 @@ const upload = multer({
     storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
     fileFilter: (req, file, callback) => {
-        // Allowed file extensions and MIME types
-        const allowedFileTypes = ['image/svg', 'image/jpeg', 'image/jpg', 'image/png'];
+        if (file.fieldname !== 'photo') {
+            return callback(new Error('Unexpected field for image'), false); // Reject unexpected fields
+        }
 
-        // Check MIME type
+        const allowedFileTypes = ['image/svg', 'image/svg+xml', 'image/jpeg', 'image/jpg', 'image/png'];
+
         if (allowedFileTypes.includes(file.mimetype)) {
             callback(null, true); // Accept the file
         } else {
-            // Reject the file with an error
             callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'Only JPEG and PNG images are allowed!'));
         }
     }
