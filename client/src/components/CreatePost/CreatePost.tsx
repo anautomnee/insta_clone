@@ -6,6 +6,9 @@ import arrow_back from '../../assets/arrow_back.svg';
 import smiley from '../../assets/smiley.png';
 import {SubmitHandler, useForm} from "react-hook-form";
 import Picker, {EmojiClickData} from "emoji-picker-react";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../store/store.ts";
+import {createPost} from "../../store/actionCreators/postActionCreators.ts";
 
 interface CreatePostProps {
     divRef: RefObject<HTMLDivElement>;
@@ -21,6 +24,8 @@ type CreatePostFormInputs = {
 export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+    const dispatch = useDispatch<AppDispatch>();
 
     // Handle emoji click
     const onEmojiClick = (emojiData: EmojiClickData) => {
@@ -38,9 +43,6 @@ export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
         formState: { isValid },
     } = useForm<CreatePostFormInputs>({mode: "onChange"});
 
-    const onSubmit: SubmitHandler<CreatePostFormInputs> = (data: CreatePostFormInputs) => {
-        console.log(data, token)
-    };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];  // Get the first file (if any)
@@ -65,6 +67,15 @@ export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
         }
     };
 
+    const onSubmit: SubmitHandler<CreatePostFormInputs> = (data: CreatePostFormInputs) => {
+        if(data && token && divRef.current) {
+            dispatch(createPost({photo: data.photo, content: data.content, token}));
+            divRef.current.hidden = true;
+            reset();
+            setPreview(null);
+            setValue("content", "");
+        }
+    };
     const photo = watch("photo");
     const content = watch("content");
 

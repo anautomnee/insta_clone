@@ -1,25 +1,7 @@
 import express from 'express';
 import User from "../db/models/User.js";
 import ifAuthenticated from "../middlewares/authMiddleware.js";
-import multer from "multer";
-
-const storage = multer.memoryStorage()
-const upload = multer({
-    storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
-    fileFilter: (req, file, callback) => {
-        // Allowed file extensions and MIME types
-        const allowedFileTypes = ['image/svg', 'image/jpeg', 'image/jpg', 'image/png'];
-
-        // Check MIME type
-        if (allowedFileTypes.includes(file.mimetype)) {
-            callback(null, true); // Accept the file
-        } else {
-            // Reject the file with an error
-            callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'Only JPEG and PNG images are allowed!'));
-        }
-    }
-});
+import upload from "../middlewares/uploadImage.js";
 
 const router = express.Router();
 
@@ -51,7 +33,7 @@ router.get('/:id', ifAuthenticated, async (req, res) => {
     }
 });
 
-router.post('/:id/update_profile', async (req, res) => {
+router.post('/:id/update_profile', upload.single('photo'), async (req, res) => {
     try {
         const { id } = req.params;
 

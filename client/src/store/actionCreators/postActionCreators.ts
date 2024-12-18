@@ -16,13 +16,16 @@ export const createPost = createAsyncThunk(
         try {
             const config = {
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             }
-            const response = await axios.post(
+            const formData = new FormData();
+            formData.append('photo', photo[0]);
+            formData.append('content', content);
+
+                const response = await axios.post(
                 `${backendURL}/posts/create`,
-                {photo, content},
+                formData,
                 config
             );
             return response.data;
