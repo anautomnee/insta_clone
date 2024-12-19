@@ -25,9 +25,11 @@ export const fetchUser = createAsyncThunk(
             `${backendURL}/users/${id}`,
             config
         );
-        const user = response.data.user;
+        const user = response.data;
+        user.id = user._id;
         user.fullName = user.full_name;
         user.profileImage = user.profile_image;
+        delete user._id;
         delete user.profile_image;
         delete user.full_name;
         return user;

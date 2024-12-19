@@ -6,7 +6,7 @@ import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
 
 export const ProfilePage = ({token}: {token:string | null}) => {
-    const user = useSelector((state: RootState) => state.user)
+    const user = useSelector((state: RootState) => state.user);
     console.log(user.posts)
     const {id} = useParams();
     const dispatch = useDispatch<AppDispatch>();
