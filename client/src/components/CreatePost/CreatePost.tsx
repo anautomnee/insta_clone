@@ -73,7 +73,6 @@ export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
         if (data && token && divRef.current) {
             try {
                 const result = await dispatch(createPost({ photo: data.photo, content: data.content, token }));
-                console.log(result);
                 if (result.type !== "post/createPost/rejected") {
                     divRef.current.hidden = true; // Hide the div
                     reset(); // Reset the form fields

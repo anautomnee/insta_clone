@@ -13,11 +13,13 @@ export const createPost = async (req, res) => {
             const base64Image = req.file.buffer.toString('base64');
             const base64EncodedImage = `data:image/${req.file.mimetype};base64,${base64Image}`;
 
-            await Post.create({
+            const post = await Post.create({
                 photo: base64EncodedImage,
                 content,
                 author: user._id
             });
+            await user.posts.push(post._id);
+            await user.save();
             return res.status(201).send('Post created successfully');
         }else {
             return res.status(500).send('Photo error occurred');
