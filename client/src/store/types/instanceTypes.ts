@@ -8,7 +8,7 @@ export type Comment = {
 }
 
 export type Post = {
-    id: string;
+    _id: string;
     author: string;
     photo: string;
     content: string;

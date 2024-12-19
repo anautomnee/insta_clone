@@ -7,7 +7,6 @@ import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
 
 export const ProfilePage = ({token}: {token:string | null}) => {
     const user = useSelector((state: RootState) => state.user);
-    console.log(user.posts)
     const {id} = useParams();
     const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
@@ -16,8 +15,21 @@ export const ProfilePage = ({token}: {token:string | null}) => {
         }
     }, [user]);
     return (
-        <>
-            <ProfileHeader user={user}/>
-        </>
-    );
-};
+        <div className="flex flex-col items-center gap-16">
+            <div className="flex flex-col gap-16">
+                <ProfileHeader user={user}/>
+                <div className="grid grid-cols-3 gap-2">
+                    {user.posts && user.posts.length > 0 && user.posts.map((post) => (<div
+                        key={post._id}
+                        className="w-[307px] h-[307px] overflow-hidden">
+                        <img
+                            src={post.photo}
+                            alt="Post"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>))}
+                </div>
+            </div>
+            </div>
+            );
+            };
