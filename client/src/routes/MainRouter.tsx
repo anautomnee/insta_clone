@@ -8,8 +8,8 @@ export const MainRouter = () => {
             <Route path="/register" element={<RegisterPage token={token} />} />
             <Route path="/login" element={<LoginPage token={token} />} />
             <Route path="/reset" element={<ResetPage token={token} />} />
-            <Route path="/" element={<HomePage token={token}/>} />
-            <Route path="/profile/:id" element={<ProfilePage token={token} />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="*" element={<ErrorPage/>} />
         </Routes>
     );

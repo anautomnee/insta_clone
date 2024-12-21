@@ -3,8 +3,8 @@ import { RootState} from "../../store/store.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
 import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 
-export const ProfilePage = ({token}: {token:string | null}) => {
-    const redirected = useRedirectIfNotAuthenticated(token);
+export const ProfilePage = () => {
+    const redirected = useRedirectIfNotAuthenticated();
     if (redirected) return null;
     const user = useSelector((state: RootState) => state.user);
     return (

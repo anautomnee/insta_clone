@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate} from "react-router";
+import {isTokenExpired} from "./utils.ts";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store/store.ts";
+import {logout} from "../store/slices/authSlice.ts";
 
-export const useRedirectIfAuthenticated = (token: string | null, redirectPath: string = '/') => {
+export const useRedirectIfAuthenticated = (redirectPath: string = '/') => {
     const navigate = useNavigate();
     const [redirected, setRedirected] = useState(false);
+    const token = localStorage.getItem("userToken");
 
     useEffect(() => {
         if (token) {
@@ -15,18 +20,20 @@ export const useRedirectIfAuthenticated = (token: string | null, redirectPath: s
     return redirected; // Return the redirection state
 };
 
-export const useRedirectIfNotAuthenticated = (token: string | null, redirectPath: string = '/login') => {
-    const navigate = useNavigate();
+export const useRedirectIfNotAuthenticated = () => {
     const [redirected, setRedirected] = useState(false);
-
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     useEffect(() => {
-        if (!token) {
-            setRedirected(true); // Mark redirection state
-            navigate(redirectPath, { replace: true }); // Perform redirection
+        const token = localStorage.getItem("userToken");
+        if (!token || isTokenExpired(token)) {
+            localStorage.removeItem('userToken');
+            setRedirected(true);
+            dispatch(logout());
+            navigate('/login', { replace: true });
         }
-    }, [token, redirectPath, navigate]);
-
-    return redirected; // Return the redirection state
+    }, []);
+    return redirected;
 };
 
 export const useScreenWidth = () => {
