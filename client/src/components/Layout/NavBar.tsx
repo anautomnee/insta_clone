@@ -15,9 +15,9 @@ interface Props {
 
 export const NavBar = ({style, type, closeMenu}: Props) => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-    const {userInfo} = useSelector((state:RootState) => state.auth);
+    const {id, profileImage} = useSelector((state:RootState) => state.user);
     const createPostRef = useRef<HTMLDivElement>(null);
-    const {userToken} = useSelector((state:RootState) => state.auth);
+    const userToken = localStorage.getItem("userToken");
 
     const showCreatePost = () => {
         if(createPostRef.current) {
@@ -96,15 +96,15 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                     />
                     <p className="cursor-pointer">Create</p>
                     <div ref={createPostRef} hidden>
-                        <CreatePost userInfo={userInfo} divRef={createPostRef} token={userToken} />
+                        <CreatePost userId={id} profileImage={profileImage} divRef={createPostRef} token={userToken} />
                     </div>
                 </div>
                 <Link
-                    to={`profile/${userInfo?.id}`}
+                    to={`profile/${id}`}
                 >
                     <div className="flex items-center gap-4 mt-12">
                         <img
-                            src={userInfo?.profile_image}
+                            src={profileImage}
                             alt="Profile image"
                             className="w-6 h-6 rounded-[50%] border border-gray"
                         />

@@ -1,12 +1,10 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {authStateType, loginPayloadType} from '../types/authTypes.ts';
+import {createSlice} from "@reduxjs/toolkit";
+import {authStateType} from '../types/authTypes.ts';
 import {registerUser, resetPassword, userLogin} from "../actionCreators/authActionCreators.ts";
 
 const initialState:authStateType = {
     status: 'IDLE',
-    error: null,
-    userToken: null,
-    userInfo: null
+    error: null
 };
 
 const authSlice = createSlice({
@@ -31,11 +29,9 @@ const authSlice = createSlice({
         }).addCase(userLogin.pending, (state) => {
             state.status = 'LOADING';
             state.error = null;
-        }).addCase(userLogin.fulfilled, (state, action: PayloadAction<loginPayloadType>) => {
+        }).addCase(userLogin.fulfilled, (state) => {
             state.status = 'SUCCEEDED';
             state.error = null;
-            state.userToken = action.payload.data.token;
-            state.userInfo = action.payload.data.info;
         }).addCase(userLogin.rejected, (state, action) => {
             state.status = 'FAILED';
             console.log(action);

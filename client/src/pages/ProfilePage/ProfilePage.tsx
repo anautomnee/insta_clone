@@ -1,19 +1,12 @@
-import {useParams} from "react-router";
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../store/store.ts";
-import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
+import {useSelector} from "react-redux";
+import { RootState} from "../../store/store.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
+import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 
 export const ProfilePage = ({token}: {token:string | null}) => {
+    const redirected = useRedirectIfNotAuthenticated(token);
+    if (redirected) return null;
     const user = useSelector((state: RootState) => state.user);
-    const {id} = useParams();
-    const dispatch = useDispatch<AppDispatch>();
-    useEffect(() => {
-        if (user.username == '' && id && token) {
-            dispatch(fetchUser({id, token}))
-        }
-    }, [user]);
     return (
         <div className="flex flex-col items-center gap-16">
             <div className="flex flex-col gap-16">
@@ -30,6 +23,6 @@ export const ProfilePage = ({token}: {token:string | null}) => {
                     </div>))}
                 </div>
             </div>
-            </div>
-            );
-            };
+        </div>
+    );
+};

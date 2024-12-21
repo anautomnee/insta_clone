@@ -105,4 +105,4 @@ export const resetPassword = async (req: Request, res: Response) => {
         console.error('Error registering a user: ', error);
         res.status(500).send('Error registering');
     }
-}
+};

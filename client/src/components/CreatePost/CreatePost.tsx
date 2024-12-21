@@ -1,6 +1,5 @@
 import {ChangeEvent, MouseEvent, RefObject, useState} from "react";
 import {Link} from "react-router";
-import {UserInfoAuthType} from "../../store/types/authTypes.ts";
 import upload from '../../assets/upload.png';
 import arrow_back from '../../assets/arrow_back.svg';
 import smiley from '../../assets/smiley.png';
@@ -13,7 +12,8 @@ import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
 
 interface CreatePostProps {
     divRef: RefObject<HTMLDivElement>;
-    userInfo: UserInfoAuthType | null;
+    userId: string | null;
+    profileImage: string;
     token: string | null;
 }
 
@@ -22,7 +22,7 @@ type CreatePostFormInputs = {
     content: string
 };
 
-export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
+export const CreatePost = ({ divRef, userId,profileImage, token }: CreatePostProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -74,9 +74,8 @@ export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
         if (data && token && divRef.current) {
             try {
                 const result = await dispatch(createPost({ photo: data.photo, content: data.content, token }));
-                if (result.type !== "post/createPost/rejected" && userInfo) {
-                    const id = userInfo.id;
-                    await dispatch(fetchUser({id, token}));
+                if (result.type !== "post/createPost/rejected" && userId) {
+                    await dispatch(fetchUser({id: userId, token}));
                     divRef.current.hidden = true; // Hide the div
                     reset(); // Reset the form fields
                     setPreview(null); // Clear the image preview
@@ -137,11 +136,11 @@ export const CreatePost = ({ divRef, userInfo, token }: CreatePostProps) => {
                     </div>
                     <div className="flex flex-col px-4 py-6 md:w-[42%]">
                         <Link
-                            to={`profile/${userInfo?.id}`}
+                            to={`profile/${userId}`}
                         >
                             <div className="flex items-center gap-4">
                                 <img
-                                    src={userInfo?.profile_image}
+                                    src={profileImage}
                                     alt="Profile image"
                                     className="w-6 h-6 rounded-[50%] border border-gray"
                                 />

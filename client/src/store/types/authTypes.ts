@@ -1,14 +1,6 @@
-export type UserInfoAuthType = {
-    id: string,
-    username: string,
-    profile_image: string,
-}
-
 export type authStateType = {
     status: string,
     error: string | null,
-    userToken: string | null,
-    userInfo: UserInfoAuthType | null,
 }
 
 export type LoginDataType = {
@@ -24,9 +16,4 @@ export type RegisterDataType = {
 
 export type ResetDataType = {
     usernameOrEmail: string,
-}
-
-export type loginPayloadType = {
-    message: string,
-    data?: any,
 }

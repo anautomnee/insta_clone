@@ -5,6 +5,7 @@ import {AppDispatch, RootState} from "../../store/store.ts";
 import {useNavigate} from "react-router";
 import {registerUser, resetPassword, userLogin} from "../../store/actionCreators/authActionCreators.ts";
 import {LoginDataType, RegisterDataType, ResetDataType} from "../../store/types/authTypes.ts";
+import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
 
 type FormInputs = {
     email?: string,
@@ -29,26 +30,49 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
         formState: { errors },
     } = useForm<FormInputs>();
 
-    const onSubmit: SubmitHandler<FormInputs> = (data) => {
+    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
         if (type === "register") {
-            if(data.username && data.email && data.fullName) {
-                const dataRegister: RegisterDataType = {
-                    username: data.username,
-                    email: data.email,
-                    password: data.password,
-                    fullName: data.fullName,
+            try {
+                if(data.username && data.email && data.fullName) {
+                    const dataRegister: RegisterDataType = {
+                        username: data.username,
+                        email: data.email,
+                        password: data.password,
+                        fullName: data.fullName,
+                    }
+                    const result = await dispatch(registerUser(dataRegister));
+                    if (result.type !== "auth/registerUser/rejected") {
+
+                        navigate('/login');
+                    } else {
+                        console.error('Login failed');
+                    }
                 }
-                dispatch(registerUser(dataRegister));
-                navigate("/login");
+            } catch (error) {
+                console.error('Error during registering:', error);
             }
         } else if (type === "login") {
-            if(data.usernameOrEmail) {
-                const dataLogin: LoginDataType = {
-                    usernameOrEmail: data.usernameOrEmail,
-                    password: data.password,
-                };
-                dispatch(userLogin(dataLogin));
-                navigate("/");
+            console.log("Login");
+            try {
+                if(data.usernameOrEmail) {
+                    const dataLogin: LoginDataType = {
+                        usernameOrEmail: data.usernameOrEmail,
+                        password: data.password,
+                    };
+                    const result = await dispatch(userLogin(dataLogin));
+                    if (result.type !== "auth/userLogin/rejected") {
+                        // Only navigate if the login was successful
+                        await dispatch(fetchUser({
+                            id: result.payload.data.info.id,
+                            token: result.payload.data.token
+                        }));
+                        navigate('/');
+                    } else {
+                        console.error('Login failed');
+                    }
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
             }
         } else if (type === "reset") {
             if(data.usernameOrEmail) {
@@ -56,6 +80,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                     usernameOrEmail: data.usernameOrEmail
                 };
                 dispatch(resetPassword(dataReset));
+
                 navigate("/login");
             }
         }
