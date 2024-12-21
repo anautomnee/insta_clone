@@ -3,8 +3,7 @@ import fs from "fs";
 import path from "path";
 
 // Get the directory name from the import.meta.url
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-
+// const __dirname = path.dirname(new URL(import.meta.url).pathname);
 // Convert the default image to a Base64 string
 const defaultImagePath = path.join(__dirname, '../../public/default_image.png');
 const defaultImageBase64 = `data:image/png;base64,${fs.readFileSync(defaultImagePath).toString('base64')}`;

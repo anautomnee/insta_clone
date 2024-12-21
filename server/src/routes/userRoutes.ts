@@ -1,7 +1,7 @@
 import express from 'express';
-import ifAuthenticated from "../middlewares/authMiddleware.js";
-import upload from "../middlewares/uploadImage.js";
-import {getUserById, updateProfile} from "../controllers/userController.js";
+import ifAuthenticated from "../middlewares/authMiddleware";
+import upload from "../middlewares/uploadImage";
+import {getUserById, updateProfile} from "../controllers/userController";
 
 const router = express.Router();
 

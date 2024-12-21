@@ -1,12 +1,13 @@
-import express from 'express';
+import express, {Application} from 'express';
 import 'dotenv/config';
-import connectToDb from "./db/index.js";
+import connectToDb from "./db";
 import cors from "cors";
-import authRouter from "./routes/authRoutes.js";
-import usersRouter from "./routes/userRoutes.js";
-import postsRouter from "./routes/postRoutes.js";
+import { CorsOptions } from 'cors';
+import authRouter from "./routes/authRoutes.ts";
+import usersRouter from "./routes/userRoutes.ts";
+import postsRouter from "./routes/postRoutes.ts";
 
-const port = process.env.PORT;
+const port: string | number = process.env.PORT || 3000;
 let hostIp;
 if (process.env.ENV === 'local') {
     hostIp = 'localhost';
@@ -15,17 +16,22 @@ if (process.env.ENV === 'local') {
 }
 
 
-const app = express();
+const app: Application = express();
 
-const corsOptions = {
+const corsOptions: CorsOptions = {
     origin: function (origin, callback) {
-        // Разрешаем запросы с этих двух источников
-        if (origin === `http://${hostIp}` || origin === `http://${hostIp}:3001` || origin === `http://${hostIp}:5173` || !origin) {
+        // Allow requests from these sources
+        if (
+            origin === `http://${hostIp}` ||
+            origin === `http://${hostIp}:3001` ||
+            origin === `http://${hostIp}:5173` ||
+            !origin
+        ) {
             callback(null, true);
         } else {
             callback(new Error("Not allowed by CORS"));
         }
-    },  // Use the public IP in production, localhost in development
+    },
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
     preflightContinue: false,
@@ -46,7 +52,7 @@ const corsOptions = {
             res.send('index');
         })
 
-        app.listen(port, '0.0.0.0', () => {
+        app.listen(Number(port), '0.0.0.0', () => {
             console.log('Server is running on port http://localhost:' + port);
         });
 

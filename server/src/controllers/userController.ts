@@ -1,28 +1,31 @@
-import User from "../db/models/User.js";
+import User from "../db/models/User";
+import {Request, Response} from "express";
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id).select('-password')
             .populate('followings').populate('followers').populate('posts');
         if (!user) {
-            return res.status(404).send('User not found');
+            res.status(404).send('User not found');
+            return;
         }
-        return res.status(200).send(user);
+        res.status(200).send(user);
     } catch (error) {
         console.error('Error fetching a user: ', error);
         res.status(500).send('Error fetching a user');
     }
 };
 
-export const updateProfile = async (req, res) => {
+export const updateProfile = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
         // Check if user exists
         const user = await User.findById(id).select('-password');
         if (!user) {
-            return res.status(404).send('User not found');
+            res.status(404).send('User not found');
+            return;
         }
         const {username, bio} = req.body;
         if(username) user.username = username;

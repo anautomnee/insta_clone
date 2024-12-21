@@ -1,11 +1,13 @@
 import mongoose from 'mongoose'
 import 'dotenv/config';
 
-let uri;
-if (process.env.ENV === 'local') {
+let uri: string;
+if (process.env.ENV && process.env.ENV === 'local') {
     uri ='mongodb://localhost:27017/insta_clone';
 } else {
-    uri = process.env.MONGO_URI ;
+    if(process.env.MONGO_URI) {
+        uri = process.env.MONGO_URI ;
+    }
 }
 async function connectToDb() {
     try {
