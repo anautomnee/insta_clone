@@ -42,7 +42,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                             src={hoveredLink === links[0].name ? links[0].logoFill : links[0].logo}
                             alt={links[0].name}
                         />
-                        {links[0].name}
+                        <span>{links[0].name}</span>
                     </div>
                 </Link>
                 <div className="flex gap-4 cursor-pointer"
@@ -52,7 +52,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[1].name ? links[1].logoFill : links[1].logo}
                         alt={links[1].name}
                     />
-                    Search
+                    <span>Search</span>
                 </div>
                 <Link
                     to={links[2].href}
@@ -64,7 +64,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                             src={hoveredLink === links[2].name ? links[2].logoFill : links[2].logo}
                             alt={links[2].name}
                         />
-                        {links[2].name}
+                        <span>{links[2].name}</span>
                     </div>
                 </Link>
                 <div className="flex gap-4 cursor-pointer"
@@ -74,7 +74,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[3].name ? links[3].logoFill : links[3].logo}
                         alt={links[3].name}
                     />
-                    Messages
+                    <span>Messages</span>
                 </div>
                 <div className="flex gap-4 cursor-pointer"
                      onMouseOver={() => setHoveredLink(links[4].name)}
@@ -83,7 +83,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[4].name ? links[4].logoFill : links[4].logo}
                         alt={links[4].name}
                     />
-                    Notifications
+                    <span>Notifications</span>
                 </div>
                 <div className="flex gap-4"
                      onClick={showCreatePost}
@@ -94,7 +94,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         alt={links[5].name}
                         className="cursor-pointer"
                     />
-                    <p className="cursor-pointer">Create</p>
+                    <span className="cursor-pointer">Create</span>
                     <div ref={createPostRef} hidden>
                         <CreatePost userId={id} profileImage={profileImage} divRef={createPostRef} token={userToken} />
                     </div>
@@ -108,7 +108,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                             alt="Profile image"
                             className="w-6 h-6 rounded-[50%] border border-gray"
                         />
-                        <p className="font-semibold">Profile</p>
+                        <span className="font-semibold hidden lgg:block">Profile</span>
                     </div>
                 </Link>
             </div>
