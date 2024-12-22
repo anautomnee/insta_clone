@@ -4,8 +4,8 @@ import login_back from "../../assets/login_back.png"
 import {AuthorizationForm} from "../../components/AuthorizartionForm/AuthorizationForm.tsx";
 import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
 
-export const LoginPage = ({token}:{token: string | null}) => {
-    const redirected = useRedirectIfAuthenticated(token);
+export const LoginPage = () => {
+    const redirected = useRedirectIfAuthenticated();
 
     // Prevent rendering the login page while redirecting
     if (redirected) return null;

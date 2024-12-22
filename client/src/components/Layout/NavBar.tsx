@@ -1,19 +1,21 @@
 import logo from "../../assets/logo.svg";
-import close from "../../assets/nav_icons/close.svg";
+//import close from "../../assets/nav_icons/close.svg";
+import ich from "../../assets/nav_icons/ich.png"
 import links from "./navLinks.ts";
 import {Link} from "react-router";
-import {MouseEventHandler, useRef, useState} from "react";
+import { useRef, useState} from "react";
+//import {MouseEventHandler} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
 
 interface Props {
     style: string,
-    type: string,
-    closeMenu?: MouseEventHandler<HTMLImageElement>;
+    // type: string,
+    // closeMenu?: MouseEventHandler<HTMLImageElement>;
 }
 
-export const NavBar = ({style, type, closeMenu}: Props) => {
+export const NavBar = ({style}: Props) => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const {id, profileImage} = useSelector((state:RootState) => state.user);
     const createPostRef = useRef<HTMLDivElement>(null);
@@ -27,9 +29,17 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
 
     return (
         <div className={`flex flex-col gap-4 bg-white border-r border-gray py-[28px] ${style}`}>
-            <div className="flex justify-between">
-                <img className="w-24" src={logo} alt="Ichgram"/>
-                {type === 'Mobile' && <img src={close} alt="Close menu" onClick={closeMenu} />}
+            {/*<div className="flex justify-between">*/}
+            {/*    <img className="w-24" src={logo} alt="Ichgram"/>*/}
+            {/*    {type === 'Mobile' && <img src={close} alt="Close menu" onClick={closeMenu} />}*/}
+            {/*</div>*/}
+            <div className="flex">
+                <img src={logo}
+                     alt="logo"
+                     className="hidden lgg:block"/>
+                <img src={ich}
+                     alt="logo small"
+                     className="block lgg:hidden"/>
             </div>
             <div className="flex flex-col gap-4 mt-6">
                 <Link
@@ -42,7 +52,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                             src={hoveredLink === links[0].name ? links[0].logoFill : links[0].logo}
                             alt={links[0].name}
                         />
-                        <span>{links[0].name}</span>
+                        <span className="hidden lgg:block">{links[0].name}</span>
                     </div>
                 </Link>
                 <div className="flex gap-4 cursor-pointer"
@@ -52,7 +62,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[1].name ? links[1].logoFill : links[1].logo}
                         alt={links[1].name}
                     />
-                    <span>Search</span>
+                    <span className="hidden lgg:block">Search</span>
                 </div>
                 <Link
                     to={links[2].href}
@@ -64,7 +74,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                             src={hoveredLink === links[2].name ? links[2].logoFill : links[2].logo}
                             alt={links[2].name}
                         />
-                        <span>{links[2].name}</span>
+                        <span className="hidden lgg:block">{links[2].name}</span>
                     </div>
                 </Link>
                 <div className="flex gap-4 cursor-pointer"
@@ -74,7 +84,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[3].name ? links[3].logoFill : links[3].logo}
                         alt={links[3].name}
                     />
-                    <span>Messages</span>
+                    <span className="hidden lgg:block">Messages</span>
                 </div>
                 <div className="flex gap-4 cursor-pointer"
                      onMouseOver={() => setHoveredLink(links[4].name)}
@@ -83,7 +93,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         src={hoveredLink === links[4].name ? links[4].logoFill : links[4].logo}
                         alt={links[4].name}
                     />
-                    <span>Notifications</span>
+                    <span className="hidden lgg:block">Notifications</span>
                 </div>
                 <div className="flex gap-4"
                      onClick={showCreatePost}
@@ -94,7 +104,7 @@ export const NavBar = ({style, type, closeMenu}: Props) => {
                         alt={links[5].name}
                         className="cursor-pointer"
                     />
-                    <span className="cursor-pointer">Create</span>
+                    <span className="cursor-pointer hidden lgg:block">Create</span>
                     <div ref={createPostRef} hidden>
                         <CreatePost userId={id} profileImage={profileImage} divRef={createPostRef} token={userToken} />
                     </div>

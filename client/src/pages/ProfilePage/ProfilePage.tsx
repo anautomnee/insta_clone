@@ -1,12 +1,13 @@
-import {useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 import { RootState} from "../../store/store.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
-import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
+import {useFetchUserAfterReload, useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 
 export const ProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
     if (redirected) return null;
     const user = useSelector((state: RootState) => state.user);
+    useFetchUserAfterReload(user);
     return (
         <div className="flex flex-col items-center gap-16">
             <div className="flex flex-col gap-16">

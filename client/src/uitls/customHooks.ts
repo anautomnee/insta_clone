@@ -4,6 +4,8 @@ import {isTokenExpired} from "./utils.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../store/store.ts";
 import {logout} from "../store/slices/authSlice.ts";
+import {fetchUser} from "../store/actionCreators/userActionCreators.ts";
+import {UserState} from "../store/types/userTypes.ts";
 
 export const useRedirectIfAuthenticated = (redirectPath: string = '/') => {
     const navigate = useNavigate();
@@ -47,3 +49,19 @@ export const useScreenWidth = () => {
 
     return screenWidth;
 };
+
+export const useFetchUserAfterReload = (user: UserState): void => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (user.username == '') {
+            const id = localStorage.getItem('userId');
+            const token = localStorage.getItem('userToken');
+            if (!id || !token) {
+                navigate('/login');
+            } else {
+                dispatch(fetchUser({id, token}));
+            }
+        }
+    }, [user]);
+}
