@@ -92,11 +92,13 @@ export const CreatePost = ({ divRef, userId,profileImage, token }: CreatePostPro
 
     return (
         <div
-            className="absolute h-screen top-0 w-screen lg:w-[calc(100vw-60px)] left-[60px] lgg:left-[244px]"
+            className="absolute h-[calc(100vh-81px)] md:h-screen top-0 w-screen
+            lg:w-[calc(100vw-60px)] left-0 md:left-[60px] lgg:left-[244px]"
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
             onClick={closeCreatePost}
         >
-            <div className="bg-white opacity-100 mt-36 mx-auto rounded-xl xl:w-[913px] lg:w-[720px] md:w-[510px] w-[90vw]"
+            <div className="bg-white opacity-100 mt-8 md:mt-36 mx-auto rounded-xl
+            xl:w-[913px] lg:w-[720px] md:w-[510px] w-[90vw]"
             onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                 {status === 'FAILED' && error && <div className="p-4 text-error text-center">Image should be less than 5MB and svg/jpg/png</div>}
                 <form
@@ -114,7 +116,7 @@ export const CreatePost = ({ divRef, userId,profileImage, token }: CreatePostPro
                 </form>
                 <div className="flex flex-col md:flex-row">
                     <div className="relative flex items-center justify-center
-                    h-[75vw]
+                    h-[320px]
                     md:w-[280px] md:h-[280px]
                     lg:w-[420px] lg:h-[420px]
                     xl:w-[520px] xl:h-[520px]
