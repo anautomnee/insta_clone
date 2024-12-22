@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     full_name: {type: String, required: true},
     password: {type: String, required: true},
-    bio: {type: String, default: ""},
+    bio: {type: String, default: "", maxlength: 180},
     profile_image: {type: String, default: defaultImageBase64},
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
