@@ -92,7 +92,7 @@ export const CreatePost = ({ divRef, userId,profileImage, token }: CreatePostPro
 
     return (
         <div
-            className="absolute h-screen top-0 w-screen md:w-[calc(100vw-244px)] left-0 md:left-[244px]"
+            className="absolute h-screen top-0 w-screen lg:w-[calc(100vw-60px)] left-[60px] lgg:left-[244px]"
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
             onClick={closeCreatePost}
         >

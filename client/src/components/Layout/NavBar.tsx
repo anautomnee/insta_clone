@@ -28,12 +28,9 @@ export const NavBar = ({style}: Props) => {
     };
 
     return (
-        <div className={`flex flex-col gap-4 bg-white border-r border-gray py-[28px] ${style}`}>
-            {/*<div className="flex justify-between">*/}
-            {/*    <img className="w-24" src={logo} alt="Ichgram"/>*/}
-            {/*    {type === 'Mobile' && <img src={close} alt="Close menu" onClick={closeMenu} />}*/}
-            {/*</div>*/}
-            <div className="flex">
+        <div className={`flex md:flex-col items-center gap-4 bg-white 
+        md:border-r border-t md:border-t-0  border-gray py-[28px] ${style}`}>
+            <div className="hidden md:flex">
                 <img src={logo}
                      alt="logo"
                      className="hidden lgg:block"/>
@@ -41,7 +38,7 @@ export const NavBar = ({style}: Props) => {
                      alt="logo small"
                      className="block lgg:hidden"/>
             </div>
-            <div className="flex flex-col gap-4 mt-6">
+            <div className="flex md:flex-col items-center justify-around md:items-start gap-4 md:mt-6 w-full">
                 <Link
                     to={links[0].href}
                 >
@@ -112,7 +109,7 @@ export const NavBar = ({style}: Props) => {
                 <Link
                     to={`profile/${id}`}
                 >
-                    <div className="flex items-center gap-4 mt-12">
+                    <div className="flex items-center gap-4 md:mt-12">
                         <img
                             src={profileImage}
                             alt="Profile image"
