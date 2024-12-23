@@ -34,5 +34,5 @@ export const Navigation = () => {
     //     </div>);
     // }
 
-    return <NavBar style='px-4 lgg:px-6 w-full md:w-[60px] lgg:w-[244px]' />
+    return <NavBar style='px-4 lgg:px-6 min-w-full md:min-w-[60px] lgg:min-w-[244px]' />
 };

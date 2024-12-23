@@ -15,9 +15,9 @@ export const ProfilePage = () => {
             <div className="flex flex-col gap-8 lg:gap-16">
                 <ProfileHeader user={user}/>
                 <div className="grid grid-cols-3 px-1 sm:px-6 gap-1 sm:gap-2">
-                    {user.posts && user.posts.length > 0 && user.posts.map((post) => (<div
+                    {user.posts && user.posts.length > 0 && [...user.posts].reverse().map((post) => (<div
                         key={post._id}
-                        className="max-w-[307px] max-h-[307px] overflow-hidden">
+                        className="aspect-square">
                         <img
                             src={post.photo}
                             alt="Post"
