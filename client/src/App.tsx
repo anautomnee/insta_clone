@@ -23,7 +23,7 @@ function App() {
       </div>);
     } else {
       return (<div className="flex flex-col min-h-screen">
-            <div className="flex flex-col md:flex-row min-h-[calc(100vh-81px)]">
+            <div className="flex flex-col md:flex-row overflow-y-scroll h-[calc(100vh-81px)]">
               <MainRouter/>
             </div>
           <Navigation/>
