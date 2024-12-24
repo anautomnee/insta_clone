@@ -1,7 +1,10 @@
-import {Dispatch, MouseEvent, RefObject, SetStateAction} from "react";
+import {Dispatch, MouseEvent, RefObject, SetStateAction, useState} from "react";
 import {PostState} from "../../store/types/postTypes.ts";
 import {Link} from "react-router";
 import {formatDate} from "../../uitls/utils.ts";
+import smiley from "../../assets/smiley.png";
+import Picker, {EmojiClickData} from "emoji-picker-react";
+import {SubmitHandler, useForm} from "react-hook-form";
 
 type PostModalProps = {
     post: PostState | null;
@@ -10,6 +13,26 @@ type PostModalProps = {
 }
 
 export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps) => {
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+    type CommentFormInputs = {
+        content: string
+    };
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        reset,
+        formState: { errors },
+    } = useForm<CommentFormInputs>({mode: "onChange"});
+
+    // Handle emoji click
+    const onEmojiClick = (emojiData: EmojiClickData) => {
+        const currentContent = watch("content") || ""; // Get current content value
+        const newContent = currentContent + emojiData.emoji; // Append emoji to content
+        setValue("content", newContent); // Update content using setValue
+    };
 
     const closePostModal = (e: MouseEvent<HTMLDivElement> | MouseEvent<HTMLAnchorElement>) => {
         if (currentPostRef.current) {
@@ -19,24 +42,29 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         }
     };
 
+    const onComment: SubmitHandler<CommentFormInputs> = async (data: CommentFormInputs) => {
+
+    };
+
     return (<div
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
-            lg:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
+            md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closePostModal}
     >
-        <div className="bg-white opacity-100 mt-8 md:mt-36 mx-auto rounded
-            xl:w-[913px] lg:w-[720px] lgg:w-[1000px] md:w-[510px] w-[90vw]"
+        <div className="relative grid bg-white opacity-100 mt-24 mx-auto rounded
+            lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
+            lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
-            <div className="flex">
                 <div className="flex justify-center items-center
-                 border-r border-gray min-w-[577px] min-h-[577px]">
+                 border-r border-gray lgg:w-[577px] lgg:h-[577px]
+                 lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]">
                     <img
                     src={post?.photo}
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-                <div className="w-full pr-6">
+                <div className=" pr-6">
                     <div className="border-b border-b-gray">
                         <Link
                             to={`/profile/${post?.author?._id}`}
@@ -78,9 +106,35 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 {formatDate(new Date(post?.createdAt))}</p>}
                         </div>
                     </div>
+                    <div className="absolute bottom-0">
+                        <div className="border-t border-t-gray">
+                            {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120 characters</p>}
+                            <form className="flex items-center justify-between pl-3.5
+                            lgg:w-[423px] lg:w-[356px] md:w-[262px]"
+                                  onSubmit={handleSubmit(onComment)}>
+                                <div className="flex items-center gap-4">
+                                    <img src={smiley}
+                                         alt="Emoji"
+                                         className="w-6 h-6 cursor-pointer"
+                                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
+                                    {showEmojiPicker && (
+                                        <div className="absolute bottom-28 md:bottom-0 z-10
+                                            -right-50 md:right-60 lg:right-80 xl:right-96">
+                                            <Picker onEmojiClick={onEmojiClick} />
+                                        </div>
+                                    )}
+                                    <input {...register('content', { required: true, maxLength: 120 })}
+                                        placeholder="Add comment"
+                                    className="placeholder:text-xs py-2.5 md:w-36 lg:w-52 lgg:w-64 outline-0"/>
+                                </div>
+                                <button type="submit"
+                                        className="text-blue text-xs font-semibold md:pr-6 lg:pr-10">Send</button>
+
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     );
 };
