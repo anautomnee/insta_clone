@@ -6,8 +6,6 @@ import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
 
 export const LoginPage = () => {
     const redirected = useRedirectIfAuthenticated();
-
-    // Prevent rendering the login page while redirecting
     if (redirected) return null;
 
     return (<div className="flex flex-col items-center justify-center w-full">

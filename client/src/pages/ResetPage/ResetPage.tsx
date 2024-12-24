@@ -4,10 +4,8 @@ import {AuthorizationForm} from "../../components/AuthorizartionForm/Authorizati
 import {Link} from "react-router";
 import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
 
-export const ResetPage = ({token}:{token: string | null}) => {
-    const redirected = useRedirectIfAuthenticated(token);
-
-    // Prevent rendering the reset page while redirecting
+export const ResetPage = () => {
+    const redirected = useRedirectIfAuthenticated();
     if (redirected) return null;
     return (
         <>

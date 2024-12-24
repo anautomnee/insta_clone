@@ -7,12 +7,18 @@ export type Comment = {
     likes: string[];
 }
 
+export type Like = {
+    user: string,
+    post: string,
+    comment: string
+}
+
 export type Post = {
     _id: string;
     author: string;
     photo: string;
     content: string;
-    createdAt: Date;
+    createdAt: Date | null;
     like_count: number;
     likes: string[];
     comments: string[];

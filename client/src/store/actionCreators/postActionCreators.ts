@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {CreatePost} from "../types/postTypes.ts";
+import {CreatePost, FetchPostParams} from "../types/postTypes.ts";
 
 let backendURL;
 
@@ -42,3 +42,31 @@ export const createPost = createAsyncThunk(
         }
     }
 );
+
+export const fetchPost = createAsyncThunk(
+    'post/fetchPost',
+    async ({id, token}: FetchPostParams, {rejectWithValue}) => {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            };
+            const response = await axios.get(
+                `${backendURL}/posts/${id}`,
+                config
+            );
+            return response.data;
+        } catch (error: unknown) {
+    // return custom error message from backend if present
+    console.log(error)
+    if (axios.isAxiosError(error)) {
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+        } else {
+            return rejectWithValue(error.message)
+        }
+    }
+}
+    }
+)
