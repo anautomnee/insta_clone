@@ -1,5 +1,7 @@
 import {Dispatch, MouseEvent, RefObject, SetStateAction} from "react";
 import {PostState} from "../../store/types/postTypes.ts";
+import {Link} from "react-router";
+import {formatDate} from "../../uitls/utils.ts";
 
 type PostModalProps = {
     post: PostState | null;
@@ -9,7 +11,7 @@ type PostModalProps = {
 
 export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps) => {
 
-    const closePostModal = (e: MouseEvent<HTMLDivElement>) => {
+    const closePostModal = (e: MouseEvent<HTMLDivElement> | MouseEvent<HTMLAnchorElement>) => {
         if (currentPostRef.current) {
             e.stopPropagation();
             setCurrentPost(null);
@@ -34,12 +36,47 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-                <div className="w-full">
+                <div className="w-full pr-6">
                     <div className="border-b border-b-gray">
-                        <p className="mx-3.5 my-4 text-xs">{post?.author?.username}</p>
+                        <Link
+                            to={`/profile/${post?.author?._id}`}
+                            onClick={closePostModal}
+                        >
+                            <div className="flex items-center gap-3 mx-3.5 my-4 text-xs">
+                                <img
+                                    src={post?.author?.profile_image}
+                                    alt="Profile image"
+                                    className="w-6 h-6 rounded-[50%] border border-gray"
+                                />
+                                <span className="font-semibold">{post?.author?.username}</span>
+                            </div>
+                        </Link>
                     </div>
-                    <div className="mx-3.5 my-3 text-xs">
-                        <p>{post?.content}</p>
+                    <div className="flex gap-3 mx-3.5 my-3 text-xs">
+                        <Link
+                            to={`/profile/${post?.author?._id}`}
+                            onClick={closePostModal}
+                        >
+                            <img
+                                src={post?.author?.profile_image}
+                                alt="Profile image"
+                                className="min-w-6 h-6 rounded-[50%] border border-gray"
+                            />
+                        </Link>
+                        <div className="flex-col">
+                            <p>
+                                <Link
+                                    to={`/profile/${post?.author?._id}`}
+                                    onClick={closePostModal}
+                                >
+                                    <span className="font-semibold">{post?.author?.username}</span>
+                                </Link>
+                                <span>   </span>
+                                {post?.content}
+                            </p>
+                            {post?.createdAt && <p className="text-darkgray text-[11px] mt-2">
+                                {formatDate(new Date(post?.createdAt))}</p>}
+                        </div>
                     </div>
                 </div>
             </div>

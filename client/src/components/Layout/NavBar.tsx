@@ -11,8 +11,6 @@ import {CreatePost} from "../CreatePost/CreatePost.tsx";
 
 interface Props {
     style: string,
-    // type: string,
-    // closeMenu?: MouseEventHandler<HTMLImageElement>;
 }
 
 export const NavBar = ({style}: Props) => {
