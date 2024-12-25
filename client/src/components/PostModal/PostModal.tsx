@@ -14,6 +14,8 @@ type PostModalProps = {
 
 export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [commentError, setCommentError] = useState<string | null>(null);
+    console.log(post?._id)
 
     type CommentFormInputs = {
         content: string
@@ -43,8 +45,14 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
     };
 
     const onComment: SubmitHandler<CommentFormInputs> = async (data: CommentFormInputs) => {
-        console.log("onComment", data);
-        reset();
+        try {
+            console.log("onComment", data);
+            // API CALL
+            reset();
+        } catch (e) {
+            console.error('Could not upload comment', e);
+            setCommentError('Could not upload comment')
+        }
     };
 
     return (<div
@@ -67,7 +75,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-                <div className="pr-6 overflow-y-scroll md:mb-0 mb-12">
+                <div className="pr-6 overflow-y-scroll pb-12 lgg:h-[577px]
+                 lg:h-[484px] md:h-[358px]">
                     <div className="border-b border-b-gray">
                         <Link
                             to={`/profile/${post?.author?._id}`}
@@ -112,7 +121,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     <div className="absolute bottom-0">
                         <div className="border-t border-t-gray">
                             {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120 characters</p>}
-                            <form className="flex items-center justify-between pl-3.5
+                            {commentError && <p className="pl-3.5 pt-2 text-xs text-error">{commentError}</p>}
+                            <form className="flex items-center justify-between pl-3.5 bg-white
                             lgg:w-[423px] lg:w-[356px] md:w-[262px] w-[90vw]"
                                   onSubmit={handleSubmit(onComment)}>
                                 <div className="flex items-center gap-4">
