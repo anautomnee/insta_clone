@@ -4,9 +4,9 @@ import { RootState} from "../../store/store.ts";
 
 export const HomePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
-    if (redirected) return null;
     const user = useSelector((state: RootState) => state.user);
     useFetchUserAfterReload(user);
+    if (redirected) return null;
     return (<>
         <p>HOMEPAGE</p>
     </>);
