@@ -52,7 +52,6 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                 console.error('Error during registering:', error);
             }
         } else if (type === "login") {
-            console.log("Login");
             try {
                 if(data.usernameOrEmail) {
                     const dataLogin: LoginDataType = {

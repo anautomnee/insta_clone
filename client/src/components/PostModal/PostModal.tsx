@@ -43,7 +43,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
     };
 
     const onComment: SubmitHandler<CommentFormInputs> = async (data: CommentFormInputs) => {
-
+        console.log("onComment", data);
+        reset();
     };
 
     return (<div
@@ -52,19 +53,21 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closePostModal}
     >
-        <div className="relative grid bg-white opacity-100 mt-24 mx-auto rounded
+        <div className="relative flex flex-col md:grid bg-white opacity-100 md:mt-24 mx-auto rounded
             lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
+            h-[74vh] md:h-fit mt-[8vh]
             lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                 <div className="flex justify-center items-center
                  border-r border-gray lgg:w-[577px] lgg:h-[577px]
-                 lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]">
+                 lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]
+                 w-full">
                     <img
                     src={post?.photo}
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-                <div className=" pr-6">
+                <div className="pr-6 overflow-y-scroll md:mb-0 mb-12">
                     <div className="border-b border-b-gray">
                         <Link
                             to={`/profile/${post?.author?._id}`}
@@ -110,7 +113,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                         <div className="border-t border-t-gray">
                             {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120 characters</p>}
                             <form className="flex items-center justify-between pl-3.5
-                            lgg:w-[423px] lg:w-[356px] md:w-[262px]"
+                            lgg:w-[423px] lg:w-[356px] md:w-[262px] w-[90vw]"
                                   onSubmit={handleSubmit(onComment)}>
                                 <div className="flex items-center gap-4">
                                     <img src={smiley}
@@ -125,10 +128,11 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                     )}
                                     <input {...register('content', { required: true, maxLength: 120 })}
                                         placeholder="Add comment"
-                                    className="placeholder:text-xs py-2.5 md:w-36 lg:w-52 lgg:w-64 outline-0"/>
+                                    className="placeholder:text-xs py-2.5
+                                     w-[54vw] sm:w-[62vw] md:w-36 lg:w-52 lgg:w-64 outline-0"/>
                                 </div>
                                 <button type="submit"
-                                        className="text-blue text-xs font-semibold md:pr-6 lg:pr-10">Send</button>
+                                        className="text-blue text-xs font-semibold pr-6 lg:pr-10">Send</button>
 
                             </form>
                         </div>
