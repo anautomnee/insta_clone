@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import Post from "../db/models/Post.ts";
 import Comment from "../db/models/Comment.ts";
-import comment from "../db/models/Comment.ts";
+import Like from "../db/models/Like.ts";
 
 export const addCommentToPost = async (req: Request, res: Response) => {
     try {
@@ -36,5 +36,35 @@ export const addCommentToPost = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error uploading comment: ', error);
         res.status(500).send('Error uploading comment');
+    }
+};
+
+export const likeComment = async (req: Request, res: Response) => {
+    try {
+        const { commentId } = req.params;
+        if (!commentId) {
+            res.status(400).send('Id must be provided');
+            return;
+        }
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            res.status(404).send('Post now found');
+            return;
+        }
+        if (!req.user) {
+            res.status(401).send('User is not authorized');
+            return;
+        }
+        const newLike = await Like.create({
+            user: req.user.id,
+            comment: commentId
+        });
+        newLike.save();
+        comment.likes.push(newLike._id);
+        comment.save();
+        res.status(201).send('Like for comment created successfully');
+    } catch (error) {
+        console.error('Error adding like to a comment: ', error);
+        res.status(500).send('Error adding like to a comment');
     }
 };
