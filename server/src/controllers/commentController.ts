@@ -30,9 +30,13 @@ export const addCommentToPost = async (req: Request, res: Response) => {
             content: content
         });
         post.comments.push(newComment._id);
-        newComment.save();
-        post.save();
-        res.status(201).send('Comment created successfully');
+        await newComment.save();
+        await post.save();
+        const populatedComment = await newComment.populate({
+            path: 'author',
+            select: 'profile_image username',
+        });
+        res.status(201).send(populatedComment);
     } catch (error) {
         console.error('Error uploading comment: ', error);
         res.status(500).send('Error uploading comment');
@@ -59,9 +63,9 @@ export const likeComment = async (req: Request, res: Response) => {
             user: req.user.id,
             comment: commentId
         });
-        newLike.save();
+        await newLike.save();
         comment.likes.push(newLike._id);
-        comment.save();
+        await comment.save();
         res.status(201).send('Like for comment created successfully');
     } catch (error) {
         console.error('Error adding like to a comment: ', error);

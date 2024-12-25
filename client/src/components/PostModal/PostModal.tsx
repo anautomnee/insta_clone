@@ -1,4 +1,4 @@
-import {Dispatch, MouseEvent, RefObject, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, MouseEvent, RefObject, SetStateAction, useState} from "react";
 import {PostState} from "../../store/types/postTypes.ts";
 import {Link} from "react-router";
 import {formatDate} from "../../uitls/utils.ts";
@@ -7,6 +7,7 @@ import like from '../../assets/reactions/like.svg';
 import comment from '../../assets/reactions/comment.svg';
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {addComment} from "../../uitls/apiCalls.ts";
 
 type PostModalProps = {
     post: PostState | null;
@@ -17,17 +18,8 @@ type PostModalProps = {
 export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
-    const [formattedDate, setFormattedDate] = useState<string | number | Date | null>(null);
-    // console.log(post?.comments)
-
-    useEffect(() => {
-        if (post?.createdAt) {
-            const res = formatDate(new Date(post?.createdAt));
-            if (res) {
-                setFormattedDate(res);
-            }
-        }
-    }, [post?.createdAt])
+    const token = localStorage.getItem("userToken");
+    //console.log(post?.comments)
 
     type CommentFormInputs = {
         content: string
@@ -58,9 +50,16 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
 
     const onComment: SubmitHandler<CommentFormInputs> = async (data: CommentFormInputs) => {
         try {
-            console.log("onComment", data);
-            // API CALL
-            reset();
+            if (post && token) {
+                const newComment = await addComment(data.content, token, post?._id);
+                if (newComment) {
+                    setCurrentPost(prev => ({
+                        ...prev!,
+                        comments: [...(prev?.comments || []), newComment]
+                    }));
+                }
+                reset();
+            }
         } catch (e) {
             console.error('Could not upload comment', e);
             setCommentError('Could not upload comment')
@@ -126,9 +125,32 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 <span>   </span>
                                 {post?.content}
                             </p>
-                            {formattedDate && <p className="text-darkgray text-[11px] mt-2">
-                                {formattedDate?.toString()}</p>}
+                            {post?.createdAt && <p className="text-darkgray text-[11px] mt-2">
+                                {formatDate(new Date(post?.createdAt))}</p>}
                         </div>
+                    </div>
+                    <div className="flex flex-col mb-3.5 px-3.5 text-xs gap-5">
+                        {post?.comments && post?.comments.length > 0 && (
+                            post?.comments.map((comment) => (
+                                <div key={comment._id} className="flex justify-between">
+                                    <div className="flex justify-between gap-3">
+                                        <img src={comment.author.profile_image}
+                                             alt={comment.author.username}
+                                             className="w-6 h-6 rounded-[50%] border border-gray"/>
+                                        <div>
+                                            <p>{comment.author.username}</p>
+                                            <p>{comment.content}</p>
+                                            <div className="flex text-darkgray text-[11px]">
+                                                {comment?.createdAt && <p className="mr-5">
+                                                    {formatDate(new Date(comment?.createdAt))}</p>}
+                                                <p>Likes: {comment?.like_count}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <img src={like} alt='like' className="w-2.5 h-2.5" />
+                                </div>
+                            ))
+                        )}
                     </div>
                     <div className="absolute bg-white bottom-0">
                         <div className="pl-3.5 mb-3 mt-2">
@@ -137,8 +159,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 <img src={comment} alt="comment" />
                             </div>
                             <p className="text-xs font-semibold">{post?.like_count} likes</p>
-                            {formattedDate && <p className="text-darkgray text-[11px]">
-                                {formattedDate?.toString()}</p>}
+                            {post?.createdAt && <p className="text-darkgray text-[11px] mt-2">
+                                {formatDate(new Date(post?.createdAt))}</p>}
                         </div>
                         <div className="border-t border-t-gray">
                             {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120 characters</p>}
@@ -164,7 +186,6 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 </div>
                                 <button type="submit"
                                         className="text-blue text-xs font-semibold pr-6 lg:pr-10">Send</button>
-
                             </form>
                         </div>
                     </div>

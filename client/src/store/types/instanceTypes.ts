@@ -1,8 +1,15 @@
+type CommentAuthor = {
+    _id: string;
+    profile_image: string;
+    username: string;
+}
+
 export type Comment = {
-    author: string;
+    _id: string;
+    author: CommentAuthor;
     content: string;
     postId: string;
-    created_at: Date;
+    createdAt: Date;
     like_count: number;
     likes: string[];
 }

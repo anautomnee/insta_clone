@@ -50,11 +50,16 @@ export const getPostById = async (req: Request, res: Response) => {
             res.status(404).send('Id must be provided');
             return;
         }
-        // TO DO populate COMMENTS and LIKES
         const post= await Post.findById(postId).populate({
             path: 'author', // Populate the author field
             select: 'profile_image username followers', // Include only photo and followers fields
-        }).populate('likes').populate('comments');
+        }).populate('likes').populate({
+            path: 'comments',
+            populate: {
+                path: 'author',
+                select: 'profile_image username',
+            }
+        });
         res.status(200).send(post);
     } catch (error) {
         console.error('Error getting post by id: ', error);
