@@ -45,6 +45,7 @@ export const addCommentToPost = async (req: Request, res: Response) => {
 
 export const likeComment = async (req: Request, res: Response) => {
     try {
+        console.log('in like');
         const { commentId } = req.params;
         if (!commentId) {
             res.status(400).send('Id must be provided');
@@ -65,6 +66,7 @@ export const likeComment = async (req: Request, res: Response) => {
         });
         await newLike.save();
         comment.likes.push(newLike._id);
+        comment.like_count += 1;
         await comment.save();
         res.status(201).send('Like for comment created successfully');
     } catch (error) {

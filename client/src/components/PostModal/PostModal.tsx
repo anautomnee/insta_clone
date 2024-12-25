@@ -4,10 +4,11 @@ import {Link} from "react-router";
 import {formatDate} from "../../uitls/utils.ts";
 import smiley from "../../assets/smiley.png";
 import like from '../../assets/reactions/like.svg';
+import liked from '../../assets/reactions/liked.svg';
 import comment from '../../assets/reactions/comment.svg';
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {addComment} from "../../uitls/apiCalls.ts";
+import {addComment, likeComment, likePost} from "../../uitls/apiCalls.ts";
 
 type PostModalProps = {
     post: PostState | null;
@@ -66,6 +67,28 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         }
     };
 
+    const onLikeComment = async (e: MouseEvent<HTMLImageElement>) => {
+        const target = e.target as HTMLImageElement;
+        const commentId = target.alt;
+        if (!token) {
+            return;
+        }
+        await likeComment(token, commentId);
+        target.src = liked;
+        console.log(target)
+    };
+
+    const onLikePost = async (e: MouseEvent<HTMLImageElement>) => {
+        const target = e.target as HTMLImageElement;
+        const postId = target.alt;
+        if (!token) {
+            return;
+        }
+        await likePost(token, postId);
+        target.src = liked;
+        console.log(target)
+    };
+
     return (<div
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
@@ -86,8 +109,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-                <div className="pr-6 overflow-y-scroll mb-32 lgg:h-[577px]
-                 lg:h-[484px] md:h-[240px] xs::max-h-[240px] sm:max-h-[108px] md:max-h-full">
+                <div className="pr-6 overflow-y-scroll mb-32 lgg:h-[520px]
+                 lg:h-[370px] md:h-[240px] xs::max-h-[240px] sm:max-h-[108px] md:max-h-full">
                     <div className="hidden lg:block border-b border-b-gray">
                         <Link
                             to={`/profile/${post?.author?._id}`}
@@ -147,7 +170,9 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                             </div>
                                         </div>
                                     </div>
-                                    <img src={like} alt='like' className="w-2.5 h-2.5" />
+                                    <img src={like} alt={comment._id}
+                                         className="w-2.5 h-2.5"
+                                        onClick={onLikeComment}/>
                                 </div>
                             ))
                         )}
@@ -155,7 +180,10 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     <div className="absolute bg-white bottom-0">
                         <div className="pl-3.5 mb-3 mt-2">
                             <div className="flex gap-3 mb-2">
-                                <img src={like} alt="like" />
+                                <img src={like}
+                                     className="w-6 h-6"
+                                     alt={post?._id}
+                                     onClick={onLikePost} />
                                 <img src={comment} alt="comment" />
                             </div>
                             <p className="text-xs font-semibold">{post?.like_count} likes</p>

@@ -89,6 +89,7 @@ export const likePost = async (req: Request, res: Response) => {
         });
         newLike.save();
         post.likes.push(newLike._id);
+        post.like_count += 1;
         post.save();
         res.status(201).send('Like for post created successfully');
     } catch (error) {
