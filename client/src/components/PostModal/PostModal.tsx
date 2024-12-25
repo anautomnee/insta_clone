@@ -1,8 +1,10 @@
-import {Dispatch, MouseEvent, RefObject, SetStateAction, useState} from "react";
+import {Dispatch, MouseEvent, RefObject, SetStateAction, useEffect, useState} from "react";
 import {PostState} from "../../store/types/postTypes.ts";
 import {Link} from "react-router";
 import {formatDate} from "../../uitls/utils.ts";
 import smiley from "../../assets/smiley.png";
+import like from '../../assets/reactions/like.svg';
+import comment from '../../assets/reactions/comment.svg';
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import {SubmitHandler, useForm} from "react-hook-form";
 
@@ -15,7 +17,17 @@ type PostModalProps = {
 export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
-    console.log(post?._id)
+    const [formattedDate, setFormattedDate] = useState<string | number | Date | null>(null);
+    // console.log(post?.comments)
+
+    useEffect(() => {
+        if (post?.createdAt) {
+            const res = formatDate(new Date(post?.createdAt));
+            if (res) {
+                setFormattedDate(res);
+            }
+        }
+    }, [post?.createdAt])
 
     type CommentFormInputs = {
         content: string
@@ -67,17 +79,17 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
             lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                 <div className="flex justify-center items-center
-                 border-r border-gray lgg:w-[577px] lgg:h-[577px]
+                 md:border-r border-b md:border-b-0 border-gray lgg:w-[577px] lgg:h-[577px]
                  lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]
-                 w-full">
+                 max-h-[420px]">
                     <img
                     src={post?.photo}
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-                <div className="pr-6 overflow-y-scroll pb-12 lgg:h-[577px]
-                 lg:h-[484px] md:h-[358px]">
-                    <div className="border-b border-b-gray">
+                <div className="pr-6 overflow-y-scroll mb-32 lgg:h-[577px]
+                 lg:h-[484px] md:h-[240px] xs::max-h-[240px] sm:max-h-[108px] md:max-h-full">
+                    <div className="hidden lg:block border-b border-b-gray">
                         <Link
                             to={`/profile/${post?.author?._id}`}
                             onClick={closePostModal}
@@ -114,11 +126,20 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 <span>   </span>
                                 {post?.content}
                             </p>
-                            {post?.createdAt && <p className="text-darkgray text-[11px] mt-2">
-                                {formatDate(new Date(post?.createdAt))}</p>}
+                            {formattedDate && <p className="text-darkgray text-[11px] mt-2">
+                                {formattedDate?.toString()}</p>}
                         </div>
                     </div>
-                    <div className="absolute bottom-0">
+                    <div className="absolute bg-white bottom-0">
+                        <div className="pl-3.5 mb-3 mt-2">
+                            <div className="flex gap-3 mb-2">
+                                <img src={like} alt="like" />
+                                <img src={comment} alt="comment" />
+                            </div>
+                            <p className="text-xs font-semibold">{post?.like_count} likes</p>
+                            {formattedDate && <p className="text-darkgray text-[11px]">
+                                {formattedDate?.toString()}</p>}
+                        </div>
                         <div className="border-t border-t-gray">
                             {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120 characters</p>}
                             {commentError && <p className="pl-3.5 pt-2 text-xs text-error">{commentError}</p>}
