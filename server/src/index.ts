@@ -1,11 +1,12 @@
-import express, {Application} from 'express';
+import express, {Application, Request, Response} from 'express';
 import 'dotenv/config';
 import connectToDb from "./db";
 import cors from "cors";
 import { CorsOptions } from 'cors';
-import authRouter from "./routes/authRoutes.ts";
-import usersRouter from "./routes/userRoutes.ts";
-import postsRouter from "./routes/postRoutes.ts";
+import authRouter from "./routes/authRoutes";
+import usersRouter from "./routes/userRoutes";
+import postsRouter from "./routes/postRoutes";
+import commentRouter from "./routes/commentRoutes";
 
 const port: string | number = process.env.PORT || 3000;
 let hostIp;
@@ -47,8 +48,9 @@ const corsOptions: CorsOptions = {
         app.use('/auth', authRouter);
         app.use('/users', usersRouter);
         app.use('/posts', postsRouter);
+        app.use('/comments', commentRouter);
 
-        app.get('/', (req, res) => {
+        app.get('/', (_req: Request, res: Response) => {
             res.send('index');
         })
 
