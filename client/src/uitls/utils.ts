@@ -1,5 +1,5 @@
 import {jwtDecode} from 'jwt-decode';
-import {PostLikesFields} from "../store/types/postTypes.ts";
+import {LikesFields} from "../store/types/instanceTypes.ts";
 
 export const isTokenExpired = (token: string): boolean => {
     if (!token) return true;
@@ -45,8 +45,7 @@ export const formatDate = (date: Date | null | undefined ) => {
     return;
 };
 
-export const isLikedByUser = (likedBy: PostLikesFields[], userId: string) => {
-    console.log(likedBy, userId);
+export const isLikedByUser = (likedBy: LikesFields[], userId: string) => {
     if (!userId) return;
     const res = likedBy.filter(like => like.user === userId);
     return res.length > 0;

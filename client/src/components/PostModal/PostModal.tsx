@@ -23,7 +23,6 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
     const [commentError, setCommentError] = useState<string | null>(null);
     const token = localStorage.getItem("userToken");
     const userId = localStorage.getItem("userId");
-    console.log(post?.comments);
 
     type CommentFormInputs = {
         content: string
@@ -77,6 +76,16 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
             return;
         }
         await likeComment(token, commentId);
+
+        // Update the UI immediately after liking the comment
+        if (!post) return;
+        const updatedPost = { ...post };
+        const updatedComment = updatedPost?.comments.find((c) => c._id === commentId);
+        if (updatedComment) {
+            updatedComment.like_count += 1; // Increment the like count
+        }
+        setCurrentPost(updatedPost);
+
         target.src = liked;
     };
 
@@ -87,6 +96,12 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
             return;
         }
         await likePost(token, postId);
+
+        // Update the UI immediately after liking the comment
+        if (post) {
+            setCurrentPost({ ...post, like_count: post.like_count + 1 });
+        }
+
         target.src = liked;
     };
 

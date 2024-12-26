@@ -1,15 +1,10 @@
-import { Comment} from "./instanceTypes.ts";
+import {Comment, LikesFields} from "./instanceTypes.ts";
 
 type PostUserFields = {
     _id: string;
     profile_image: string;
     username: string;
     followers: string[];
-}
-
-export type PostLikesFields = {
-    _id: string;
-    user: string;
 }
 
 export type PostState = {
@@ -21,7 +16,7 @@ export type PostState = {
     content: string,
     createdAt: Date | null,
     like_count: number,
-    likes: PostLikesFields[],
+    likes: LikesFields[],
     comments: Comment[],
 }
 

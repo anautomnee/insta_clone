@@ -11,7 +11,12 @@ export type Comment = {
     postId: string;
     createdAt: Date;
     like_count: number;
-    likes: string[];
+    likes: LikesFields[];
+}
+
+export type LikesFields = {
+    _id: string;
+    user: string;
 }
 
 export type Like = {
@@ -27,7 +32,7 @@ export type Post = {
     content: string;
     createdAt: Date | null;
     like_count: number;
-    likes: string[];
+    likes: LikesFields[];
     comments: string[];
 }
 
