@@ -220,7 +220,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
                                     {showEmojiPicker && (
                                         <div className="absolute bottom-28 md:bottom-0 z-10
-                                            -right-50 md:right-60 lg:right-80 xl:right-96">
+                                            -right-0 sm:right-50 md:right-72 lg:right-16 xl:right-96">
                                             <Picker onEmojiClick={onEmojiClick} />
                                         </div>
                                     )}
