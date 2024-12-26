@@ -6,9 +6,11 @@ import smiley from "../../assets/smiley.png";
 import like from '../../assets/reactions/like.svg';
 import liked from '../../assets/reactions/liked.svg';
 import comment from '../../assets/reactions/comment.svg';
+import more from '../../assets/more.svg';
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {addComment, likeComment, likePost} from "../../uitls/apiCalls.ts";
+import {isLikedByUser} from "../../uitls/utils.ts";
 
 type PostModalProps = {
     post: PostState | null;
@@ -20,7 +22,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
     const token = localStorage.getItem("userToken");
-    //console.log(post?.comments)
+    const userId = localStorage.getItem("userId");
+    console.log(post?.comments);
 
     type CommentFormInputs = {
         content: string
@@ -75,7 +78,6 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         }
         await likeComment(token, commentId);
         target.src = liked;
-        console.log(target)
     };
 
     const onLikePost = async (e: MouseEvent<HTMLImageElement>) => {
@@ -86,7 +88,6 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         }
         await likePost(token, postId);
         target.src = liked;
-        console.log(target)
     };
 
     return (<div
@@ -111,7 +112,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                 </div>
                 <div className="pr-6 overflow-y-scroll mb-32 lgg:h-[520px]
                  lg:h-[370px] md:h-[240px] xs::max-h-[240px] sm:max-h-[108px] md:max-h-full">
-                    <div className="hidden lg:block border-b border-b-gray">
+                    <div className="hidden lg:flex justify-between border-b border-b-gray">
                         <Link
                             to={`/profile/${post?.author?._id}`}
                             onClick={closePostModal}
@@ -125,6 +126,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 <span className="font-semibold">{post?.author?.username}</span>
                             </div>
                         </Link>
+                        <img src={more} alt="More"/>
                     </div>
                     <div className="flex gap-3 mx-3.5 my-3 text-xs">
                         <Link
@@ -170,7 +172,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                             </div>
                                         </div>
                                     </div>
-                                    <img src={like} alt={comment._id}
+                                    <img src={userId && isLikedByUser(comment?.likes, userId) ? liked : like} alt={comment._id}
                                          className="w-2.5 h-2.5"
                                         onClick={onLikeComment}/>
                                 </div>
@@ -180,7 +182,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     <div className="absolute bg-white bottom-0">
                         <div className="pl-3.5 mb-3 mt-2">
                             <div className="flex gap-3 mb-2">
-                                <img src={like}
+                                <img src={userId && post?.likes && isLikedByUser(post?.likes, userId) ? liked : like}
                                      className="w-6 h-6"
                                      alt={post?._id}
                                      onClick={onLikePost} />

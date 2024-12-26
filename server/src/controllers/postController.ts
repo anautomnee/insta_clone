@@ -53,12 +53,19 @@ export const getPostById = async (req: Request, res: Response) => {
         const post= await Post.findById(postId).populate({
             path: 'author', // Populate the author field
             select: 'profile_image username followers', // Include only photo and followers fields
-        }).populate('likes').populate({
+        }).populate('likes')
+            .populate({
             path: 'comments',
-            populate: {
-                path: 'author',
-                select: 'profile_image username',
-            }
+                populate: [
+                    {
+                        path: 'author',
+                        select: 'profile_image username',
+                    },
+                    {
+                        path: 'likes',
+                        select: 'user',
+                    }
+                ]
         });
         res.status(200).send(post);
     } catch (error) {

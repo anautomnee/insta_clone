@@ -45,7 +45,6 @@ export const addCommentToPost = async (req: Request, res: Response) => {
 
 export const likeComment = async (req: Request, res: Response) => {
     try {
-        console.log('in like');
         const { commentId } = req.params;
         if (!commentId) {
             res.status(400).send('Id must be provided');
