@@ -69,10 +69,9 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         }
     };
 
-    const onLikeComment = async (e: MouseEvent<HTMLImageElement>) => {
+    const onLikeComment = async (e: MouseEvent<HTMLImageElement>, commentId: string) => {
         const target = e.target as HTMLImageElement;
-        const commentId = target.alt;
-        if (!token) {
+        if (!token || !target) {
             return;
         }
         await likeComment(token, commentId);
@@ -89,9 +88,8 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         target.src = liked;
     };
 
-    const onLikePost = async (e: MouseEvent<HTMLImageElement>) => {
+    const onLikePost = async (e: MouseEvent<HTMLImageElement>, postId: string) => {
         const target = e.target as HTMLImageElement;
-        const postId = target.alt;
         if (!token) {
             return;
         }
@@ -189,7 +187,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                     </div>
                                     <img src={userId && isLikedByUser(comment?.likes, userId) ? liked : like} alt={comment._id}
                                          className="w-2.5 h-2.5"
-                                        onClick={onLikeComment}/>
+                                        onClick={(e) => onLikeComment(e, comment._id)}/>
                                 </div>
                             ))
                         )}
@@ -198,9 +196,9 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                         <div className="pl-3.5 mb-3 mt-2">
                             <div className="flex gap-3 mb-2">
                                 <img src={userId && post?.likes && isLikedByUser(post?.likes, userId) ? liked : like}
+                                     alt='like'
                                      className="w-6 h-6"
-                                     alt={post?._id}
-                                     onClick={onLikePost} />
+                                     onClick={(e) => post?._id && onLikePost(e, post._id)} />
                                 <img src={comment} alt="comment" />
                             </div>
                             <p className="text-xs font-semibold">{post?.like_count} likes</p>
