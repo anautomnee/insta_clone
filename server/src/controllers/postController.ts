@@ -120,7 +120,6 @@ export const unLikePost = async (req: Request, res: Response) => {
             return;
         }
 
-        console.log({user: req.user.id, post: post._id});
         const like = await Like.findOne({ user: req.user.id, post: post._id });
         if (!like) {
             res.status(404).send('Like not found');
