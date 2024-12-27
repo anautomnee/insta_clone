@@ -33,7 +33,6 @@ export const likeComment = async (token: string, commentId: string) => {
                 'Authorization': `Bearer ${token}`,
             },
         };
-        console.log('in function', token, commentId);
         const response = await axios.post(
             `${backendURL}/comments/${commentId}/like`,
             {},
@@ -42,6 +41,23 @@ export const likeComment = async (token: string, commentId: string) => {
         return response.data;
     } catch (error) {
         console.error('Error liking comment', error);
+    }
+};
+
+export const unLikeComment = async (token: string, commentId: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.delete(
+            `${backendURL}/comments/${commentId}/unlike`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error unliking comment', error);
     }
 };
 
@@ -60,5 +76,22 @@ export const likePost = async (token: string, postId: string) => {
         return response.data;
     } catch (error) {
         console.error('Error liking post', error);
+    }
+};
+
+export const unLikePost = async (token: string, postId: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.delete(
+            `${backendURL}/posts/${postId}/unlike`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error unliking post', error);
     }
 };

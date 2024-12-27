@@ -3,6 +3,7 @@ import Post from "../db/models/Post";
 import { Request, Response } from 'express';
 import multer from "multer";
 import Like from "../db/models/Like.ts";
+import mongoose from "mongoose";
 
 export const createPost = async (req: Request, res: Response) => {
     try {
@@ -102,5 +103,38 @@ export const likePost = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error adding like to a post: ', error);
         res.status(500).send('Error adding like to a post');
+    }
+};
+
+export const unLikePost = async (req: Request, res: Response) => {
+    try {
+        const { postId } = req.params;
+        const post = await Post.findById(postId);
+        if (!post) {
+            res.status(404).send('Post not found');
+            return;
+        }
+
+        if (!req.user || !(new mongoose.Types.ObjectId(req.user.id).equals(post.author))) {
+            res.status(401).send('User is not authorized');
+            return;
+        }
+
+        console.log({user: req.user.id, post: post._id});
+        const like = await Like.findOne({ user: req.user.id, post: post._id });
+        if (!like) {
+            res.status(404).send('Like not found');
+            return;
+        }
+
+        await Like.deleteOne({ _id: like._id });
+
+        post.likes = post.likes.filter(likeId => likeId.toString() !== like._id.toString());
+        post.like_count -= 1;
+        await post.save();
+        res.status(200).send('Like deleted successfully');
+    } catch (error) {
+        console.error('Error unliking a post: ', error);
+        res.status(500).send('Error unliking a post');
     }
 };

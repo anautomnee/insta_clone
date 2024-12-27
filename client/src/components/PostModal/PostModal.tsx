@@ -9,7 +9,7 @@ import comment from '../../assets/reactions/comment.svg';
 import more from '../../assets/more.svg';
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {addComment, likeComment, likePost} from "../../uitls/apiCalls.ts";
+import {addComment, likeComment, likePost, unLikeComment, unLikePost} from "../../uitls/apiCalls.ts";
 import {isLikedByUser} from "../../uitls/utils.ts";
 
 type PostModalProps = {
@@ -33,6 +33,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         watch,
         setValue,
         reset,
+        setFocus,
         formState: { errors },
     } = useForm<CommentFormInputs>({mode: "onChange"});
 
@@ -71,21 +72,50 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
 
     const onLikeComment = async (e: MouseEvent<HTMLImageElement>, commentId: string) => {
         const target = e.target as HTMLImageElement;
+
         if (!token || !target) {
             return;
         }
-        await likeComment(token, commentId);
 
-        // Update the UI immediately after liking the comment
-        if (!post) return;
-        const updatedPost = { ...post };
-        const updatedComment = updatedPost?.comments.find((c) => c._id === commentId);
-        if (updatedComment) {
-            updatedComment.like_count += 1; // Increment the like count
+        if (target.src === like) {
+            await likeComment(token, commentId);
+
+            // Update the UI immediately after liking the comment
+            if (!post) return;
+            const updatedPost = { ...post };
+            const updatedComment = updatedPost?.comments.find((c) => c._id === commentId);
+            if (updatedComment) {
+                // Create a new comment object with the updated like_count
+                const modifiedComment = { ...updatedComment, like_count: updatedComment.like_count + 1 };
+
+                // Replace the old comment with the modified one
+                updatedPost.comments = updatedPost.comments.map((comment) =>
+                    comment._id === commentId ? modifiedComment : comment
+                );
+            }
+            setCurrentPost(updatedPost);
+
+            target.src = liked;
+        } else {
+            await unLikeComment(token, commentId);
+
+            // Update the UI immediately after liking the comment
+            if (!post) return;
+            const updatedPost = { ...post };
+            const updatedComment = updatedPost?.comments.find((c) => c._id === commentId);
+            if (updatedComment) {
+                // Create a new comment object with the updated like_count
+                const modifiedComment = { ...updatedComment, like_count: updatedComment.like_count - 1 };
+
+                // Replace the old comment with the modified one
+                updatedPost.comments = updatedPost.comments.map((comment) =>
+                    comment._id === commentId ? modifiedComment : comment
+                );
+            }
+            setCurrentPost(updatedPost);
+
+            target.src = like;
         }
-        setCurrentPost(updatedPost);
-
-        target.src = liked;
     };
 
     const onLikePost = async (e: MouseEvent<HTMLImageElement>, postId: string) => {
@@ -93,14 +123,26 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         if (!token) {
             return;
         }
-        await likePost(token, postId);
 
-        // Update the UI immediately after liking the comment
-        if (post) {
-            setCurrentPost({ ...post, like_count: post.like_count + 1 });
+        if (target.src === like) {
+            await likePost(token, postId);
+
+            // Update the UI immediately after liking the comment
+            if (post) {
+                setCurrentPost({ ...post, like_count: post.like_count + 1 });
+            }
+
+            target.src = liked;
+        } else {
+            await unLikePost(token, postId);
+
+            // Update the UI immediately after liking the comment
+            if (post) {
+                setCurrentPost({ ...post, like_count: post.like_count - 1 });
+            }
+
+            target.src = like;
         }
-
-        target.src = liked;
     };
 
     return (<div
@@ -186,7 +228,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                         </div>
                                     </div>
                                     <img src={userId && isLikedByUser(comment?.likes, userId) ? liked : like} alt={comment._id}
-                                         className="w-2.5 h-2.5"
+                                         className="w-2.5 h-2.5 cursor-pointer"
                                         onClick={(e) => onLikeComment(e, comment._id)}/>
                                 </div>
                             ))
@@ -197,9 +239,12 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                             <div className="flex gap-3 mb-2">
                                 <img src={userId && post?.likes && isLikedByUser(post?.likes, userId) ? liked : like}
                                      alt='like'
-                                     className="w-6 h-6"
+                                     className="w-6 h-6 cursor-pointer"
                                      onClick={(e) => post?._id && onLikePost(e, post._id)} />
-                                <img src={comment} alt="comment" />
+                                <img src={comment}
+                                     alt="comment"
+                                     className="cursor-pointer"
+                                    onClick={() => setFocus('content')}/>
                             </div>
                             <p className="text-xs font-semibold">{post?.like_count} likes</p>
                             {post?.createdAt && <p className="text-darkgray text-[11px] mt-2">
