@@ -1,4 +1,4 @@
-import {Dispatch, MouseEvent, RefObject, SetStateAction, useState} from "react";
+import {Dispatch, MouseEvent, RefObject, SetStateAction, useRef, useState} from "react";
 import {PostState} from "../../store/types/postTypes.ts";
 import {Link} from "react-router";
 import {formatDate} from "../../uitls/utils.ts";
@@ -11,6 +11,7 @@ import Picker, {EmojiClickData} from "emoji-picker-react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {addComment, likeComment, likePost, unLikeComment, unLikePost} from "../../uitls/apiCalls.ts";
 import {isLikedByUser} from "../../uitls/utils.ts";
+import {EditPost} from "../EditPost/EditPost.tsx";
 
 type PostModalProps = {
     post: PostState | null;
@@ -23,6 +24,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
     const [commentError, setCommentError] = useState<string | null>(null);
     const token = localStorage.getItem("userToken");
     const userId = localStorage.getItem("userId");
+    const moreRef = useRef<HTMLDivElement>(null);
 
     type CommentFormInputs = {
         content: string
@@ -145,13 +147,17 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         }
     };
 
-    return (<div
+    return (<>
+    <div hidden ref={moreRef}>
+        <EditPost modalRef={moreRef} />
+    </div>
+    <div
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closePostModal}
     >
-        <div className="relative flex flex-col md:grid bg-white opacity-100 md:mt-24 mx-auto rounded
+        <div className="relative flex flex-col md:grid bg-white z-10 opacity-100 md:mt-24 mx-auto rounded
             lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
             h-[74vh] md:h-fit mt-[8vh]
             lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
@@ -181,7 +187,15 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                                 <span className="font-semibold">{post?.author?.username}</span>
                             </div>
                         </Link>
-                        <img src={more} alt="More"/>
+                        <img
+                            src={more}
+                            alt="More"
+                            onClick={() => {
+                                if(moreRef.current) {
+                                    moreRef.current.hidden = false;
+                                }
+                            }}
+                        />
                     </div>
                     <div className="flex gap-3 mx-3.5 my-3 text-xs">
                         <Link
@@ -280,5 +294,6 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                 </div>
             </div>
         </div>
+    </>
     );
 };
