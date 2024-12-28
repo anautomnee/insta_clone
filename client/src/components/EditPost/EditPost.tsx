@@ -22,11 +22,14 @@ export const EditPost = ({modalRef}: EditPostProps) => {
             xl:w-[400px] md:w-[320px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
             <div className="text-center">
-                <p className="py-4 border-b border-b-gray text-error font-semibold">Delete</p>
-                <p className="py-4 border-b border-b-gray">Edit</p>
-                <p className="py-4 border-b border-b-gray">Go to post</p>
-                <p className="py-4 border-b border-b-gray">Copy link</p>
-                <p className="py-4">Cancel</p>
+                <p className="py-4 border-b border-b-gray text-error font-semibold cursor-pointer">
+                    Delete</p>
+                <p className="py-4 border-b border-b-gray cursor-pointer">Edit</p>
+                <p className="py-4 border-b border-b-gray cursor-pointer"
+                    onClick={closeModal}>Go to post</p>
+                <p className="py-4 border-b border-b-gray cursor-pointer">Copy link</p>
+                <p className="py-4 cursor-pointer"
+                   onClick={closeModal}>Cancel</p>
             </div>
         </div>
     </div>;

@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
-import {useFetchUserAfterReload, useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
+import { useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 import {PostModal} from "../../components/PostModal/PostModal.tsx";
 import {MouseEvent, useRef, useState} from 'react';
 import {PostState} from "../../store/types/postTypes.ts";
@@ -11,7 +11,6 @@ export const ProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
     if (redirected) return null;
     const user = useSelector((state: RootState) => state.user);
-    useFetchUserAfterReload(user);
     const [currentPost, setCurrentPost] = useState<PostState | null>(null);
     const currentPostRef = useRef<HTMLDivElement>(null);
     const token = localStorage.getItem("userToken");
