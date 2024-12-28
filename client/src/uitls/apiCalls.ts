@@ -95,3 +95,20 @@ export const unLikePost = async (token: string, postId: string) => {
         console.error('Error unliking post', error);
     }
 };
+
+export const fetchProfile = async (username: string, token: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.get(
+            `${backendURL}/users/${username}`,
+            config
+        );
+        return response.data[0];
+    } catch (error) {
+        console.error('Error liking post', error);
+    }
+}

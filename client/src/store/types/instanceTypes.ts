@@ -37,11 +37,11 @@ export type Post = {
 }
 
 export type User = {
-    id: string,
+    _id: string,
     username: string,
     email: string,
-    fullName: string,
-    profileImage: string,
+    full_name: string,
+    profile_image: string,
     bio: string,
     posts: Post[] | [],
     followers: string[],

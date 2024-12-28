@@ -97,15 +97,15 @@ export const Navigation = () => {
                     />
                     <span className="cursor-pointer hidden lgg:block">Create</span>
                     <div ref={createPostRef} hidden>
-                        <CreatePost userId={user?.id} profileImage={user?.profileImage} divRef={createPostRef} token={userToken} />
+                        <CreatePost userId={user?._id} profileImage={user?.profile_image} divRef={createPostRef} token={userToken} />
                     </div>
                 </div>
                 <Link
-                    to={`profile/${user?.id}`}
+                    to={`profile/${user?.username}`}
                 >
                     <div className="flex items-center gap-4 md:mt-12">
                         <img
-                            src={user?.profileImage}
+                            src={user?.profile_image}
                             alt="Profile image"
                             className="w-6 h-6 rounded-[50%] border border-gray"
                         />

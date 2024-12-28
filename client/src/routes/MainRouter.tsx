@@ -8,7 +8,7 @@ export const MainRouter = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/reset" element={<ResetPage />} />
             <Route path="/" element={<HomePage />} />
-            <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route path="/profile/:username" element={<ProfilePage />} />
             <Route path="*" element={<ErrorPage/>} />
         </Routes>
     );

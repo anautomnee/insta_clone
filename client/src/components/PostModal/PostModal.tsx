@@ -12,6 +12,8 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {addComment, likeComment, likePost, unLikeComment, unLikePost} from "../../uitls/apiCalls.ts";
 import {isLikedByUser} from "../../uitls/utils.ts";
 import {EditPost} from "../EditPost/EditPost.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store.ts";
 
 type PostModalProps = {
     post: PostState | null;
@@ -23,7 +25,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
     const token = localStorage.getItem("userToken");
-    const userId = localStorage.getItem("userId");
+    const userId = useSelector((state: RootState) => state.user.id);
     const moreRef = useRef<HTMLDivElement>(null);
 
     type CommentFormInputs = {

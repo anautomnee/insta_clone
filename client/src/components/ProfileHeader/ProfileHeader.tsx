@@ -1,11 +1,11 @@
 import {User} from "../../store/types/instanceTypes.ts";
 
-export const ProfileHeader= ({user}: {user: User}) => {
+export const ProfileHeader= ({user}: {user: User | null}) => {
     return (
         <>
             <div className="flex gap-4 px-6 md:gap-12 lg:gap-20">
                 <img className="rounded-[50%] border border-gray
-                w-28 h-28 md:w-[150px] md:h-[150px]" src={user?.profileImage} alt="Profile pic"/>
+                w-28 h-28 md:w-[150px] md:h-[150px]" src={user?.profile_image} alt="Profile pic"/>
                 <div>
                     <div className="flex flex-col items-start md:flex-row md:items-center gap-2 mb-7">
                         <p className="text-lg mr-3">{user?.username}</p>

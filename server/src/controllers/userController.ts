@@ -1,10 +1,10 @@
 import User from "../db/models/User";
 import {Request, Response} from "express";
 
-export const getUserById = async (req: Request, res: Response) => {
+export const getUserByUsername = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const user = await User.findById(id).select('-password')
+        const { username } = req.params;
+        const user = await User.find({username}).select('-password')
             .populate('followings').populate('followers').populate('posts');
         if (!user) {
             res.status(404).send('User not found');

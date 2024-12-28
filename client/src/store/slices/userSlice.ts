@@ -4,11 +4,11 @@ import {UserState} from "../types/userTypes.ts";
 import {User} from "../types/instanceTypes.ts";
 
 const initialState: UserState = {
-    id: '',
+    _id: '',
     username: '',
     email: '',
-    fullName: '',
-    profileImage: '',
+    full_name: '',
+    profile_image: '',
     bio: '',
     posts: [],
     followers: [],
@@ -28,11 +28,11 @@ const userSlice = createSlice({
         }).addCase(fetchUser.fulfilled, (state, action: PayloadAction<User>) => {
             state.status = 'FETCHED';
             state.error = null;
-            state.id = action.payload.id;
+            state._id = action.payload._id;
             state.username = action.payload.username;
             state.email = action.payload.email;
-            state.fullName = action.payload.fullName;
-            state.profileImage = action.payload.profileImage;
+            state.full_name = action.payload.full_name;
+            state.profile_image = action.payload.profile_image;
             state.bio = action.payload.bio;
             state.posts = action.payload.posts;
             state.followers = action.payload.followers;

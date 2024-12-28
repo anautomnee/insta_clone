@@ -13,7 +13,7 @@ if(import.meta.env.VITE_ENV === 'local') {
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
-    async ({id, token}: fetchUserData, { rejectWithValue }) => {
+    async ({username, token}: fetchUserData, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
@@ -22,17 +22,10 @@ export const fetchUser = createAsyncThunk(
             },
         }
         const response = await axios.get(
-            `${backendURL}/users/${id}`,
+            `${backendURL}/users/${username}`,
             config
         );
-        const user = response.data;
-        user.id = user._id;
-        user.fullName = user.full_name;
-        user.profileImage = user.profile_image;
-        delete user._id;
-        delete user.profile_image;
-        delete user.full_name;
-        return user;
+        return response.data[0];
     } catch (error: unknown) {
             // return custom error message from backend if present
             console.log(error)

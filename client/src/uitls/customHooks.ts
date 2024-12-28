@@ -55,12 +55,12 @@ export const useFetchUserAfterReload = (user: UserState): void => {
     const navigate = useNavigate();
     useEffect(() => {
         if (user.username == '') {
-            const id = localStorage.getItem('userId');
+            const username = localStorage.getItem('username');
             const token = localStorage.getItem('userToken');
-            if (!id || !token) {
+            if (!username || !token) {
                 navigate('/login');
             } else {
-                dispatch(fetchUser({id, token}));
+                dispatch(fetchUser({username, token}));
             }
         }
     }, [user]);

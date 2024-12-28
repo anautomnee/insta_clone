@@ -1,7 +1,7 @@
 import {User} from "./instanceTypes.ts";
 
 export type fetchUserData = {
-    id: string,
+    username: string,
     token: string,
 }
 

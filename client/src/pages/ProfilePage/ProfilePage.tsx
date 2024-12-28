@@ -1,16 +1,20 @@
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../store/store.ts";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../store/store.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
 import { useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 import {PostModal} from "../../components/PostModal/PostModal.tsx";
-import {MouseEvent, useRef, useState} from 'react';
+import {MouseEvent, useEffect, useRef, useState} from 'react';
 import {PostState} from "../../store/types/postTypes.ts";
 import {fetchPost} from "../../store/actionCreators/postActionCreators.ts";
+import {User} from "../../store/types/instanceTypes.ts";
+import {fetchProfile} from "../../uitls/apiCalls.ts";
+import {useParams} from "react-router";
 
 export const ProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
     if (redirected) return null;
-    const user = useSelector((state: RootState) => state.user);
+    const {username} = useParams();
+    const [user, setUser] = useState<User | null>(null);
     const [currentPost, setCurrentPost] = useState<PostState | null>(null);
     const currentPostRef = useRef<HTMLDivElement>(null);
     const token = localStorage.getItem("userToken");
@@ -18,7 +22,7 @@ export const ProfilePage = () => {
 
     const fetchPostData = async (postId: string) => {
         try {
-            if (user.id && token) {
+            if (token) {
                 const result = await dispatch(fetchPost({ id: postId, token })).unwrap();
                 setCurrentPost(result);
             }
@@ -35,6 +39,15 @@ export const ProfilePage = () => {
         }
     };
 
+    useEffect(() => {
+        const fetchUserFunc = async() => {
+            if (!username || !token) return;
+            const result = await fetchProfile(username, token);
+            setUser(result);
+        }
+        fetchUserFunc();
+    }, [username]);
+
     return (
         <div className="flex flex-col items-center gap-8 lg:gap-16">
             <div className="w-full text-center border-b border-b-gray md:hidden p-2 font-semibold">
@@ -49,7 +62,7 @@ export const ProfilePage = () => {
                             setCurrentPost={setCurrentPost}
                         />
                     </div>
-                    {user.posts && user.posts.length > 0 && [...user.posts].reverse().map((post) => (<div
+                    {user?.posts && user.posts.length > 0 && [...user?.posts].reverse().map((post) => (<div
                         key={post._id}
                         className="aspect-square">
                         <img
