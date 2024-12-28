@@ -1,6 +1,5 @@
-import {Dispatch, MouseEvent, RefObject, SetStateAction, useRef, useState} from "react";
-import {PostState} from "../../store/types/postTypes.ts";
-import {Link} from "react-router";
+import { MouseEvent, useEffect, useRef, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router";
 import {formatDate} from "../../uitls/utils.ts";
 import smiley from "../../assets/smiley.png";
 import like from '../../assets/reactions/like.svg';
@@ -12,21 +11,35 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {addComment, likeComment, likePost, unLikeComment, unLikePost} from "../../uitls/apiCalls.ts";
 import {isLikedByUser} from "../../uitls/utils.ts";
 import {EditPost} from "../EditPost/EditPost.tsx";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/store.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store.ts";
+import {Post} from "../../store/types/instanceTypes.ts";
+import {fetchPost} from "../../store/actionCreators/postActionCreators.ts";
 
-type PostModalProps = {
-    post: PostState | null;
-    currentPostRef: RefObject<HTMLDivElement>;
-    setCurrentPost: Dispatch<SetStateAction<PostState | null>>;
-}
-
-export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps) => {
+export const PostModal = () => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
+    const [post, setPost] = useState<Post | null>(null);
     const token = localStorage.getItem("userToken");
-    const userId = useSelector((state: RootState) => state.user.id);
+    const userId = useSelector((state: RootState) => state.user._id);
     const moreRef = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const {postId} = useParams();
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        navigate(-1); // Go back to the previous route (profile page)
+    };
+
+    useEffect(() => {
+        const fetchPostFunc = async() => {
+            if (!postId || !token) return;
+            const result = await dispatch(fetchPost({ id: postId, token })).unwrap();
+            setPost(result);
+        }
+        fetchPostFunc();
+    }, [postId]);
 
     type CommentFormInputs = {
         content: string
@@ -48,20 +61,12 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         setValue("content", newContent); // Update content using setValue
     };
 
-    const closePostModal = (e: MouseEvent<HTMLDivElement> | MouseEvent<HTMLAnchorElement>) => {
-        if (currentPostRef.current) {
-            e.stopPropagation();
-            setCurrentPost(null);
-            currentPostRef.current.hidden = true;
-        }
-    };
-
     const onComment: SubmitHandler<CommentFormInputs> = async (data: CommentFormInputs) => {
         try {
             if (post && token) {
                 const newComment = await addComment(data.content, token, post?._id);
                 if (newComment) {
-                    setCurrentPost(prev => ({
+                    setPost(prev => ({
                         ...prev!,
                         comments: [...(prev?.comments || []), newComment]
                     }));
@@ -97,7 +102,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     comment._id === commentId ? modifiedComment : comment
                 );
             }
-            setCurrentPost(updatedPost);
+            setPost(updatedPost);
 
             target.src = liked;
         } else {
@@ -116,7 +121,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     comment._id === commentId ? modifiedComment : comment
                 );
             }
-            setCurrentPost(updatedPost);
+            setPost(updatedPost);
 
             target.src = like;
         }
@@ -133,7 +138,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
 
             // Update the UI immediately after liking the comment
             if (post) {
-                setCurrentPost({ ...post, like_count: post.like_count + 1 });
+                setPost({ ...post, like_count: post.like_count + 1 });
             }
 
             target.src = liked;
@@ -142,7 +147,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
 
             // Update the UI immediately after liking the comment
             if (post) {
-                setCurrentPost({ ...post, like_count: post.like_count - 1 });
+                setPost({ ...post, like_count: post.like_count - 1 });
             }
 
             target.src = like;
@@ -157,7 +162,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
-        onClick={closePostModal}
+        onClick={closeModal}
     >
         <div className="relative flex flex-col md:grid bg-white z-10 opacity-100 md:mt-24 mx-auto rounded
             lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
@@ -177,8 +182,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                  lg:h-[370px] md:h-[240px] xs::max-h-[240px] sm:max-h-[108px] md:max-h-full">
                     <div className="hidden lg:flex justify-between border-b border-b-gray">
                         <Link
-                            to={`/profile/${post?.author?._id}`}
-                            onClick={closePostModal}
+                            to={`/profile/${post?.author?.username}`}
                         >
                             <div className="flex items-center gap-3 mx-3.5 my-4 text-xs">
                                 <img
@@ -201,8 +205,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                     </div>
                     <div className="flex gap-3 mx-3.5 my-3 text-xs">
                         <Link
-                            to={`/profile/${post?.author?._id}`}
-                            onClick={closePostModal}
+                            to={`/profile/${post?.author?.username}`}
                         >
                             <img
                                 src={post?.author?.profile_image}
@@ -213,8 +216,7 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                         <div className="flex-col">
                             <p>
                                 <Link
-                                    to={`/profile/${post?.author?._id}`}
-                                    onClick={closePostModal}
+                                    to={`/profile/${post?.author?.username}`}
                                 >
                                     <span className="font-semibold">{post?.author?.username}</span>
                                 </Link>
@@ -230,11 +232,15 @@ export const PostModal = ({post, currentPostRef, setCurrentPost}: PostModalProps
                             post?.comments.map((comment) => (
                                 <div key={comment._id} className="flex justify-between">
                                     <div className="flex justify-between gap-3">
-                                        <img src={comment.author.profile_image}
-                                             alt={comment.author.username}
-                                             className="w-6 h-6 rounded-[50%] border border-gray"/>
+                                        <Link to={`/profile/${comment.author.username}`}>
+                                            <img src={comment.author.profile_image}
+                                                 alt={comment.author.username}
+                                                 className="w-6 h-6 rounded-[50%] border border-gray"/>
+                                        </Link>
                                         <div>
-                                            <p>{comment.author.username}</p>
+                                            <Link to={`/profile/${comment.author.username}`}>
+                                                <p>{comment.author.username}</p>
+                                            </Link>
                                             <p>{comment.content}</p>
                                             <div className="flex text-darkgray text-[11px]">
                                                 {comment?.createdAt && <p className="mr-5">

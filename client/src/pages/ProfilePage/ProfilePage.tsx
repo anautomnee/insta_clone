@@ -1,43 +1,17 @@
-import {useDispatch} from "react-redux";
-import {AppDispatch} from "../../store/store.ts";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
 import { useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
-import {PostModal} from "../../components/PostModal/PostModal.tsx";
-import {MouseEvent, useEffect, useRef, useState} from 'react';
-import {PostState} from "../../store/types/postTypes.ts";
-import {fetchPost} from "../../store/actionCreators/postActionCreators.ts";
+import { useEffect, useState} from 'react';
 import {User} from "../../store/types/instanceTypes.ts";
 import {fetchProfile} from "../../uitls/apiCalls.ts";
-import {useParams} from "react-router";
+import {Link, Outlet, useParams} from "react-router";
 
 export const ProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
     if (redirected) return null;
     const {username} = useParams();
     const [user, setUser] = useState<User | null>(null);
-    const [currentPost, setCurrentPost] = useState<PostState | null>(null);
-    const currentPostRef = useRef<HTMLDivElement>(null);
     const token = localStorage.getItem("userToken");
-    const dispatch = useDispatch<AppDispatch>();
 
-    const fetchPostData = async (postId: string) => {
-        try {
-            if (token) {
-                const result = await dispatch(fetchPost({ id: postId, token })).unwrap();
-                setCurrentPost(result);
-            }
-        } catch (err) {
-            console.error("Failed to fetch post:", err);
-        }
-    };
-    const openPostModal = async (e: MouseEvent<HTMLImageElement>) => {
-        const target = e.target as HTMLImageElement;
-        const postId = target.alt;
-        if (currentPostRef.current && postId) {
-            currentPostRef.current.hidden = false;
-            await fetchPostData(postId);
-        }
-    };
 
     useEffect(() => {
         const fetchUserFunc = async() => {
@@ -55,22 +29,17 @@ export const ProfilePage = () => {
             <div className="flex flex-col gap-8 lg:gap-16">
                 <ProfileHeader user={user}/>
                 <div className="grid grid-cols-3 px-1 sm:px-6 gap-1 sm:gap-2">
-                    <div ref={currentPostRef} hidden>
-                        <PostModal
-                            post={currentPost}
-                            currentPostRef={currentPostRef}
-                            setCurrentPost={setCurrentPost}
-                        />
-                    </div>
+                    <Outlet />
                     {user?.posts && user.posts.length > 0 && [...user?.posts].reverse().map((post) => (<div
                         key={post._id}
                         className="aspect-square">
-                        <img
-                            src={post.photo}
-                            alt={post._id}
-                            className="w-full h-full object-cover"
-                            onClick={(e: MouseEvent<HTMLImageElement>) => openPostModal(e)}
-                        />
+                        <Link to={`post/${post._id}`}>
+                            <img
+                                src={post.photo}
+                                alt={post._id}
+                                className="w-full h-full object-cover"
+                            />
+                        </Link>
                     </div>))}
                 </div>
             </div>

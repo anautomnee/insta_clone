@@ -27,13 +27,13 @@ export type Like = {
 
 export type Post = {
     _id: string;
-    author: string;
+    author: CommentAuthor;
     photo: string;
     content: string;
     createdAt: Date | null;
     like_count: number;
     likes: LikesFields[];
-    comments: string[];
+    comments: Comment[];
 }
 
 export type User = {
