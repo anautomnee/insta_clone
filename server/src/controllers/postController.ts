@@ -108,17 +108,8 @@ export const likePost = async (req: Request, res: Response) => {
 
 export const unLikePost = async (req: Request, res: Response) => {
     try {
-        const { postId } = req.params;
-        const post = await Post.findById(postId);
-        if (!post) {
-            res.status(404).send('Post not found');
-            return;
-        }
-
-        if (!req.user || !(new mongoose.Types.ObjectId(req.user.id).equals(post.author))) {
-            res.status(401).send('User is not authorized');
-            return;
-        }
+        const post = (req as any).post;
+        if(!post || !req.user) return;
 
         const like = await Like.findOne({ user: req.user.id, post: post._id });
         if (!like) {
@@ -128,7 +119,7 @@ export const unLikePost = async (req: Request, res: Response) => {
 
         await Like.deleteOne({ _id: like._id });
 
-        post.likes = post.likes.filter(likeId => likeId.toString() !== like._id.toString());
+        post.likes = post.likes.filter((likeId: mongoose.Types.ObjectId) => likeId.toString() !== like._id.toString());
         post.like_count -= 1;
         await post.save();
         res.status(200).send('Like deleted successfully');
@@ -137,3 +128,17 @@ export const unLikePost = async (req: Request, res: Response) => {
         res.status(500).send('Error unliking a post');
     }
 };
+
+export const deletePost = async (req: Request, res: Response) => {
+    try {
+        const post = (req as any).post;
+        if(!post || !req.user) return;
+
+        await Post.deleteOne({ _id: post._id });
+        res.status(200).send('Post deleted successfully');
+
+    } catch (error) {
+        console.error('Error deleting a post: ', error);
+        res.status(500).send('Error deleting a post');
+    }
+}
