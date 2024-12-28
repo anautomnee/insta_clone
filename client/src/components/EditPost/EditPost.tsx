@@ -1,10 +1,27 @@
-import {MouseEvent, RefObject} from "react";
+import {MouseEvent, RefObject, useState} from "react";
+import {useLocation} from "react-router";
 
 type EditPostProps = {
     modalRef: RefObject<HTMLDivElement>;
 }
 
 export const EditPost = ({modalRef}: EditPostProps) => {
+    const location = useLocation();
+    const [showNotification, setShowNotification] = useState(false);
+
+    const copyToClipboard = () => {
+        const fullUrl = `${window.location.origin}${location.pathname}`;
+        navigator.clipboard.writeText(fullUrl)
+            .then(() => {
+                setShowNotification(true); // Show the notification
+                setTimeout(() => {
+                    setShowNotification(false); // Automatically hide after 3 seconds
+                }, 3000);
+            })
+            .catch((err) => {
+                console.error('Failed to copy link: ', err);
+            });
+    };
 
     const closeModal = (e: MouseEvent<HTMLDivElement> | MouseEvent<HTMLAnchorElement>) => {
         if (modalRef.current) {
@@ -27,10 +44,25 @@ export const EditPost = ({modalRef}: EditPostProps) => {
                 <p className="py-4 border-b border-b-gray cursor-pointer">Edit</p>
                 <p className="py-4 border-b border-b-gray cursor-pointer"
                     onClick={closeModal}>Go to post</p>
-                <p className="py-4 border-b border-b-gray cursor-pointer">Copy link</p>
+                <p className="py-4 border-b border-b-gray cursor-pointer"
+                   onClick={copyToClipboard}>Copy link</p>
                 <p className="py-4 cursor-pointer"
                    onClick={closeModal}>Cancel</p>
             </div>
         </div>
+        {showNotification && (
+            <div className="fixed bottom-4 right-4 bg-white px-4 py-2 rounded shadow-md flex items-center gap-2">
+                <span>Link copied!</span>
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setShowNotification(false)
+                    }} // Manually close the notification
+                    className="text-sm px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                >
+                    ✕
+                </button>
+            </div>
+        )}
     </div>;
 };
