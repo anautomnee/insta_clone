@@ -43,7 +43,7 @@ export type User = {
     full_name: string,
     profile_image: string,
     bio: string,
-    posts: Post[] | [],
+    posts: Post[],
     followers: string[],
     followings: string[],
 }

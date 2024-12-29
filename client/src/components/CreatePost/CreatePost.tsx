@@ -8,7 +8,7 @@ import Picker, {EmojiClickData} from "emoji-picker-react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store.ts";
 import {createPost} from "../../store/actionCreators/postActionCreators.ts";
-import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
+import {addPost} from "../../store/slices/userSlice.ts";
 
 interface CreatePostProps {
     divRef: RefObject<HTMLDivElement>;
@@ -25,7 +25,6 @@ type CreatePostFormInputs = {
 export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const {username} = useSelector((state: RootState) => state.user);
 
     const { status, error } = useSelector((state: RootState) => state.post);
 
@@ -74,9 +73,9 @@ export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostPr
     const onSubmit: SubmitHandler<CreatePostFormInputs> = async (data: CreatePostFormInputs) => {
         if (data && token && divRef.current) {
             try {
-                const result = await dispatch(createPost({ photo: data.photo, content: data.content, token }));
-                if (result.type !== "post/createPost/rejected" && userId) {
-                    await dispatch(fetchUser({username: username, token}));
+                const result = await dispatch(createPost({ photo: data.photo, content: data.content, token })).unwrap();
+                if (result && userId) {
+                    dispatch(addPost(result));
                     divRef.current.hidden = true; // Hide the div
                     reset(); // Reset the form fields
                     setPreview(null); // Clear the image preview

@@ -28,7 +28,7 @@ export const createPost = async (req: Request, res: Response) => {
             });
             await user.posts.push(post._id);
             await user.save();
-            res.status(201).send('Post created successfully');
+            res.status(201).send(post);
         }else {
             res.status(500).send('Photo error occurred');
             return;

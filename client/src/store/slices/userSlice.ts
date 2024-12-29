@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { fetchUser } from "../actionCreators/userActionCreators.ts";
 import {UserState} from "../types/userTypes.ts";
-import {User} from "../types/instanceTypes.ts";
+import {Post, User} from "../types/instanceTypes.ts";
 
 const initialState: UserState = {
     _id: '',
@@ -20,7 +20,11 @@ const initialState: UserState = {
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        addPost: (state, action: PayloadAction<Post>) => {
+            state.posts.push(action.payload);
+        }
+    },
     extraReducers: builder => {
         builder.addCase(fetchUser.pending, (state) => {
             state.status = 'LOADING';
@@ -44,4 +48,6 @@ const userSlice = createSlice({
         })
     }
 });
+
+export const {addPost} = userSlice.actions;
 export default userSlice.reducer;
