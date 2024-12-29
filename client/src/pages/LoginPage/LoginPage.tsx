@@ -13,7 +13,7 @@ export const LoginPage = () => {
             <img className="hidden lg:block" src={login_back} alt="Ichgram screenshot"/>
             <div>
                 <div
-                    className="flex flex-col items-center justify-center border border-gray px-10 py-6 w-[90%] sm:w-[350px] h-fit">
+                    className="flex flex-col items-center justify-center border border-gray px-10 py-6 w-full sm:w-[350px] h-fit">
                     <img className="my-6" src={logo} alt="Ichgram"/>
                     <AuthorizationForm type="login"/>
                     <div className="flex gap-4 justify-center items-center text-gray mb-[70px] mt-4">
@@ -23,7 +23,7 @@ export const LoginPage = () => {
                     </div>
                     <Link className="text-darkblue text-xs" to="/reset">Forgot password?</Link>
                 </div>
-                <div className="flex items-center justify-center border border-gray py-[26px] mt-2.5 w-[90%] sm:w-[350px]">
+                <div className="flex items-center justify-center border border-gray py-[26px] mt-2.5 w-full sm:w-[350px]">
                     <p className="text-center text-sm">Don't have an account? <Link className="text-blue" to="/register">Sign up</Link>
                     </p>
                 </div>

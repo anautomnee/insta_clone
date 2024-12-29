@@ -7,6 +7,8 @@ import {Post} from "../../store/types/instanceTypes.ts";
 import {fetchPost} from "../../store/actionCreators/postActionCreators.ts";
 import {PostMain} from "./PostMain.tsx";
 import {EditPostForm} from "./EditPostForm.tsx";
+import more from "../../assets/more.svg";
+import arrow_back from "../../assets/arrow_back.svg";
 
 export const PostModal = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -44,14 +46,32 @@ export const PostModal = () => {
     >
         <div className="relative flex flex-col md:grid bg-white z-10 opacity-100 md:mt-24 mx-auto rounded
             lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
-            h-[74vh] md:h-fit mt-[8vh]
+            h-[80vh] md:h-fit mt-[6vh]
             lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
-                <div className="flex justify-center items-center
+            <div className="md:hidden flex w-full justify-between border-b border-b-gray px-4 py-2 font-semibold">
+                <img
+                    src={arrow_back}
+                    alt="Back"
+                    className="cursor-pointer"
+                    onClick={closeModal}/>
+                {post?.author.username}
+                <img
+                    src={more}
+                    alt="More"
+                    className="justify-self-end"
+                    onClick={() => {
+                        if (moreRef.current) {
+                            moreRef.current.hidden = false;
+                        }
+                    }}
+                />
+            </div>
+            <div className="flex justify-center items-center
                  md:border-r border-b md:border-b-0 border-gray lgg:w-[577px] lgg:h-[577px]
                  lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]
-                 max-h-[420px]">
-                    <img
+                 max-h-[400px]">
+            <img
                     src={post?.photo}
                     alt="Post"
                     className="w-full h-full object-contain"/>

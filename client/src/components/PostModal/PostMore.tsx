@@ -51,7 +51,7 @@ export const PostMore = ({modalRef, postId, token, setPostType}: EditPostProps) 
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}>
-        <div className="bg-white opacity-100 mt-8 md:mt-36 mx-auto rounded-xl
+        <div className="bg-white opacity-100 mt-36 mx-auto rounded-xl
             xl:w-[400px] md:w-[320px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
             <div className="text-center">
