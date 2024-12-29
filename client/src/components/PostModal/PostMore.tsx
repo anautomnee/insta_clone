@@ -1,4 +1,4 @@
-import {MouseEvent, RefObject, useState} from "react";
+import {Dispatch, MouseEvent, RefObject, SetStateAction, useState} from "react";
 import {useLocation, useParams} from "react-router";
 import {deletePost} from "../../uitls/apiCalls.ts";
 
@@ -6,9 +6,10 @@ type EditPostProps = {
     modalRef: RefObject<HTMLDivElement>;
     postId: string | undefined
     token: string | null;
+    setPostType: Dispatch<SetStateAction<'preview' | 'edit'>>;
 }
 
-export const EditPost = ({modalRef, postId, token}: EditPostProps) => {
+export const PostMore = ({modalRef, postId, token, setPostType}: EditPostProps) => {
     const location = useLocation();
     const [showNotification, setShowNotification] = useState(false);
     const {username} = useParams();
@@ -57,7 +58,11 @@ export const EditPost = ({modalRef, postId, token}: EditPostProps) => {
                 <p className="py-4 border-b border-b-gray text-error font-semibold cursor-pointer"
                     onClick={handleDeletePost}>
                     Delete</p>
-                <p className="py-4 border-b border-b-gray cursor-pointer">Edit</p>
+                <p className="py-4 border-b border-b-gray cursor-pointer"
+                    onClick={(e) => {
+                        closeModal(e);
+                        setPostType('edit')
+                    }}>Edit</p>
                 <p className="py-4 border-b border-b-gray cursor-pointer"
                     onClick={closeModal}>Go to post</p>
                 <p className="py-4 border-b border-b-gray cursor-pointer"
@@ -73,7 +78,7 @@ export const EditPost = ({modalRef, postId, token}: EditPostProps) => {
                     onClick={(e) => {
                         e.stopPropagation();
                         setShowNotification(false)
-                    }} // Manually close the notification
+                    }}
                     className="text-sm px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
                 >
                     ✕

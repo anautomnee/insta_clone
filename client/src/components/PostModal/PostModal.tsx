@@ -1,14 +1,16 @@
 import { MouseEvent, useEffect, useRef, useState} from "react";
 import { useNavigate, useParams} from "react-router";
-import {EditPost} from "../EditPost/EditPost.tsx";
+import {PostMore} from "./PostMore.tsx";
 import {useDispatch, } from "react-redux";
 import {AppDispatch, } from "../../store/store.ts";
 import {Post} from "../../store/types/instanceTypes.ts";
 import {fetchPost} from "../../store/actionCreators/postActionCreators.ts";
 import {PostMain} from "./PostMain.tsx";
+import {EditPostForm} from "./EditPostForm.tsx";
 
 export const PostModal = () => {
     const [post, setPost] = useState<Post | null>(null);
+    const [postType, setPostType] = useState<'preview' | 'edit'>('preview');
     const token = localStorage.getItem("userToken");
     const moreRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +34,7 @@ export const PostModal = () => {
 
     return (<>
     <div hidden ref={moreRef}>
-        <EditPost modalRef={moreRef} postId={post?._id} token={token} />
+        <PostMore modalRef={moreRef} postId={post?._id} token={token} setPostType={setPostType} />
     </div>
     <div
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
@@ -54,7 +56,9 @@ export const PostModal = () => {
                     alt="Post"
                     className="w-full h-full object-contain"/>
                 </div>
-            <PostMain post={post} setPost={setPost} moreRef={moreRef} />
+            {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef} /> :
+                <EditPostForm postContent={post?.content}/>}
+
             </div>
         </div>
     </>
