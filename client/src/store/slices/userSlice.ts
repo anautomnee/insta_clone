@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {fetchUser} from "../actionCreators/userActionCreators.ts";
+import { fetchUser } from "../actionCreators/userActionCreators.ts";
 import {UserState} from "../types/userTypes.ts";
 import {User} from "../types/instanceTypes.ts";
 
@@ -40,7 +40,6 @@ const userSlice = createSlice({
 
         }).addCase(fetchUser.rejected, (state, action) => {
             state.status = 'FAILED';
-            console.log(action);
             state.error = action.error.message || "Registration failed";
         })
     }

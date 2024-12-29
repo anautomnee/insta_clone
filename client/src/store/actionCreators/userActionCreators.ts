@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {fetchUserData} from "../types/userTypes.ts";
+import { fetchUserData} from "../types/userTypes.ts";
 
 let backendURL;
 

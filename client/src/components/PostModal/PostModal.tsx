@@ -156,7 +156,7 @@ export const PostModal = () => {
 
     return (<>
     <div hidden ref={moreRef}>
-        <EditPost modalRef={moreRef} />
+        <EditPost modalRef={moreRef} postId={post?._id} token={token} />
     </div>
     <div
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen

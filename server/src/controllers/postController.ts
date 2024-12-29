@@ -135,7 +135,7 @@ export const deletePost = async (req: Request, res: Response) => {
         if(!post || !req.user) return;
 
         await Post.deleteOne({ _id: post._id });
-        res.status(200).send('Post deleted successfully');
+        res.status(200).send(post);
 
     } catch (error) {
         console.error('Error deleting a post: ', error);

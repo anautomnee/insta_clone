@@ -1,13 +1,17 @@
 import {MouseEvent, RefObject, useState} from "react";
-import {useLocation} from "react-router";
+import {useLocation, useParams} from "react-router";
+import {deletePost} from "../../uitls/apiCalls.ts";
 
 type EditPostProps = {
     modalRef: RefObject<HTMLDivElement>;
+    postId: string | undefined
+    token: string | null;
 }
 
-export const EditPost = ({modalRef}: EditPostProps) => {
+export const EditPost = ({modalRef, postId, token}: EditPostProps) => {
     const location = useLocation();
     const [showNotification, setShowNotification] = useState(false);
+    const {username} = useParams();
 
     const copyToClipboard = () => {
         const fullUrl = `${window.location.origin}${location.pathname}`;
@@ -23,10 +27,21 @@ export const EditPost = ({modalRef}: EditPostProps) => {
             });
     };
 
+
     const closeModal = (e: MouseEvent<HTMLDivElement> | MouseEvent<HTMLAnchorElement>) => {
         if (modalRef.current) {
             e.stopPropagation();
             modalRef.current.hidden = true;
+        }
+    };
+
+    const handleDeletePost = async () => {
+        try {
+            if (!postId || !token || !modalRef.current) return;
+            await deletePost(token, postId);
+            window.location.href = `/profile/${username}`;
+        } catch (error) {
+            console.error('Could not delete post', error);
         }
     };
 
@@ -39,7 +54,8 @@ export const EditPost = ({modalRef}: EditPostProps) => {
             xl:w-[400px] md:w-[320px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
             <div className="text-center">
-                <p className="py-4 border-b border-b-gray text-error font-semibold cursor-pointer">
+                <p className="py-4 border-b border-b-gray text-error font-semibold cursor-pointer"
+                    onClick={handleDeletePost}>
                     Delete</p>
                 <p className="py-4 border-b border-b-gray cursor-pointer">Edit</p>
                 <p className="py-4 border-b border-b-gray cursor-pointer"

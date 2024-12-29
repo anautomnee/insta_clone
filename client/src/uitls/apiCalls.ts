@@ -111,4 +111,21 @@ export const fetchProfile = async (username: string, token: string) => {
     } catch (error) {
         console.error('Error liking post', error);
     }
-}
+};
+
+export const deletePost = async (token: string, postId: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.delete(
+            `${backendURL}/posts/${postId}`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error unliking post', error);
+    }
+};
