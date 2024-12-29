@@ -30,3 +30,9 @@ export type FetchPostParams = {
     id: string,
     token: string,
 }
+
+export type UpdatePostParams = {
+    id: string,
+    token: string,
+    content: string,
+}

@@ -141,4 +141,22 @@ export const deletePost = async (req: Request, res: Response) => {
         console.error('Error deleting a post: ', error);
         res.status(500).send('Error deleting a post');
     }
-}
+};
+
+export const updatePost = async (req: Request, res: Response) => {
+    try {
+        const post = (req as any).post;
+        if(!post || !req.user) return;
+
+        const {content} = req.body;
+        if (!content) {
+            res.status(401).send('Content be provided');
+        }
+        post.content = content;
+        post.save();
+        res.status(200).send(post);
+    } catch (error) {
+        console.error('Error updating a post: ', error);
+        res.status(500).send('Error updating a post');
+    }
+};

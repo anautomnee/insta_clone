@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {CreatePost, FetchPostParams} from "../types/postTypes.ts";
+import {CreatePost, FetchPostParams, UpdatePostParams} from "../types/postTypes.ts";
 
 let backendURL;
 
@@ -58,15 +58,45 @@ export const fetchPost = createAsyncThunk(
             );
             return response.data;
         } catch (error: unknown) {
-    // return custom error message from backend if present
-    console.log(error)
-    if (axios.isAxiosError(error)) {
-        if (error.response && error.response.data.message) {
-            return rejectWithValue(error.response.data.message)
-        } else {
-            return rejectWithValue(error.message)
+            // return custom error message from backend if present
+            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.data.message) {
+                    return rejectWithValue(error.response.data.message)
+                } else {
+                    return rejectWithValue(error.message)
+                }
+            }
         }
     }
-}
+);
+
+export const updatePost = createAsyncThunk(
+    'post/updatePost',
+    async ({id, token, content}: UpdatePostParams, { rejectWithValue }) => {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+
+            const response = await axios.put(
+                `${backendURL}/posts/${id}`,
+                {content},
+                config
+            );
+            return response.data;
+        } catch (error: unknown) {
+            // return custom error message from backend if present
+            console.log(error)
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.data.message) {
+                    return rejectWithValue(error.response.data.message)
+                } else {
+                    return rejectWithValue(error.message)
+                }
+            }
+        }
     }
-)
+);

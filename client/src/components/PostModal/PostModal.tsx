@@ -57,7 +57,7 @@ export const PostModal = () => {
                     className="w-full h-full object-contain"/>
                 </div>
             {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef} /> :
-                <EditPostForm postContent={post?.content}/>}
+                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} token={token} />}
 
             </div>
         </div>

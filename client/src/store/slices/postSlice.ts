@@ -1,6 +1,7 @@
 import {PostState} from "../types/postTypes.ts";
-import {createSlice} from "@reduxjs/toolkit";
-import {createPost, fetchPost} from "../actionCreators/postActionCreators.ts";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createPost, fetchPost, updatePost} from "../actionCreators/postActionCreators.ts";
+import {Post} from "../types/instanceTypes.ts";
 
 const initialState: PostState = {
         status: 'IDLE',
@@ -48,6 +49,17 @@ const postSlice = createSlice({
             state.status = 'FAILED';
             console.log(action);
             state.error = action.error.message || "Post fetch failed";
+        }).addCase(updatePost.pending, (state) => {
+            state.status = 'LOADING';
+            state.error = null;
+        }).addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+            state.status = 'UPDATED';
+            state.error = null;
+            state.content = action.payload.content;
+        }).addCase(updatePost.rejected, (state, action) => {
+            state.status = 'FAILED';
+            console.log(action);
+            state.error = action.error.message || "Post creation failed";
         })
     }
 });
