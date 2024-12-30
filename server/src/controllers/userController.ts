@@ -1,5 +1,6 @@
 import User from "../db/models/User";
 import {Request, Response} from "express";
+import mongoose from "mongoose";
 
 export const getUserByUsername = async (req: Request, res: Response) => {
     try {
@@ -40,5 +41,49 @@ export const updateProfile = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error updating a user profile: ', error);
         res.status(500).send('Error updating a user profile');
+    }
+};
+
+export const followUser = async (req: Request, res: Response) => {
+    try {
+        const profile = (req as any).profile;
+        const userProfile = (req as any).userProfile;
+        const followed = (req as any).followed;
+
+        if (followed) {
+            res.status(404).send('Already followed');
+            return;
+        }
+
+        profile.followers.push(userProfile._id);
+        userProfile.followings.push(profile._id);
+        profile.save();
+        userProfile.save();
+        res.status(201).send('Follower added successfully.');
+    } catch (error) {
+        console.error('Error following a user: ', error);
+        res.status(500).send('Error following a user');
+    }
+};
+
+export const unfollowUser = async (req: Request, res: Response) => {
+    try {
+        const profile = (req as any).profile;
+        const userProfile = (req as any).userProfile;
+        const followed = (req as any).followed;
+
+        if (!followed) {
+            res.status(404).send('Following not found');
+            return;
+        }
+
+        profile.followers = profile.followers.filter((f: mongoose.Types.ObjectId) => !f._id.equals(userProfile._id));
+        userProfile.followings = userProfile.followings.filter((f: mongoose.Types.ObjectId) => !f._id.equals(profile._id));
+        profile.save();
+        userProfile.save();
+        res.status(201).send('Follower deleted successfully.');
+    } catch (error) {
+        console.error('Error deleting a following: ', error);
+        res.status(500).send('Error deleting a following');
     }
 };
