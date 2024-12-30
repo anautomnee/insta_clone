@@ -6,7 +6,13 @@ export const getUserByUsername = async (req: Request, res: Response) => {
     try {
         const { username } = req.params;
         const user = await User.find({username}).select('-password')
-            .populate('followings').populate('followers').populate('posts');
+            .populate({
+                path: 'followings',
+                select: 'profile_image username _id',
+            }).populate({
+                path: 'followers',
+                select: 'profile_image username _id',
+            }).populate('posts');
         if (!user) {
             res.status(404).send('User not found');
             return;
@@ -59,7 +65,11 @@ export const followUser = async (req: Request, res: Response) => {
         userProfile.followings.push(profile._id);
         profile.save();
         userProfile.save();
-        res.status(201).send('Follower added successfully.');
+        res.status(201).send({
+            _id: profile._id,
+            profile_image: profile.profile_image,
+            username: profile.username,
+        });
     } catch (error) {
         console.error('Error following a user: ', error);
         res.status(500).send('Error following a user');
@@ -81,7 +91,11 @@ export const unfollowUser = async (req: Request, res: Response) => {
         userProfile.followings = userProfile.followings.filter((f: mongoose.Types.ObjectId) => !f._id.equals(profile._id));
         profile.save();
         userProfile.save();
-        res.status(201).send('Follower deleted successfully.');
+        res.status(200).send({
+            _id: profile._id,
+            profile_image: profile.profile_image,
+            username: profile.username,
+        });
     } catch (error) {
         console.error('Error deleting a following: ', error);
         res.status(500).send('Error deleting a following');

@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { fetchUser } from "../actionCreators/userActionCreators.ts";
 import {UserState} from "../types/userTypes.ts";
-import {Post, User} from "../types/instanceTypes.ts";
+import {CondensedUser, Post, User} from "../types/instanceTypes.ts";
 
 const initialState: UserState = {
     _id: '',
@@ -23,6 +23,14 @@ const userSlice = createSlice({
     reducers: {
         addPost: (state, action: PayloadAction<Post>) => {
             state.posts.push(action.payload);
+        },
+        addFollowing: (state, action: PayloadAction<CondensedUser>) => {
+            state.followings.push(action.payload);
+        },
+        removeFollowing: (state, action: PayloadAction<CondensedUser>) => {
+            state.followings = state.followings.filter(f => {
+                return f._id !== action.payload._id
+            });
         }
     },
     extraReducers: builder => {
@@ -49,5 +57,5 @@ const userSlice = createSlice({
     }
 });
 
-export const {addPost} = userSlice.actions;
+export const {addPost, addFollowing, removeFollowing} = userSlice.actions;
 export default userSlice.reducer;

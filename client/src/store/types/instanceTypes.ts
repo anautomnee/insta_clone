@@ -1,4 +1,4 @@
-type CommentAuthor = {
+export type CondensedUser = {
     _id: string;
     profile_image: string;
     username: string;
@@ -6,7 +6,7 @@ type CommentAuthor = {
 
 export type Comment = {
     _id: string;
-    author: CommentAuthor;
+    author: CondensedUser;
     content: string;
     postId: string;
     createdAt: Date;
@@ -27,7 +27,7 @@ export type Like = {
 
 export type Post = {
     _id: string;
-    author: CommentAuthor;
+    author: CondensedUser;
     photo: string;
     content: string;
     createdAt: Date | null;
@@ -44,6 +44,6 @@ export type User = {
     profile_image: string,
     bio: string,
     posts: Post[],
-    followers: string[],
-    followings: string[],
+    followers: CondensedUser[],
+    followings: CondensedUser[],
 }

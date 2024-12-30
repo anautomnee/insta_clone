@@ -129,3 +129,38 @@ export const deletePost = async (token: string, postId: string) => {
         console.error('Error unliking post', error);
     }
 };
+
+export const followUser = async (token: string, username: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.post(
+            `${backendURL}/users/${username}/follow`,
+            {},
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error liking post', error);
+    }
+};
+
+export const unfollowUser = async (token: string, username: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.delete(
+            `${backendURL}/users/${username}/unfollow`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error liking post', error);
+    }
+};
