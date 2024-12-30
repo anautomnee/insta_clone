@@ -30,12 +30,6 @@ export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostPr
 
     const dispatch = useDispatch<AppDispatch>();
 
-    // Handle emoji click
-    const onEmojiClick = (emojiData: EmojiClickData) => {
-        const currentContent = watch("content") || ""; // Get current content value
-        const newContent = currentContent + emojiData.emoji; // Append emoji to content
-        setValue("content", newContent); // Update content using setValue
-    };
 
     const {
         register,
@@ -43,9 +37,15 @@ export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostPr
         watch,
         setValue,
         reset,
-        formState: { isValid },
     } = useForm<CreatePostFormInputs>({mode: "onChange"});
 
+
+    const currentContent = watch("content") || ""; // Get current content value
+    // Handle emoji click
+    const onEmojiClick = (emojiData: EmojiClickData) => {
+        const newContent = currentContent + emojiData.emoji; // Append emoji to content
+        setValue("content", newContent); // Update content using setValue
+    };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];  // Get the first file (if any)
@@ -111,8 +111,8 @@ export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostPr
                         onClick={closeCreatePost}/>
                     <p className="font-semibold">Create new post</p>
                     <input type="submit"
-                           disabled={!isValid || !photo?.length}
-                           className="text-blue" value="Share"/>
+                           disabled={currentContent.length === 0 || !photo?.length}
+                           className={currentContent.length === 0 || !photo?.length ? "text-gray" : "text-blue"} value="Share"/>
                 </form>
                 <div className="flex flex-col md:flex-row">
                     <div className="relative flex items-center justify-center
