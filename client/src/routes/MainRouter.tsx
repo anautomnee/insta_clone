@@ -1,5 +1,5 @@
 import {Route, Routes } from "react-router";
-import {ErrorPage, HomePage, LoginPage, ProfilePage, RegisterPage, ResetPage} from "../pages";
+import {EditProfilePage, ErrorPage, HomePage, LoginPage, ProfilePage, RegisterPage, ResetPage} from "../pages";
 import {PostModal} from "../components/PostModal/PostModal.tsx";
 
 export const MainRouter = () => {
@@ -12,6 +12,7 @@ export const MainRouter = () => {
             <Route path="/profile/:username" element={<ProfilePage />}>
                 <Route path="post/:postId" element={<PostModal />} />
             </Route>
+            <Route path="/profile/:username/edit" element={<EditProfilePage />} />
             <Route path="*" element={<ErrorPage/>} />
         </Routes>
     );
