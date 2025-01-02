@@ -35,6 +35,7 @@ export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostPr
         register,
         handleSubmit,
         watch,
+        formState: { errors },
         setValue,
         reset,
     } = useForm<CreatePostFormInputs>({mode: "onChange"});
@@ -113,6 +114,10 @@ export const CreatePost = ({ divRef, userId, profileImage, token }: CreatePostPr
                     <input type="submit"
                            disabled={currentContent.length === 0 || !photo?.length}
                            className={currentContent.length === 0 || !photo?.length ? "text-gray" : "text-blue"} value="Share"/>
+                    {errors.photo && <p className="pl-3.5 pt-2 text-xs text-error">Photo should be less than 5MB</p>}
+                    {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200
+                        characters</p>}
+
                 </form>
                 <div className="flex flex-col md:flex-row">
                     <div className="relative flex items-center justify-center

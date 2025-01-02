@@ -5,6 +5,7 @@ import {selectIfFollowing} from "../../store/selectors/userSelector.ts";
 import {followUser, unfollowUser} from "../../uitls/apiCalls.ts";
 import {addFollowing, removeFollowing} from "../../store/slices/userSlice.ts";
 import {useEffect, useState} from "react";
+import {Link} from "react-router";
 
 export const ProfileHeader= ({user}: {user: User | null}) => {
     const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -68,11 +69,11 @@ export const ProfileHeader= ({user}: {user: User | null}) => {
                             <button className="rounded-lg bg-[#EFEFEF] text-sm
                             h-7 w-28 sm:w-36 md:w-[190px]">Message
                             </button>
-                        </div> : <div>
+                        </div> : <Link to={`${window.location.pathname}/edit`}>
                             <button className="rounded-lg bg-[#EFEFEF] text-sm
                             h-7 w-28 sm:w-36 md:w-[190px]">Edit profile
                             </button>
-                        </div>}
+                        </Link>}
                     </div>
                     <div className="flex gap-3.5 sm:gap-8 md:gap-16 md:mb-5 text-sm md:text-md">
                         <p><b>{user?.posts.length}</b> posts</p>

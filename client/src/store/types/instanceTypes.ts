@@ -43,6 +43,7 @@ export type User = {
     full_name: string,
     profile_image: string,
     bio: string,
+    website?: string,
     posts: Post[],
     followers: CondensedUser[],
     followings: CondensedUser[],

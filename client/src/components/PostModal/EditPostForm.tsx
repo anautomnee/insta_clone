@@ -56,7 +56,7 @@ export const EditPostForm = ({postContent, postId, setPostType, setPost, token}:
         <form
             onSubmit={handleSubmit(onEditPost)}
             className="flex flex-col gap-4 p-5">
-            {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120
+            {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200
                 characters</p>}
             <textarea
                 defaultValue={postContent}
