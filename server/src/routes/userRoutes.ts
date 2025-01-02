@@ -9,6 +9,6 @@ const router = express.Router();
 router.get('/:username', ifAuthenticated, getUserByUsername);
 router.post('/:username/follow', ifAuthenticated, ifFollowed, followUser);
 router.delete('/:username/unfollow', ifAuthenticated, ifFollowed, unfollowUser);
-router.post('/:id/update_profile', upload.single('photo'), updateProfile);
+router.post('/:username/edit', ifAuthenticated, upload.single('photo'), updateProfile);
 
 export default router;

@@ -1,6 +1,7 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store.ts";
 import { ChangeEvent, useEffect, useState, useRef } from "react";
+import {editProfile} from "../../store/actionCreators/userActionCreators.ts";
 
 export const EditProfilePage = () => {
     const [preview, setPreview] = useState<string | null>(null);
@@ -12,6 +13,8 @@ export const EditProfilePage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>();
+    const token = localStorage.getItem("userToken");
 
     useEffect(() => {
         if (user) {
@@ -27,9 +30,7 @@ export const EditProfilePage = () => {
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
-        if (!profileImage || profileImage.length === 0) {
-            newErrors.profile_image = "A photo is required.";
-        } else if (profileImage[0].size > 5 * 1024 * 1024) {
+        if (profileImage && profileImage[0].size > 5 * 1024 * 1024) {
             newErrors.profile_image = "File must be smaller than 5MB.";
         }
 
@@ -78,18 +79,20 @@ export const EditProfilePage = () => {
         }
     };
 
-    const onSubmit = (e: React.FormEvent) => {
+    const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (validateForm()) {
-            const formData = {
-                profile_image: profileImage,
-                username,
-                website,
-                about,
-            };
-            console.log(formData);
-            // Here, you can submit the form data (e.g., via an API call)
+            if (token) {
+                 await dispatch(editProfile({
+                    username: user.username,
+                    new_username: username,
+                    profile_image: profileImage,
+                    website: website,
+                    bio: about,
+                    token: token
+                }))
+            }
         }
     };
 
@@ -130,12 +133,13 @@ export const EditProfilePage = () => {
                     New photo
                 </button>
             </div>
+            {user.error && user.error.length > 0 && <p className="pt-2 text-xs text-error">{user.error}</p>}
             {errors.profile_image && (
-                <p className="pl-3.5 pt-2 text-xs text-error">{errors.profile_image}</p>
+                <p className="pt-2 text-xs text-error">{errors.profile_image}</p>
             )}
             <p className="font-semibold mb-2">Username</p>
             {errors.username && (
-                <p className="pl-3.5 pt-2 text-xs text-error">{errors.username}</p>
+                <p className="pt-2 text-xs text-error">{errors.username}</p>
             )}
             <input
                 value={username}
@@ -144,7 +148,7 @@ export const EditProfilePage = () => {
             />
             <p className="font-semibold mb-2">Website</p>
             {errors.website && (
-                <p className="pl-3.5 pt-2 text-xs text-error">{errors.website}</p>
+                <p className="pt-2 text-xs text-error">{errors.website}</p>
             )}
             <input
                 value={website}
@@ -153,7 +157,7 @@ export const EditProfilePage = () => {
             />
             <p className="font-semibold mb-2">About</p>
             {errors.about && (
-                <p className="pl-3.5 pt-2 text-xs text-error">{errors.about}</p>
+                <p className="pt-2 text-xs text-error">{errors.about}</p>
             )}
             <div className="relative h-16 mb-16 w-full">
         <textarea

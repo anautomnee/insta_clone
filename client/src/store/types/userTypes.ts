@@ -10,7 +10,11 @@ export interface UserState extends User {
     error: string | null,
 }
 
-export type deletePostData = {
-    postId: string;
-    token: string;
+export type EditProfileData = {
+    profile_image: FileList | null,
+    username: string,
+    new_username: string,
+    website: string,
+    bio: string,
+    token: string,
 }

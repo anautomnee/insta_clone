@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchUserData} from "../types/userTypes.ts";
+import {EditProfileData, fetchUserData} from "../types/userTypes.ts";
 
 let backendURL;
 
@@ -36,6 +36,42 @@ export const fetchUser = createAsyncThunk(
                     return rejectWithValue(error.message)
                 }
             }
+        }
+    }
+);
+
+export const editProfile = createAsyncThunk(
+    'user/editProfile',
+    async ({profile_image, username, new_username, website, bio, token}: EditProfileData, { rejectWithValue }) => {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            }
+            const formData = new FormData();
+            if (profile_image) {
+                formData.append('photo', profile_image[0]);
+            }
+            formData.append('new_username', new_username);
+            formData.append('website', website);
+            formData.append('bio', bio);
+
+            const response = await axios.post(
+                `${backendURL}/users/${username}/edit`,
+                formData,
+                config
+            );
+            return response.data;
+
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.data?.message) {
+                    return rejectWithValue(error.response.data.message); // Error message from backend
+                }
+                return rejectWithValue(error.message); // Axios generic error
+            }
+            return rejectWithValue("An unexpected error occurred");
         }
     }
 );

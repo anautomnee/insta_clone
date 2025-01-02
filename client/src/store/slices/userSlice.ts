@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { fetchUser } from "../actionCreators/userActionCreators.ts";
+import {editProfile, fetchUser} from "../actionCreators/userActionCreators.ts";
 import {UserState} from "../types/userTypes.ts";
 import {CondensedUser, Post, User} from "../types/instanceTypes.ts";
 
@@ -53,7 +53,20 @@ const userSlice = createSlice({
         }).addCase(fetchUser.rejected, (state, action) => {
             state.status = 'FAILED';
             state.error = action.error.message || "Registration failed";
-        })
+        }).addCase(editProfile.pending, (state) => {
+            state.status = 'LOADING';
+            state.error = null;
+        }).addCase(editProfile.fulfilled, (state, action: PayloadAction<User>) => {
+            state.status = 'EDITED';
+            state.error = null;
+            state.username = action.payload.username;
+            state.profile_image = action.payload.profile_image;
+            state.bio = action.payload.bio;
+            state.website = action.payload.website;
+        }).addCase(editProfile.rejected, (state, action) => {
+            state.status = 'FAILED';
+            state.error = action.payload as string || "An unexpected error occurred";
+        });
     }
 });
 

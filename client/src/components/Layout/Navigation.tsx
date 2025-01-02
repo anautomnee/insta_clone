@@ -107,7 +107,7 @@ export const Navigation = () => {
                         <img
                             src={user?.profile_image}
                             alt="Profile image"
-                            className="w-6 h-6 rounded-[50%] border border-gray"
+                            className="w-6 h-6 object-cover rounded-[50%] border border-gray"
                         />
                         <span className="font-semibold hidden lgg:block">Profile</span>
                     </div>

@@ -26,21 +26,29 @@ export const getUserByUsername = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-
+        const { username } = req.params;
         // Check if user exists
-        const user = await User.findById(id).select('-password');
+        const user = await User.findOne({username}).select('-password');
         if (!user) {
             res.status(404).send('User not found');
             return;
         }
-        const {username, bio} = req.body;
-        if(username) user.username = username;
-        if(bio) user.bio = bio;
+        const { bio, website, new_username} = req.body;
+        // Check if username already exists
+        const usernameExists = await User.findOne({ username: new_username });
+        if (usernameExists) {
+            res.status(400).json({ message: 'Username already exists' });
+            return;
+        }
+        if(new_username.length > 0 && new_username !== user.username && new_username.length <= 120) user.username = new_username;
+        if(website.length > 0 && website !== user.username && website.length <= 120) user.website = website;
+        if(bio.length > 0 && bio.length <= 150 && bio !== user.bio ) user.bio = bio;
 
         if (req.file) {
             const base64Image = req.file.buffer.toString('base64');
-            user.profile_image = `data:image/${req.file.mimetype};base64,${base64Image}`;
+            if (user.profile_image !== base64Image) {
+                user.profile_image = `data:image/${req.file.mimetype};base64,${base64Image}`;
+            }
         }
         const updatedUser = await user.save();
         res.status(200).send(updatedUser);
