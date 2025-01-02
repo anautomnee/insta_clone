@@ -4,6 +4,21 @@ export type CondensedUser = {
     username: string;
 }
 
+export type CondensedPost = {
+    _id: string;
+    photo: string;
+}
+
+export type Notification = {
+    _id: string,
+    user: string,
+    actionMaker: CondensedUser,
+    post?: CondensedPost,
+    comment?: { post: CondensedPost },
+    createdAt: string,
+    type: "liked your post" | "liked your comment" | "commented on your post" | "started following you"
+}
+
 export type Comment = {
     _id: string;
     author: CondensedUser;
@@ -45,6 +60,7 @@ export type User = {
     bio: string,
     website?: string,
     posts: Post[],
+    notifications: Notification[],
     followers: CondensedUser[],
     followings: CondensedUser[],
 }

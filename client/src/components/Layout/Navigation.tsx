@@ -7,12 +7,14 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
 import {useFetchUserAfterReload} from "../../uitls/customHooks.ts";
+import {NotificationsModal} from "../NotificationsModal/NotificationsModal.tsx";
 
 export const Navigation = () => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const user = useSelector((state: RootState) => state.user);
     useFetchUserAfterReload(user);
     const createPostRef = useRef<HTMLDivElement>(null);
+    const notificationsRef = useRef<HTMLDivElement>(null);
     const userToken = localStorage.getItem("userToken");
 
     const showCreatePost = () => {
@@ -20,6 +22,12 @@ export const Navigation = () => {
             createPostRef.current.hidden = false;
         }
     };
+
+    const showNotifications = () => {
+        if(notificationsRef.current) {
+            notificationsRef.current.hidden = false;
+        }
+    }
 
     return (
         <div className="flex md:flex-col items-center gap-4 bg-white
@@ -78,6 +86,7 @@ export const Navigation = () => {
                     <span className="hidden lgg:block">Messages</span>
                 </div>
                 <div className="flex gap-4 cursor-pointer"
+                     onClick={showNotifications}
                      onMouseOver={() => setHoveredLink(links[4].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
@@ -85,6 +94,9 @@ export const Navigation = () => {
                         alt={links[4].name}
                     />
                     <span className="hidden lgg:block">Notifications</span>
+                    <div ref={notificationsRef} hidden>
+                        <NotificationsModal modalRef={notificationsRef} notifications={user?.notifications}/>
+                    </div>
                 </div>
                 <div className="flex gap-4"
                      onClick={showCreatePost}

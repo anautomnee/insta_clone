@@ -27,8 +27,8 @@ export const addCommentToPost = async (req: Request, res: Response) => {
             res.status(401).send('User is not authorized');
             return;
         }
-        const user = await User.findById(req.user.id);
-        if (!user) {
+        const receiver = await User.findById(post.author);
+        if (!receiver) {
             res.status(404).send('User is not found');
             return;
         }
@@ -46,9 +46,9 @@ export const addCommentToPost = async (req: Request, res: Response) => {
             post: postId,
             type: 'commented on your post'
         });
-        user.notifications.push(newNotification._id);
+        receiver.notifications.push(newNotification._id);
         await post.save();
-        await user.save();
+        await receiver.save();
         const populatedComment = await newComment.populate({
             path: 'author',
             select: 'profile_image username',
@@ -80,8 +80,8 @@ export const likeComment = async (req: Request, res: Response) => {
             user: req.user.id,
             comment: commentId
         });
-        const user = await User.findById(req.user.id);
-        if (!user) {
+        const receiver = await User.findById(comment.author);
+        if (!receiver) {
             res.status(404).send('User is not found');
             return;
         }
@@ -89,7 +89,7 @@ export const likeComment = async (req: Request, res: Response) => {
         const newNotification = await Notification.create({
             user: comment.author,
             actionMaker: req.user.id,
-            post: comment._id,
+            comment: comment._id,
             type: 'liked your comment'
         });
 
@@ -97,8 +97,8 @@ export const likeComment = async (req: Request, res: Response) => {
         comment.likes.push(newLike._id);
         comment.like_count += 1;
         await comment.save();
-        user.notifications.push(newNotification._id);
-        await user.save();
+        receiver.notifications.push(newNotification._id);
+        await receiver.save();
         res.status(201).send('Like for comment created successfully');
     } catch (error) {
         console.error('Error adding like to a comment: ', error);

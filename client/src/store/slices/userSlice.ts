@@ -11,6 +11,7 @@ const initialState: UserState = {
     profile_image: '',
     bio: '',
     posts: [],
+    notifications: [],
     followers: [],
     followings: [],
     status: 'IDLE',
@@ -47,6 +48,7 @@ const userSlice = createSlice({
             state.profile_image = action.payload.profile_image;
             state.bio = action.payload.bio;
             state.posts = action.payload.posts;
+            state.notifications = action.payload.notifications;
             state.followers = action.payload.followers;
             state.followings = action.payload.followings;
 

@@ -92,8 +92,8 @@ export const likePost = async (req: Request, res: Response) => {
             res.status(401).send('User is not authorized');
             return;
         }
-        const user = await User.findById(req.user.id);
-        if (!user) {
+        const receiver = await User.findById(post.author);
+        if (!receiver) {
             res.status(404).send('User is not found');
             return;
         }
@@ -111,8 +111,8 @@ export const likePost = async (req: Request, res: Response) => {
         post.likes.push(newLike._id);
         post.like_count += 1;
         await post.save();
-        user.notifications.push(newNotification._id);
-        await user.save();
+        receiver.notifications.push(newNotification._id);
+        await receiver.save();
         res.status(201).send('Like for post created successfully');
     } catch (error) {
         console.error('Error adding like to a post: ', error);

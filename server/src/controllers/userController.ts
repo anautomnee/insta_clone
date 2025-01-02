@@ -13,7 +13,28 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             }).populate({
                 path: 'followers',
                 select: 'profile_image username _id',
-            }).populate('posts');
+            }).populate('posts').populate({
+                path: 'notifications',
+                populate: [
+                    {
+                        path: 'post',
+                        select: 'photo',
+                    },
+                    {
+                        path: 'comment',
+                        populate: [
+                            {
+                                path: 'post',
+                                select: 'photo'
+                            }
+                        ]
+                    },
+                    {
+                        path: 'actionMaker',
+                        select: 'username profile_image',
+                    },
+                ]
+            });
         if (!user) {
             res.status(404).send('User not found');
             return;
@@ -77,9 +98,8 @@ export const followUser = async (req: Request, res: Response) => {
             actionMaker: userProfile._id,
             type: 'started following you'
         });
-        userProfile.notifications.push(newNotification._id);
+        profile.notifications.push(newNotification._id);
         profile.save();
-        userProfile.save();
         res.status(201).send({
             _id: profile._id,
             profile_image: profile.profile_image,
