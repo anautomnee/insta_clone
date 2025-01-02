@@ -8,6 +8,7 @@ import {RootState} from "../../store/store.ts";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
 import {useFetchUserAfterReload} from "../../uitls/customHooks.ts";
 import {NotificationsModal} from "../NotificationsModal/NotificationsModal.tsx";
+import {SearchModal} from "../SearchModal/SearchModal.tsx";
 
 export const Navigation = () => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
@@ -15,6 +16,7 @@ export const Navigation = () => {
     useFetchUserAfterReload(user);
     const createPostRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<HTMLDivElement>(null);
     const userToken = localStorage.getItem("userToken");
 
     const showCreatePost = () => {
@@ -27,7 +29,13 @@ export const Navigation = () => {
         if(notificationsRef.current) {
             notificationsRef.current.hidden = false;
         }
-    }
+    };
+
+    const showSearch = () => {
+        if(searchRef.current) {
+            searchRef.current.hidden = false;
+        }
+    };
 
     return (
         <div className="flex md:flex-col items-center gap-4 bg-white
@@ -55,6 +63,7 @@ export const Navigation = () => {
                     </div>
                 </Link>
                 <div className="flex gap-4 cursor-pointer"
+                     onClick={showSearch}
                      onMouseOver={() => setHoveredLink(links[1].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
@@ -62,6 +71,9 @@ export const Navigation = () => {
                         alt={links[1].name}
                     />
                     <span className="hidden lgg:block">Search</span>
+                    <div ref={searchRef} hidden>
+                        <SearchModal modalRef={searchRef} />
+                    </div>
                 </div>
                 <Link
                     to={links[2].href}
