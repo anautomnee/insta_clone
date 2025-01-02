@@ -46,6 +46,16 @@ export const getUserByUsername = async (req: Request, res: Response) => {
     }
 };
 
+export const searchUsers = async (_req: Request, res: Response) => {
+    try {
+        const users = await User.find({}, 'username profile_image');
+        res.status(200).send(users);
+    } catch (error) {
+        console.error('Error searching users: ', error);
+        res.status(500).send('Error searching users');
+    }
+}
+
 export const updateProfile = async (req: Request, res: Response) => {
     try {
         const { username } = req.params;

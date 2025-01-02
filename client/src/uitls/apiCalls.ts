@@ -164,3 +164,20 @@ export const unfollowUser = async (token: string, username: string) => {
         console.error('Error liking post', error);
     }
 };
+
+export const getAllUsersForSearch = async (token: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.get(
+            `${backendURL}/users`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error getting users', error);
+    }
+}
