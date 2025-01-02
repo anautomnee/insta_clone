@@ -3,6 +3,8 @@ import Post from "../db/models/Post.ts";
 import Comment from "../db/models/Comment.ts";
 import Like from "../db/models/Like.ts";
 import mongoose from "mongoose";
+import User from "../db/models/User.ts";
+import Notification from "../db/models/Notification.ts";
 
 export const addCommentToPost = async (req: Request, res: Response) => {
     try {
@@ -25,6 +27,11 @@ export const addCommentToPost = async (req: Request, res: Response) => {
             res.status(401).send('User is not authorized');
             return;
         }
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            res.status(404).send('User is not found');
+            return;
+        }
         const newComment = await Comment.create({
             post: postId,
             author: req.user.id,
@@ -32,7 +39,16 @@ export const addCommentToPost = async (req: Request, res: Response) => {
         });
         post.comments.push(newComment._id);
         await newComment.save();
+
+        const newNotification = await Notification.create({
+            user: post.author,
+            actionMaker: req.user.id,
+            post: postId,
+            type: 'commented on your post'
+        });
+        user.notifications.push(newNotification._id);
         await post.save();
+        await user.save();
         const populatedComment = await newComment.populate({
             path: 'author',
             select: 'profile_image username',
@@ -64,10 +80,25 @@ export const likeComment = async (req: Request, res: Response) => {
             user: req.user.id,
             comment: commentId
         });
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            res.status(404).send('User is not found');
+            return;
+        }
+
+        const newNotification = await Notification.create({
+            user: comment.author,
+            actionMaker: req.user.id,
+            post: comment._id,
+            type: 'liked your comment'
+        });
+
         await newLike.save();
         comment.likes.push(newLike._id);
         comment.like_count += 1;
         await comment.save();
+        user.notifications.push(newNotification._id);
+        await user.save();
         res.status(201).send('Like for comment created successfully');
     } catch (error) {
         console.error('Error adding like to a comment: ', error);

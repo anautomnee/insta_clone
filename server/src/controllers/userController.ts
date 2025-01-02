@@ -1,6 +1,7 @@
 import User from "../db/models/User";
 import {Request, Response} from "express";
 import mongoose from "mongoose";
+import Notification from "../db/models/Notification.ts";
 
 export const getUserByUsername = async (req: Request, res: Response) => {
     try {
@@ -71,6 +72,12 @@ export const followUser = async (req: Request, res: Response) => {
 
         profile.followers.push(userProfile._id);
         userProfile.followings.push(profile._id);
+        const newNotification = await Notification.create({
+            user: profile._id,
+            actionMaker: userProfile._id,
+            type: 'started following you'
+        });
+        userProfile.notifications.push(newNotification._id);
         profile.save();
         userProfile.save();
         res.status(201).send({

@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import multer from "multer";
 import Like from "../db/models/Like.ts";
 import mongoose from "mongoose";
+import Notification from "../db/models/Notification.ts";
 
 export const createPost = async (req: Request, res: Response) => {
     try {
@@ -91,14 +92,27 @@ export const likePost = async (req: Request, res: Response) => {
             res.status(401).send('User is not authorized');
             return;
         }
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            res.status(404).send('User is not found');
+            return;
+        }
         const newLike = await Like.create({
             user: req.user.id,
             post: postId
         });
-        newLike.save();
+        await newLike.save();
+        const newNotification = await Notification.create({
+            user: post.author,
+            actionMaker: req.user.id,
+            post: postId,
+            type: 'liked your post'
+        });
         post.likes.push(newLike._id);
         post.like_count += 1;
-        post.save();
+        await post.save();
+        user.notifications.push(newNotification._id);
+        await user.save();
         res.status(201).send('Like for post created successfully');
     } catch (error) {
         console.error('Error adding like to a post: ', error);

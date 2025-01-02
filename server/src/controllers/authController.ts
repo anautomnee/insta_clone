@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from "../db/models/User";
+import User, {UserType} from "../db/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
@@ -13,7 +13,7 @@ export const loginUser = async (req: Request, res: Response) => {
             return;
         }
         // Check if user exists
-        const user = await User.findOne({$or: [{username: usernameOrEmail}, {email: usernameOrEmail}]});
+        const user: UserType | null = await User.findOne({$or: [{username: usernameOrEmail}, {email: usernameOrEmail}]});
         if (!user) {
             res.status(404).send('User not found');
             return;
