@@ -104,7 +104,7 @@ export const EditProfilePage = () => {
     };
 
     return (
-        <form className="flex flex-col ml-40 max-w-[610px]" onSubmit={onSubmit}>
+        <form className="flex flex-col ml-40 my-9 max-w-[610px]" onSubmit={onSubmit}>
             <p className="font-semibold text-xl mb-11">Edit profile</p>
             <div className="flex justify-between items-center mb-8 p-4 bg-gray rounded-[20px]">
                 <div className="flex gap-4">

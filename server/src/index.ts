@@ -7,6 +7,7 @@ import authRouter from "./routes/authRoutes";
 import usersRouter from "./routes/userRoutes";
 import postsRouter from "./routes/postRoutes";
 import commentRouter from "./routes/commentRoutes";
+import messagesRouter from "./routes/messageRoutes";
 
 const port: string | number = process.env.PORT || 3000;
 let hostIp;
@@ -49,6 +50,7 @@ const corsOptions: CorsOptions = {
         app.use('/users', usersRouter);
         app.use('/posts', postsRouter);
         app.use('/comments', commentRouter);
+        app.use('/messages', messagesRouter);
 
         app.get('/', (_req: Request, res: Response) => {
             res.send('index');

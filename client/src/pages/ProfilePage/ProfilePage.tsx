@@ -30,7 +30,7 @@ export const ProfilePage = () => {
     }, [username, user]);
 
     return (
-        <div className="flex flex-col items-center gap-8 lg:gap-16">
+        <div className="flex flex-col items-center gap-8 my-9 lg:gap-16">
             <div className="w-full text-center border-b border-b-gray md:hidden p-2 font-semibold">
                 {currentUser?.username}</div>
             <div className="flex flex-col gap-8 lg:gap-16">

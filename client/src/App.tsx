@@ -15,7 +15,7 @@ function App() {
       return (<div className="flex flex-col min-h-screen">
         <div className="flex flex-col md:flex-row nav_height">
           <Navigation/>
-          <div className="flex-grow my-9">
+          <div className="flex-grow">
             <MainRouter/>
           </div>
         </div>

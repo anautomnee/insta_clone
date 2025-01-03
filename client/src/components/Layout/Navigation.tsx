@@ -88,7 +88,7 @@ export const Navigation = () => {
                         <span className="hidden lgg:block">{links[2].name}</span>
                     </div>
                 </Link>
-                <div className="flex gap-4 cursor-pointer"
+                <Link to="/messages" className="flex gap-4 cursor-pointer"
                      onMouseOver={() => setHoveredLink(links[3].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
@@ -96,7 +96,7 @@ export const Navigation = () => {
                         alt={links[3].name}
                     />
                     <span className="hidden lgg:block">Messages</span>
-                </div>
+                </Link>
                 <div className="flex gap-4 cursor-pointer"
                      onClick={showNotifications}
                      onMouseOver={() => setHoveredLink(links[4].name)}
