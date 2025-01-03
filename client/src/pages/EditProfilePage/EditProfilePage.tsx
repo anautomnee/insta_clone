@@ -2,8 +2,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store.ts";
 import { ChangeEvent, useEffect, useState, useRef } from "react";
 import {editProfile} from "../../store/actionCreators/userActionCreators.ts";
+import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 
 export const EditProfilePage = () => {
+    const redirected = useRedirectIfNotAuthenticated();
+    if (redirected) return null;
     const [preview, setPreview] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<FileList | null>(null);
     const [username, setUsername] = useState<string>("");
