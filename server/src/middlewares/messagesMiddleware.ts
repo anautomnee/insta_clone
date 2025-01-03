@@ -20,7 +20,20 @@ const messagesMiddleware = async (req: Request, res: Response, next: NextFunctio
                 { user1: req.user.id, user2: receiver._id },
                 { user1: receiver._id, user2: req.user.id }
             ]
-        }).populate('messages');
+        }).populate({
+            path: 'messages',
+            select: 'content createdAt',
+            populate: [{
+                path: 'author',
+                select: 'profile_image username'
+            }]
+        }).populate({
+            path: 'user1',
+            select: 'profile_image username'
+        }).populate({
+            path: 'user2',
+            select: 'profile_image username'
+        });
 
         (req as any).authorId = req.user.id;
         (req as any).receiverId = receiver._id;

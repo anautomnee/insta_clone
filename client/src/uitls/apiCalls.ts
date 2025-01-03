@@ -180,4 +180,58 @@ export const getAllUsersForSearch = async (token: string) => {
     } catch (error) {
         console.error('Error getting users', error);
     }
-}
+};
+
+export const fetchChatMessages = async (receiverUsername: string, token: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.post(
+            `${backendURL}/messages/get_chat`,
+            {receiverUsername},
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching chat messages', error);
+    }
+};
+
+export const startChat = async (receiverUsername: string, token: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.post(
+            `${backendURL}/messages/start_chat`,
+            {receiverUsername},
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching chat messages', error);
+    }
+};
+
+export const saveMessage = async (receiverUsername: string, content: string, token: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.post(
+            `${backendURL}/messages/save`,
+            {receiverUsername, content},
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching chat messages', error);
+    }
+};

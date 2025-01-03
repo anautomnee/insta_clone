@@ -19,6 +19,7 @@ export default {
       'blue': '#0095F6',
       'white': '#FFFFFF',
       'lightgray': '#FAFAFA',
+      'purple': '#4D00FF',
       'error': '#FF0000'
     },
     fontFamily: {

@@ -9,6 +9,13 @@ export type CondensedPost = {
     photo: string;
 }
 
+export type Message = {
+    _id: string;
+    content: string;
+    author: CondensedUser;
+    receiver: CondensedUser;
+}
+
 export type Notification = {
     _id: string,
     user: string,

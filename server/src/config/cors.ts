@@ -2,7 +2,7 @@ import { CorsOptions } from "cors";
 import 'dotenv/config';
 
 export const configureCors = (): CorsOptions => {
-    const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    //const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
     const hostIp = process.env.ENV === "local" ? "localhost" : process.env.HOST_IP;
 
     return {

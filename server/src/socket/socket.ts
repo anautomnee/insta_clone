@@ -11,6 +11,11 @@ export const initializeSocket = (server: http.Server) => {
     io.on("connection", (socket) => {
         console.log("User connected:", socket.id);
 
+        socket.on('message', (msg) => {
+
+            io.emit('messageResponse', msg);
+        });
+
         socket.on("disconnect", () => {
             console.log("User disconnected:", socket.id);
         });
