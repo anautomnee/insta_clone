@@ -32,19 +32,25 @@ export const MessagesMain = () => {
     useEffect((): void => {
         const getMessages = async () => {
             if (!token || !username) return;
-            const result: Chat = await fetchChat(username, token);
-            setMessages(result.messages);
-            if (result.user1.username === username) {
-                setReceiver(result.user1);
-            } else {
-                setReceiver(result.user2);
+
+            try {
+                const result: Chat = await fetchChat(username, token);
+                setMessages(result.messages);
+
+                if (result.user1.username === username) {
+                    setReceiver(result.user1);
+                } else {
+                    setReceiver(result.user2);
+                }
+                setChatId(result._id);
+            } catch (error) {
+                console.error("Error fetching messages:", error);
             }
-            setChatId(result._id);
         };
-        if (messages?.length === 0 || !receiver) {
-            getMessages();
-        }
-    }, [messages]);
+
+        getMessages();
+    }, [username]);
+
 
     useEffect(() => {
 
