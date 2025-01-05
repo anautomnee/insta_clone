@@ -1,4 +1,4 @@
-import User from "../db/models/User";
+import User, {UserType} from "../db/models/User";
 import Post from "../db/models/Post";
 import { Request, Response } from 'express';
 import multer from "multer";
@@ -172,5 +172,36 @@ export const updatePost = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error updating a post: ', error);
         res.status(500).send('Error updating a post');
+    }
+};
+
+export const getFollowedPosts = async (req: Request, res: Response) => {
+    try {
+        if (!req.user) {
+            res.status(404).send('User is not authorized');
+            return;
+        }
+        const userId = req.user.id; // Assume this is set by authentication middleware
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = 10;
+
+        // Find the current user's following list
+        const user: UserType = await User.findById(userId).select("followings");
+        if (!user) {
+            res.status(404).send("User not found");
+            return
+        }
+
+        // Fetch posts from followed users
+        const posts = await Post.find({ author: { $in: user.followings } })
+            .sort({ createdAt: -1 }) // Sort by newest first
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .populate("author", "username profile_image");
+
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        res.status(500).send("Server error");
     }
 };

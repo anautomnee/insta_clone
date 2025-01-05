@@ -216,3 +216,20 @@ export const fetchUserChats = async (token: string) => {
         console.error('Error fetching chat messages', error);
     }
 };
+
+export const fetchFollowedPosts = async (token: string, page: number) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.get(
+            `${backendURL}/posts/get_followed?page=${page}`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching chat messages', error);
+    }
+};

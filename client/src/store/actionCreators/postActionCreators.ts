@@ -53,7 +53,7 @@ export const fetchPost = createAsyncThunk(
                 },
             };
             const response = await axios.get(
-                `${backendURL}/posts/${id}`,
+                `${backendURL}/posts/get/${id}`,
                 config
             );
             return response.data;

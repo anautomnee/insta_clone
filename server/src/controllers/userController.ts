@@ -110,6 +110,7 @@ export const followUser = async (req: Request, res: Response) => {
         });
         profile.notifications.push(newNotification._id);
         profile.save();
+        userProfile.save();
         res.status(201).send({
             _id: profile._id,
             profile_image: profile.profile_image,
