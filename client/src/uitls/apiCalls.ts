@@ -200,34 +200,15 @@ export const fetchChat = async (receiverUsername: string, token: string) => {
     }
 };
 
-export const startChat = async (receiverUsername: string, token: string) => {
+export const fetchUserChats = async (token: string) => {
     try {
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         };
-        const response = await axios.post(
-            `${backendURL}/messages/start_chat`,
-            {receiverUsername},
-            config
-        );
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching chat messages', error);
-    }
-};
-
-export const saveMessage = async (receiverUsername: string, content: string, token: string) => {
-    try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.post(
-            `${backendURL}/messages/save`,
-            {receiverUsername, content},
+        const response = await axios.get(
+            `${backendURL}/messages/get_user_chats`,
             config
         );
         return response.data;

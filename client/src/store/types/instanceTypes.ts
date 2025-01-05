@@ -14,6 +14,7 @@ export type Message = {
     content: string;
     author: CondensedUser;
     receiver: CondensedUser;
+    createdAt: string;
 }
 
 export type Chat = {
@@ -21,6 +22,7 @@ export type Chat = {
     user1: CondensedUser;
     user2: CondensedUser;
     messages: Message[];
+    last_message: Message;
 }
 
 export type Notification = {

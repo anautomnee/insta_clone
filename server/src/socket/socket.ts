@@ -48,6 +48,7 @@ export const initializeSocket = (server: http.Server) => {
 
                 // Update chat with the new message
                 chat.messages.push(newMessage._id);
+                chat.last_message = newMessage._id;
                 await chat.save();
 
                 await newMessage.populate({
