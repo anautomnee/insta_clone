@@ -4,6 +4,9 @@ import {UserState} from "../../store/types/userTypes.ts";
 import {ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState} from "react";
 import {backendURL, fetchChat} from "../../uitls/apiCalls.ts";
 import { io } from "socket.io-client";
+import {formatMessageTime} from "../../uitls/utils.ts";
+
+const TEN_MINUTES = 10 * 60 * 1000;
 
 const socket = io(backendURL, {
     autoConnect: true, // Allow automatic connection
@@ -104,24 +107,38 @@ export const MessagesMain = () => {
                     View profile</Link>
             </div>
             <div className="px-3.5 text-xs">
-                {messages?.map((message) => (
-                    <div key={message._id} className="flex justify-start">
-                        {message.author.username === user?.username ? (<>
-                            <div
-                                className="flex gap-4 mb-2 py-5 px-4 bg-purple text-white w-[397px] rounded-2xl ml-auto">
-                                <p>{message.content}</p>
-                            </div>
-                            <img src={user?.profile_image} alt={user?.username}
-                                 className="w-7 h-7 object-cover rounded-[50%] ml-2"/>
-                        </>) : (<>
-                            <img src={message.author.profile_image} alt={user?.username}
-                                 className="w-7 h-7 object-cover rounded-[50%] mr-2"/>
-                            <div className="flex gap-4 mb-2 py-5 px-4 bg-gray w-[397px] rounded-2xl">
-                                <p>{message.content}</p>
-                            </div>
-                        </>)}
+                {messages?.map((message: Message, index: number) => {
+                    const prevMessage = messages[index - 1];
+                    const showTime =
+                        !prevMessage ||
+                        new Date(message.createdAt).getTime() - new Date(prevMessage.createdAt).getTime() > TEN_MINUTES;
+                    return (<div key={message._id}>
+                            {showTime && (
+                                <div className="flex justify-center my-2">
+                                <span className="text-darkgray">
+                                    {formatMessageTime(message.createdAt)}
+                                </span>
+                                </div>
+                            )}
+                        <div className="flex justify-start">
+                            {message.author.username === user?.username ? (<>
+                                <div
+                                    className="flex gap-4 mb-2 py-5 px-4 bg-purple text-white w-[397px] rounded-2xl ml-auto">
+                                    <p>{message.content}</p>
+                                </div>
+                                <img src={user?.profile_image} alt={user?.username}
+                                     className="w-7 h-7 object-cover rounded-[50%] ml-2"/>
+                            </>) : (<>
+                                <img src={message.author.profile_image} alt={user?.username}
+                                     className="w-7 h-7 object-cover rounded-[50%] mr-2"/>
+                                <div className="flex gap-4 mb-2 py-5 px-4 bg-gray w-[397px] rounded-2xl">
+                                    <p>{message.content}</p>
+                                </div>
+                            </>)}
+                        </div>
                     </div>
-                ))}
+                    )
+                })}
                 {/* Invisible div to act as scroll anchor */}
                 <div ref={messagesEndRef}></div>
             </div>
