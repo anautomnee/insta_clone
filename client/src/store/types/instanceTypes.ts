@@ -16,6 +16,13 @@ export type Message = {
     receiver: CondensedUser;
 }
 
+export type Chat = {
+    _id: string;
+    user1: CondensedUser;
+    user2: CondensedUser;
+    messages: Message[];
+}
+
 export type Notification = {
     _id: string,
     user: string,

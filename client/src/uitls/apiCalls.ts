@@ -182,7 +182,7 @@ export const getAllUsersForSearch = async (token: string) => {
     }
 };
 
-export const fetchChatMessages = async (receiverUsername: string, token: string) => {
+export const fetchChat = async (receiverUsername: string, token: string) => {
     try {
         const config = {
             headers: {

@@ -11,12 +11,12 @@ export const initializeSocket = (server: http.Server) => {
     });
 
     io.on("connection", (socket) => {
-        console.log("A user connected:", socket.id);
+        //console.log("A user connected:", socket.id);
 
         // Assign the user to a room based on their ID
         socket.on("joinRoom", (userId: string) => {
             socket.join(userId);
-            console.log(`User ${userId} joined their room: ${userId}`);
+            //console.log(`User ${userId} joined their room: ${userId}`);
         });
 
         // Listen for a new message event
@@ -50,10 +50,19 @@ export const initializeSocket = (server: http.Server) => {
                 chat.messages.push(newMessage._id);
                 await chat.save();
 
-                // Emit the new message to the receiver's room
-                io.to(receiverId.toString()).emit("receiveMessage", newMessage);
+                await newMessage.populate({
+                    path: 'author',
+                    select: 'username profile_image',
+                });
+                await newMessage.populate({
+                    path: 'receiver',
+                    select: 'username profile_image',
+                });
 
-                console.log("Message saved and sent to receiver:", newMessage);
+                // Emit the new message to the receiver's room
+                io.to(chat._id.toString()).emit("receiveMessage", newMessage);
+
+                //console.log("Message saved and sent to receiver:", newMessage);
             } catch (error) {
                 console.error("Error saving message:", error);
             }
@@ -61,7 +70,7 @@ export const initializeSocket = (server: http.Server) => {
 
         // Handle disconnection
         socket.on("disconnect", () => {
-            console.log("A user disconnected:", socket.id);
+            //console.log("A user disconnected:", socket.id);
         });
     });
 };
