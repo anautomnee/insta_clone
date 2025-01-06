@@ -97,7 +97,7 @@ export const MessagesMain = () => {
                  className="w-11 h-11 object-cover rounded-[50%]" />
             <p className="font-semibold">{receiver?.username}</p>
         </div>
-        <div className="max-h-[72vh] md:max-h-[56vh] overflow-y-scroll">
+        <div className="h-[72vh] md:h-[56vh] overflow-y-scroll">
             <div className="flex flex-col items-center mt-16 mb-20">
                 <img src={receiver?.profile_image} alt={receiver?.username}
                      className="w-24 h-24 object-cover mb-4 rounded-[50%]"/>

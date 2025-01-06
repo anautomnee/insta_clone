@@ -28,7 +28,9 @@ export const MessagesPage = () => {
 
     return (
         <div className="flex h-full">
-            <div className="hidden md:block lg:min-w-[398px] min-w-64 border-r border-r-gray">
+            <div className={`${
+                username ? "hidden" : "flex"
+            } sm:flex lg:min-w-[398px] md:min-w-64 min-w-full md:border-r border-r-gray flex-col`}>
                 <p className="font-semibold ml-4 lg:ml-6 mt-9 mb-14 text-xl">{user?.username}</p>
                 <div className="flex flex-col">
                     {chats.length > 0 && chats.map((chat: Chat) => {
@@ -68,7 +70,9 @@ export const MessagesPage = () => {
                     })}
                 </div>
             </div>
-            <Outlet context={{ user }} />
+            <div className={`${username ? "flex" : "hidden"} sm:flex flex-1`}>
+                <Outlet context={{user}}/>
+            </div>
         </div>
     );
 }

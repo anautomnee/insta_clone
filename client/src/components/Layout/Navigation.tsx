@@ -1,7 +1,7 @@
 import logo from "../../assets/logo.svg";
 import ich from "../../assets/nav_icons/ich.png"
 import links from "./navLinks.ts";
-import {Link} from "react-router";
+import {Link, useLocation} from "react-router";
 import { useRef, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
@@ -18,6 +18,7 @@ export const Navigation = () => {
     const notificationsRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLDivElement>(null);
     const userToken = localStorage.getItem("userToken");
+    const location = useLocation();
 
     const showCreatePost = () => {
         if(createPostRef.current) {
@@ -56,13 +57,13 @@ export const Navigation = () => {
                          onMouseOver={() => setHoveredLink(links[0].name)}
                          onMouseLeave={() => setHoveredLink(null)}>
                         <img
-                            src={hoveredLink === links[0].name ? links[0].logoFill : links[0].logo}
+                            src={hoveredLink === links[0].name || location.pathname === '/' ? links[0].logoFill : links[0].logo}
                             alt={links[0].name}
                         />
                         <span className="hidden lgg:block">{links[0].name}</span>
                     </div>
                 </Link>
-                <div className="flex gap-4 cursor-pointer"
+                <div className="hidden md:flex gap-4 cursor-pointer"
                      onClick={showSearch}
                      onMouseOver={() => setHoveredLink(links[1].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
@@ -92,12 +93,16 @@ export const Navigation = () => {
                      onMouseOver={() => setHoveredLink(links[3].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
-                        src={hoveredLink === links[3].name ? links[3].logoFill : links[3].logo}
+                        src={
+                            hoveredLink === links[3].name || location.pathname.startsWith('/messages')
+                                ? links[3].logoFill
+                                : links[3].logo
+                        }
                         alt={links[3].name}
                     />
                     <span className="hidden lgg:block">Messages</span>
                 </Link>
-                <div className="flex gap-4 cursor-pointer"
+                <div className="hidden md:flex gap-4 cursor-pointer"
                      onClick={showNotifications}
                      onMouseOver={() => setHoveredLink(links[4].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
