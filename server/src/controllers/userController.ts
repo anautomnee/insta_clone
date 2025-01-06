@@ -68,7 +68,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         const { bio, website, new_username} = req.body;
         // Check if username already exists
         const usernameExists = await User.findOne({ username: new_username });
-        if (usernameExists) {
+        if (usernameExists && user.username !== username) {
             res.status(400).json({ message: 'Username already exists' });
             return;
         }

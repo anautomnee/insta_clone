@@ -5,7 +5,6 @@ const upload = multer({
     storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
     fileFilter: (req, file, callback) => {
-        console.log(req.body.new_username)
         if (file.fieldname !== 'photo') {
             return callback(new Error('Unexpected field for image')); // Reject unexpected fields
         }

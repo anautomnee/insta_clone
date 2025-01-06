@@ -80,3 +80,39 @@ export const onLikePost = async (e: MouseEvent<HTMLImageElement>, postId: string
         target.src = like;
     }
 };
+
+export const onLikePostFromHomepage = async (e: MouseEvent<HTMLImageElement>, postId: string, setPosts: Dispatch<React.SetStateAction<Post[]>>) => {
+    const target = e.target as HTMLImageElement;
+    if (!token) {
+        return;
+    }
+
+    if (target.src === like) {
+        await likePost(token, postId);
+
+        // Update the UI immediately after liking the comment
+        setPosts((prevPosts) =>
+            prevPosts.map((post) =>
+                post._id === postId
+                    ? { ...post, like_count: post.like_count + 1 }
+                    : post
+            )
+        );
+
+
+        target.src = liked;
+    } else {
+        await unLikePost(token, postId);
+
+        // Update the UI immediately after liking the comment
+        setPosts((prevPosts) =>
+            prevPosts.map((post) =>
+                post._id === postId
+                    ? { ...post, like_count: post.like_count - 1 }
+                    : post
+            )
+        );
+
+        target.src = like;
+    }
+};

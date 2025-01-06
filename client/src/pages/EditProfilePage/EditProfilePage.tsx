@@ -13,6 +13,7 @@ export const EditProfilePage = () => {
     const [website, setWebsite] = useState<string>("");
     const [about, setAbout] = useState<string>("");
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [showNotification, setShowNotification] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const user = useSelector((state: RootState) => state.user);
@@ -94,7 +95,15 @@ export const EditProfilePage = () => {
                     website: website,
                     bio: about,
                     token: token
-                }))
+                }));
+
+                setShowNotification(true); // Show the notification
+                setTimeout(() => {
+                    setShowNotification(false); // Automatically hide after 3 seconds
+                }, 3000);setShowNotification(true); // Show the notification
+                setTimeout(() => {
+                    setShowNotification(false); // Automatically hide after 3 seconds
+                }, 3000);
             }
         }
     };
@@ -171,6 +180,20 @@ export const EditProfilePage = () => {
                 <p className="absolute bottom-2 right-3 text-darkgray text-xs">{about.length}/150</p>
             </div>
             <button className="bg-blue text-white py-2 w-[268px] rounded-lg text-sm">Save</button>
+            {showNotification && (
+                <div className="fixed bottom-4 right-4 bg-blue text-white px-4 py-2 rounded shadow-md flex items-center gap-2">
+                    <span>Profile edited</span>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowNotification(false)
+                        }}
+                        className="text-sm px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
+                    >
+                        ✕
+                    </button>
+                </div>
+            )}
         </form>
     );
 };

@@ -20,6 +20,6 @@ router.post('/create', upload.single('photo'), ifAuthenticated, createPost);
 router.put('/:postId', ifAuthenticated, ifPostAuthor, updatePost);
 router.post('/:postId/like', ifAuthenticated, likePost);
 router.delete('/:postId', ifAuthenticated, ifPostAuthor, deletePost);
-router.delete('/:postId/unlike', ifAuthenticated, ifPostAuthor, unLikePost);
+router.delete('/:postId/unlike', ifAuthenticated, unLikePost);
 
 export default router;

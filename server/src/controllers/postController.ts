@@ -122,8 +122,12 @@ export const likePost = async (req: Request, res: Response) => {
 
 export const unLikePost = async (req: Request, res: Response) => {
     try {
-        const post = (req as any).post;
-        if(!post || !req.user) return;
+        const { postId } = req.params;
+        const post = await Post.findById(postId);
+        if(!post || !req.user) {
+            res.status(404).send('Post or user not found');
+            return;
+        }
 
         const like = await Like.findOne({ user: req.user.id, post: post._id });
         if (!like) {
@@ -197,7 +201,8 @@ export const getFollowedPosts = async (req: Request, res: Response) => {
             .sort({ createdAt: -1 }) // Sort by newest first
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate("author", "username profile_image");
+            .populate("author", "username profile_image")
+            .populate('likes', 'user');
 
         res.status(200).json(posts);
     } catch (error) {
