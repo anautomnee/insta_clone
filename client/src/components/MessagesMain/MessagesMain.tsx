@@ -97,7 +97,7 @@ export const MessagesMain = () => {
                  className="w-11 h-11 object-cover rounded-[50%]" />
             <p className="font-semibold">{receiver?.username}</p>
         </div>
-        <div className="max-h-[56vh] overflow-y-scroll">
+        <div className="max-h-[72vh] md:max-h-[56vh] overflow-y-scroll">
             <div className="flex flex-col items-center mt-16 mb-20">
                 <img src={receiver?.profile_image} alt={receiver?.username}
                      className="w-24 h-24 object-cover mb-4 rounded-[50%]"/>
@@ -123,7 +123,7 @@ export const MessagesMain = () => {
                         <div className="flex justify-start">
                             {message.author.username === user?.username ? (<>
                                 <div
-                                    className="flex gap-4 mb-2 py-5 px-4 bg-purple text-white w-[397px] rounded-2xl ml-auto">
+                                    className="flex gap-4 mb-2 py-5 px-4 bg-purple text-white w-60 lg:w-[397px] rounded-2xl ml-auto">
                                     <p>{message.content}</p>
                                 </div>
                                 <img src={user?.profile_image} alt={user?.username}
@@ -131,7 +131,7 @@ export const MessagesMain = () => {
                             </>) : (<>
                                 <img src={message.author.profile_image} alt={user?.username}
                                      className="w-7 h-7 object-cover rounded-[50%] mr-2"/>
-                                <div className="flex gap-4 mb-2 py-5 px-4 bg-gray w-[397px] rounded-2xl">
+                                <div className="flex gap-4 mb-2 py-5 px-4 bg-gray w-60 lg:w-[397px] rounded-2xl">
                                     <p>{message.content}</p>
                                 </div>
                             </>)}
@@ -143,7 +143,7 @@ export const MessagesMain = () => {
                 <div ref={messagesEndRef}></div>
             </div>
         </div>
-        <input className="mx-3.5 my-6 px-8 py-3 w-[96%] rounded-3xl border border-gray text-sm"
+        <input className="mx-3.5 my-6 px-8 py-3 w-[92%] rounded-3xl border border-gray text-sm"
                placeholder="Write message"
                 value={newMessage}
                onChange={(e: ChangeEvent<HTMLInputElement>) => {setNewMessage(e.target.value)}}
