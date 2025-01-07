@@ -1,5 +1,14 @@
 import {Route, Routes } from "react-router";
-import {EditProfilePage, ErrorPage, HomePage, LoginPage, ProfilePage, RegisterPage, ResetPage} from "../pages";
+import {
+    EditProfilePage,
+    ErrorPage,
+    ExplorePage,
+    HomePage,
+    LoginPage,
+    ProfilePage,
+    RegisterPage,
+    ResetPage
+} from "../pages";
 import {PostModal} from "../components/PostModal/PostModal.tsx";
 import {MessagesPage} from "../pages/MessagesPage/MessagesPage.tsx";
 import {MessagesMain} from "../components/MessagesMain/MessagesMain.tsx";
@@ -18,6 +27,7 @@ export const MainRouter = () => {
             <Route path="/messages" element={<MessagesPage/>}>
                 <Route path=":username" element={<MessagesMain />} />
             </Route>
+            <Route path="/explore" element={<ExplorePage/>} />
             <Route path="*" element={<ErrorPage/>} />
         </Routes>
     );

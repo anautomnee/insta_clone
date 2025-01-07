@@ -1,127 +1,95 @@
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../store/store.ts";
-import { ChangeEvent, useEffect, useState, useRef } from "react";
-import {editProfile} from "../../store/actionCreators/userActionCreators.ts";
-import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
+import {ChangeEvent, useState} from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store.ts";
+import {editProfile, fetchUser} from "../../store/actionCreators/userActionCreators.ts";
+import { useRedirectIfNotAuthenticated } from "../../uitls/customHooks.ts";
+
+interface FormInputs {
+    username: string;
+    website: string;
+    about: string;
+    profileImage: File[] | null;
+}
 
 export const EditProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
     if (redirected) return null;
-    const [preview, setPreview] = useState<string | null>(null);
-    const [profileImage, setProfileImage] = useState<FileList | null>(null);
-    const [username, setUsername] = useState<string>("");
-    const [website, setWebsite] = useState<string>("");
-    const [about, setAbout] = useState<string>("");
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [showNotification, setShowNotification] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
+    const user = useSelector((state: RootState) => state.user);
     const token = localStorage.getItem("userToken");
 
-    useEffect(() => {
-        if (user) {
-            setUsername(user.username);
-            setAbout(user.bio);
-            if (user.website) {
-                setWebsite(user.website);
-            }
-            setPreview(user.profile_image); // Set initial profile image preview
-        }
-    }, [user]);
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        trigger,
+        formState: { errors, isDirty },
+    } = useForm<FormInputs>({
+        defaultValues: {
+            username: user?.username || "",
+            website: user?.website || "",
+            about: user?.bio || "",
+            profileImage: null,
+        },
+    });
 
-    const validateForm = () => {
-        const newErrors: { [key: string]: string } = {};
+    const [preview, setPreview] = useState<string | null>(user?.profile_image || null);
+    const [showNotification, setShowNotification] = useState(false);
 
-        if (profileImage && profileImage[0].size > 5 * 1024 * 1024) {
-            newErrors.profile_image = "File must be smaller than 5MB.";
-        }
-
-        if (username.length > 120) {
-            newErrors.username = "Username should be less than 120 characters.";
-        }
-
-        if (website.length > 120) {
-            newErrors.website = "Website should be less than 120 characters.";
-        }
-
-        if (about.length > 150) {
-            newErrors.about = "Bio should be less than 150 characters.";
-        }
-
-        setErrors(newErrors);
-
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-
-        if (file) {
-            // Validate file size manually here
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
             if (file.size > 5 * 1024 * 1024) {
                 alert("File must be smaller than 5MB");
                 return;
             }
 
-            // Generate a preview for the file (if it's an image)
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPreview(reader.result as string); // Set the preview URL
+                setPreview(reader.result as string);
             };
-            reader.readAsDataURL(file); // Read the file as a Data URL (base64)
-
-            // Set the selected file into state
-            setProfileImage(e.target.files);
+            reader.readAsDataURL(file);
+            console.log(e.target.files);
+            setValue("profileImage", [file], { shouldValidate: true, shouldDirty: true });
+            await trigger("profileImage");
         }
     };
 
-    const handleButtonClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
-    };
-
-    const onSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (validateForm()) {
-            if (token) {
-                 await dispatch(editProfile({
-                    username: user.username,
-                    new_username: username,
-                    profile_image: profileImage,
-                    website: website,
-                    bio: about,
-                    token: token
-                }));
-
-                setShowNotification(true); // Show the notification
-                setTimeout(() => {
-                    setShowNotification(false); // Automatically hide after 3 seconds
-                }, 3000);setShowNotification(true); // Show the notification
-                setTimeout(() => {
-                    setShowNotification(false); // Automatically hide after 3 seconds
-                }, 3000);
-            }
-        }
-    };
-
-    const handleAboutChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        const text = e.target.value;
-        if (text.length <= 150) {
-            setAbout(text);
-        }
+    const onSubmit = async (data: FormInputs) => {
+       try {
+           console.log(data);
+           if (token) {
+               const result = await dispatch(
+                   editProfile({
+                       username: user.username,
+                       new_username: data.username,
+                       profile_image: data.profileImage,
+                       website: data.website,
+                       bio: data.about,
+                       token,
+                   })
+               );
+               if (result.type !== "user/editProfile/rejected") {
+                    await dispatch(fetchUser({username: data.username, token}));
+                   setShowNotification(true);
+                   setTimeout(() => setShowNotification(false), 3000);
+               }
+           }
+       } catch (error) {
+           console.error('Failed to edit profile: ', error);
+       }
     };
 
     return (
-        <form className="flex flex-col ml-40 my-9 max-w-[610px]" onSubmit={onSubmit}>
+        <form className="flex flex-col ml-40 my-9 max-w-[610px]" onSubmit={handleSubmit(onSubmit)}>
             <p className="font-semibold text-xl mb-11">Edit profile</p>
             <div className="flex justify-between items-center mb-8 p-4 bg-gray rounded-[20px]">
                 <div className="flex gap-4">
                     <img
-                        src={preview || user.profile_image} // Use preview or fallback to existing user image
+                        src={preview || user.profile_image}
                         alt={user.username}
                         className="w-14 h-14 object-cover rounded-[50%] border border-[#00000019]"
                     />
@@ -131,62 +99,60 @@ export const EditProfilePage = () => {
                     </div>
                 </div>
                 <input
-                    ref={fileInputRef}
-                    id="fileInput"
+                    {...register('profileImage')}
                     type="file"
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
+                    style={{display: 'none'}} id="file-upload"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleFileChange(e)}
                 />
-                <button
-                    type="button"
-                    onClick={handleButtonClick}
+                <label
+                    htmlFor="file-upload"
                     className="text-white bg-blue h-fit rounded-lg px-4 py-2 cursor-pointer"
                 >
                     New photo
-                </button>
+                </label>
             </div>
-            {user.error && user.error.length > 0 && <p className="pt-2 text-xs text-error">{user.error}</p>}
-            {errors.profile_image && (
-                <p className="pt-2 text-xs text-error">{errors.profile_image}</p>
-            )}
             <p className="font-semibold mb-2">Username</p>
-            {errors.username && (
-                <p className="pt-2 text-xs text-error">{errors.username}</p>
-            )}
+            {user.error && <p className="pt-2 text-xs text-error">{user.error}</p>}
             <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                {...register("username", { required: "Username is required", maxLength: 120 })}
                 className="border border-gray rounded-xl mb-5 h-10 px-4"
             />
+            {errors.username && <p className="pt-2 text-xs text-error">{errors.username.message}</p>}
+
             <p className="font-semibold mb-2">Website</p>
-            {errors.website && (
-                <p className="pt-2 text-xs text-error">{errors.website}</p>
-            )}
             <input
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
+                {...register("website", { maxLength: 120 })}
                 className="border border-gray rounded-xl mb-5 h-10 px-4"
             />
+            {errors.website && <p className="pt-2 text-xs text-error">{errors.website.message}</p>}
+
             <p className="font-semibold mb-2">About</p>
-            {errors.about && (
-                <p className="pt-2 text-xs text-error">{errors.about}</p>
-            )}
             <div className="relative h-16 mb-16 w-full">
         <textarea
-            value={about}
-            onChange={handleAboutChange}
-            className="border border-gray rounded-xl h-16 w-full pl-4 pr-20 py-1 overflow-y-scroll resize-none"
+            {...register("about", { maxLength: 150 })}
+            className="border border-gray z-0 rounded-xl h-16 w-full pl-4 pr-20 py-1 overflow-y-scroll resize-none"
         />
-                <p className="absolute bottom-2 right-3 text-darkgray text-xs">{about.length}/150</p>
+                <p className="absolute bottom-2 right-3 text-darkgray text-xs">{watch("about").length}/150</p>
             </div>
-            <button className="bg-blue text-white py-2 w-[268px] rounded-lg text-sm">Save</button>
+            {errors.about && <p className="pt-2 text-xs text-error">{errors.about.message}</p>}
+
+            <button
+                type="submit"
+                className={`${
+                    isDirty ? "bg-blue" : "bg-gray cursor-not-allowed"
+                } text-white py-2 w-[268px] rounded-lg text-sm`}
+                disabled={!isDirty}
+            >
+                Save
+            </button>
+
             {showNotification && (
                 <div className="fixed bottom-4 right-4 bg-blue text-white px-4 py-2 rounded shadow-md flex items-center gap-2">
                     <span>Profile edited</span>
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            setShowNotification(false)
+                            setShowNotification(false);
                         }}
                         className="text-sm px-2 py-1 bg-gray-700 rounded hover:bg-gray-600"
                     >

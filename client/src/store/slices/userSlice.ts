@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {editProfile, fetchUser} from "../actionCreators/userActionCreators.ts";
-import {UserState} from "../types/userTypes.ts";
+import { UserState} from "../types/userTypes.ts";
 import {CondensedUser, Post, User} from "../types/instanceTypes.ts";
 
 const initialState: UserState = {

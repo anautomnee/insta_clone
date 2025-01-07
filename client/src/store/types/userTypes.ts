@@ -11,7 +11,7 @@ export interface UserState extends User {
 }
 
 export type EditProfileData = {
-    profile_image: FileList | null,
+    profile_image: File[] | null,
     username: string,
     new_username: string,
     website: string,

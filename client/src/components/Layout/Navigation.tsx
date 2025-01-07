@@ -72,7 +72,7 @@ export const Navigation = () => {
                         alt={links[1].name}
                     />
                     <span className="hidden lgg:block">Search</span>
-                    <div ref={searchRef} hidden>
+                    <div ref={searchRef} hidden className="z-20">
                         <SearchModal modalRef={searchRef} />
                     </div>
                 </div>
@@ -111,7 +111,7 @@ export const Navigation = () => {
                         alt={links[4].name}
                     />
                     <span className="hidden lgg:block">Notifications</span>
-                    <div ref={notificationsRef} hidden>
+                    <div ref={notificationsRef} hidden className="z-20">
                         <NotificationsModal modalRef={notificationsRef} notifications={user?.notifications}/>
                     </div>
                 </div>
