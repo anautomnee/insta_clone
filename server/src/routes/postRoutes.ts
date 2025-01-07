@@ -8,7 +8,8 @@ import {
     deletePost,
     unLikePost,
     updatePost,
-    getFollowedPosts
+    getFollowedPosts,
+    getRandomPosts
 } from "../controllers/postController";
 import ifPostAuthor from "../middlewares/authorMiddleware.ts";
 
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.get('/get/:postId', ifAuthenticated, getPostById);
 router.get('/get_followed', ifAuthenticated, getFollowedPosts);
+router.get('/random', ifAuthenticated, getRandomPosts);
 router.post('/create', upload.single('photo'), ifAuthenticated, createPost);
 router.put('/:postId', ifAuthenticated, ifPostAuthor, updatePost);
 router.post('/:postId/like', ifAuthenticated, likePost);

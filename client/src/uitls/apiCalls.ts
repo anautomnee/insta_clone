@@ -233,3 +233,21 @@ export const fetchFollowedPosts = async (token: string, page: number) => {
         console.error('Error fetching chat messages', error);
     }
 };
+
+
+export const getRandomPosts = async (token: string) => {
+    try {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        };
+        const response = await axios.get(
+            `${backendURL}/posts/random`,
+            config
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error getting users', error);
+    }
+};

@@ -80,7 +80,8 @@ export const ProfileHeader= ({user}: {user: User | null}) => {
                         <p><b>{user?.followers.length}</b> followers</p>
                         <p><b>{user?.followings.length}</b> following</p>
                     </div>
-                    <p className="hidden md:block text-sm w-[434px] break-words">{user?.bio}</p>
+                    {user.bio ? <p className="hidden md:block text-sm w-[434px] break-words">{user.bio}</p> :
+                        <p className="hidden md:block text-sm text-darkgray">No bio yet</p>}
                 </div>
             </div>
             <p className="md:hidden pl-6 text-sm w-[90vw] break-words">{user?.bio}</p>

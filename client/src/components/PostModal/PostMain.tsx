@@ -77,7 +77,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                         <img
                             src={post?.author?.profile_image}
                             alt="Profile image"
-                            className="w-6 h-6 rounded-[50%] border border-gray"
+                            className="w-6 h-6 rounded-[50%] border border-gray object-cover"
                         />
                         <span className="font-semibold">{post?.author?.username}</span>
                     </div>
@@ -99,7 +99,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     <img
                         src={post?.author?.profile_image}
                         alt="Profile image"
-                        className="min-w-6 h-6 rounded-[50%] border border-gray"
+                        className="min-w-6 h-6 object-cover rounded-[50%] border border-gray"
                     />
                 </Link>
                 <div className="flex-col">

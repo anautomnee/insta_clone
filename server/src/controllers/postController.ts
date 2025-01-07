@@ -76,6 +76,18 @@ export const getPostById = async (req: Request, res: Response) => {
     }
 };
 
+export const getRandomPosts = async (req: Request, res: Response) => {
+    try {
+        const posts = await Post.aggregate().sample(10);
+        const populatedPosts = await Post.populate(posts, { path: 'author', select: 'username' });
+
+        res.status(200).send(populatedPosts);
+    } catch (error) {
+        console.error('Error getting posts: ', error);
+        res.status(500).send('Error getting posts');
+    }
+};
+
 export const likePost = async (req: Request, res: Response) => {
     try {
         const { postId } = req.params;
