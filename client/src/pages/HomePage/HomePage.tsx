@@ -32,19 +32,25 @@ export const HomePage = () => {
         const loadPosts = async (): Promise<void> => {
             try {
                 if (!token) return;
-                const result = await fetchFollowedPosts(token, page);
+                const result: Post[] = await fetchFollowedPosts(token, page);
+
+                // Update posts state and remove duplicates
+                setPosts((prevPosts) => {
+                    const newPosts = result.filter(
+                        (newPost) => !prevPosts.some((post) => post._id === newPost._id)
+                    );
+                    return [...prevPosts, ...newPosts];
+                });
+
+                // Check if there are more posts to load
                 if (result.length < 10) setHasMore(false);
-                if (page !== 1) {
-                    setPosts((prevPosts) => [...prevPosts, ...result])
-                } else {
-                    setPosts(result);
-                }
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
         };
+
         loadPosts();
-    }, [page]);
+    }, [page, token]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -152,5 +158,4 @@ export const HomePage = () => {
             </div>
         </div>
     );
-
 };
