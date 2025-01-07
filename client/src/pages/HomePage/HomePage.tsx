@@ -18,7 +18,6 @@ import {NotificationsModal} from "../../components/NotificationsModal/Notificati
 
 export const HomePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
-    if (redirected) return null;
     const [posts, setPosts] = useState<Post[]>([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -75,6 +74,8 @@ export const HomePage = () => {
             searchRef.current.hidden = false;
         }
     };
+
+    if (redirected) return null;
 
     return (
         <div className="flex flex-col justify-center">

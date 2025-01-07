@@ -10,7 +10,6 @@ import {formatDate} from "../../uitls/utils.ts";
 
 export const MessagesPage = () => {
     const redirected: boolean = useRedirectIfNotAuthenticated();
-    if (redirected) return null;
     const [chats, setChats] = useState<Chat[]>([]);
     const user: UserState = useSelector((state: RootState) => state.user);
     const token = localStorage.getItem("userToken");
@@ -25,6 +24,8 @@ export const MessagesPage = () => {
         }
         if (chats.length === 0) getChats();
     }, []);
+
+    if (redirected) return null;
 
     return (
         <div className="flex h-full">

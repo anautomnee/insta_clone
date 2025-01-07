@@ -14,7 +14,6 @@ interface FormInputs {
 
 export const EditProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
-    if (redirected) return null;
 
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: RootState) => state.user);
@@ -82,6 +81,8 @@ export const EditProfilePage = () => {
            console.error('Failed to edit profile: ', error);
        }
     };
+
+    if (redirected) return null;
 
     return (
         <form className="flex flex-col ml-40 my-9 max-w-[610px]" onSubmit={handleSubmit(onSubmit)}>

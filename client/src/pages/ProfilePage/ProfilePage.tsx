@@ -9,12 +9,10 @@ import {RootState} from "../../store/store.ts";
 
 export const ProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
-    if (redirected) return null;
     const {username} = useParams();
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const user = useSelector((state: RootState) => state.user);
     const token = localStorage.getItem("userToken");
-
 
     useEffect(() => {
         const fetchUserFunc = async() => {
@@ -28,6 +26,8 @@ export const ProfilePage = () => {
         }
         fetchUserFunc();
     }, [username, user]);
+
+    if (redirected) return null;
 
     return (
         <div className="flex flex-col items-center gap-8 mx-auto md:mx-28 md:my-9 lg:gap-16">
