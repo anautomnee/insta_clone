@@ -115,11 +115,36 @@ export const HomePage = () => {
                                  alt='like'
                                  className="w-6 h-6 cursor-pointer"
                                  onClick={async (e) => onLikePostFromHomepage(e, post._id, setPosts)}/>
-                            <img src={comment} alt="comment"/>
+                            <Link to={`/profile/${post.author.username}/post/${post._id}`}>
+                                <img src={comment} alt="comment"/>
+                            </Link>
                         </div>
                         <p className="text-xs font-semibold mb-2">{post.like_count} likes</p>
-                        <p className="line-clamp-3 text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
-                            {post.author.username}</span>{post.content}</p>
+                        {post.content.length < 82 ?
+                            <p className="text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
+                            {post.author.username}</span>{post.content}</p> :
+                            <div>
+                                <p className="text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
+                            {post.author.username}</span>{post.content.slice(0, 82)}
+                                    <span className="text-darkgray cursor-pointer"
+                                    onClick={(e) => {
+                                        const target = e.target as HTMLElement;
+                                        const contentP = target.parentElement as HTMLElement;
+                                        const fullText = contentP.nextElementSibling as HTMLElement;
+                                        contentP.hidden = true;
+                                        fullText.hidden = false;
+                                    }}>  ...more</span></p>
+                                <p hidden className=" text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
+                            {post.author.username}</span>{post.content}
+                                    <span className="text-darkgray cursor-pointer"
+                                          onClick={(e) => {
+                                              const target = e.target as HTMLElement;
+                                              const contentP = target.parentElement as HTMLElement;
+                                              const shortenedText = contentP.previousElementSibling as HTMLElement;
+                                              contentP.hidden = true;
+                                              shortenedText.hidden = false;
+                                          }}>  ...less</span></p>
+                            </div>}
                         <p className="text-darkgray text-xs mb-9">View all comments ({post.comments.length})</p>
                     </div>
                 ))}
