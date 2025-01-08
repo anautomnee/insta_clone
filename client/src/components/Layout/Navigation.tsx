@@ -28,27 +28,27 @@ export const Navigation = () => {
 
     const showNotifications = () => {
         if(notificationsRef.current) {
-            notificationsRef.current.hidden = false;
+            notificationsRef.current.hidden = notificationsRef.current.hidden ? false : true;
         }
     };
 
     const showSearch = () => {
         if(searchRef.current) {
-            searchRef.current.hidden = false;
+            searchRef.current.hidden = searchRef.current.hidden ? false : true;
         }
     };
 
     return (
         <div className="flex md:flex-col items-center gap-4 bg-white
         md:border-r border-t md:border-t-0  border-gray py-[28px] px-4 lgg:px-6 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
-            <div className="hidden md:flex">
+            <Link to='/' className="hidden md:flex">
                 <img src={logo}
                      alt="logo"
                      className="hidden lgg:block"/>
                 <img src={ich}
                      alt="logo small"
                      className="block lgg:hidden"/>
-            </div>
+            </Link>
             <div className="flex md:flex-col items-center justify-around md:items-start gap-4 md:mt-6 w-full">
                 <Link
                     to={links[0].href}

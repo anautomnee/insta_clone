@@ -87,7 +87,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                 <img
                     src={more}
                     alt="More"
-                    className="w-6 mr-2"
+                    className="w-6 mr-2 cursor-pointer"
                     onClick={() => {
                         if (moreRef.current) {
                             moreRef.current.hidden = false;

@@ -14,6 +14,7 @@ import search from '../../assets/nav_icons/search/search.svg';
 import notifications_icon from '../../assets/nav_icons/notifications/notifications.svg';
 import {SearchModal} from "../../components/SearchModal/SearchModal.tsx";
 import {NotificationsModal} from "../../components/NotificationsModal/NotificationsModal.tsx";
+import done from '../../assets/done.png';
 
 
 export const HomePage = () => {
@@ -157,6 +158,11 @@ export const HomePage = () => {
                 ))}
                 <div ref={loadMoreRef} className="load-more-trigger"></div>
             </div>
+            {!hasMore && (<div className="flex flex-col items-center mx-auto pb-16">
+                <img src={done} alt='done' className="mb-2.5"/>
+                <p>You've seen all the posts</p>
+                <p className="text-xs text-darkgray">You have viewed all the posts from followed users</p>
+            </div>)}
         </div>
     );
 };
