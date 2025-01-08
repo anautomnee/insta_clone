@@ -1,4 +1,4 @@
-import {Link} from "react-router";
+import {Link, useLocation} from "react-router";
 import more from "../../assets/more.svg";
 import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
 import liked from "../../assets/reactions/liked.svg";
@@ -24,6 +24,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
     const userId = useSelector((state: RootState) => state.user._id);
+    const location = useLocation();
+    const isModal = location.state?.backgroundLocation;
 
     const token = localStorage.getItem("userToken");
 
@@ -67,8 +69,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     };
 
     return (
-        <div className="pr-6 overflow-y-scroll mb-32 lgg:h-[520px]
-                 lg:h-[370px] md:h-[240px] xs::max-h-[240px] sm:max-h-[108px] md:max-h-full">
+        <div className={`flex flex-col overflow-y-scroll lgg:h-[520px] h-[120px]
+            lg:h-[370px] md:h-[220px] ${isModal ? "" : "sm:mb-40 h-[36vh]"} md:max-h-full`}>
             <div className="hidden lg:flex justify-between border-b border-b-gray">
                 <Link
                     to={`/profile/${post?.author?.username}`}
@@ -85,6 +87,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                 <img
                     src={more}
                     alt="More"
+                    className="w-6 mr-2"
                     onClick={() => {
                         if (moreRef.current) {
                             moreRef.current.hidden = false;
@@ -99,7 +102,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     <img
                         src={post?.author?.profile_image}
                         alt="Profile image"
-                        className="min-w-6 h-6 object-cover rounded-[50%] border border-gray"
+                        className="min-w-6 max-w-6 h-6 object-cover rounded-[50%] border border-gray"
                     />
                 </Link>
                 <div className="flex-col">
@@ -145,7 +148,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     ))
                 )}
             </div>
-            <div className="absolute bg-white bottom-0">
+            <div className={`bg-white ${isModal ? "absolute bottom-0" 
+                : "sm:absolute lgg:top-[460px] lg:top-[400px] md:top-[280px] sm:top-[460px] "}`}>
                 <div className="pl-3.5 mb-3 mt-2">
                     <div className="flex gap-3 mb-2">
                         <img src={userId && post?.likes && isLikedByUser(post?.likes, userId) ? liked : like}
@@ -167,8 +171,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120
                         characters</p>}
                     {commentError && <p className="pl-3.5 pt-2 text-xs text-error">{commentError}</p>}
-                    <form className="flex items-center justify-between pl-3.5 bg-white
-                            lgg:w-[423px] lg:w-[356px] md:w-[262px] w-[90vw]"
+                    <form className={`flex items-center justify-between pl-3.5 bg-white
+                            ${isModal ? "lgg:w-[423px] lg:w-[356px] md:w-[262px] w-[90vw]" : ""}`}
                           onSubmit={handleSubmit(onComment)}>
                         <div className="flex items-center gap-4">
                             <img src={smiley}
@@ -183,11 +187,12 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                             )}
                             <input {...register('content', {required: true, maxLength: 120})}
                                    placeholder="Add comment"
-                                   className="placeholder:text-xs py-2.5
-                                     w-[54vw] sm:w-[62vw] md:w-36 lg:w-52 lgg:w-64 outline-0"/>
+                                   className={`placeholder:text-xs py-2.5
+                                     ${isModal ? "w-[54vw] sm:w-[62vw] md:w-36 lg:w-52 lgg:w-64 outline-0" :
+                                       "lgg:w-52 lg:w-40 md:w-28 sm:w-[310px] w-[26vh]"}`}/>
                         </div>
                         <button type="submit"
-                                className="text-blue text-xs font-semibold pr-6 lg:pr-10">Send
+                                className={`text-blue text-xs font-semibold pr-6 ${isModal ? "lg:pr-10" : ""}`}>Send
                         </button>
                     </form>
                 </div>

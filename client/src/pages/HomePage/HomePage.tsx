@@ -8,7 +8,7 @@ import comment from '../../assets/reactions/comment.svg';
 import liked from "../../assets/reactions/liked.svg";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
-import {Link} from "react-router";
+import {Link, useLocation} from "react-router";
 import {onLikePostFromHomepage} from "../../uitls/likeFunctions.ts";
 import search from '../../assets/nav_icons/search/search.svg';
 import notifications_icon from '../../assets/nav_icons/notifications/notifications.svg';
@@ -26,6 +26,7 @@ export const HomePage = () => {
     const searchRef = useRef<HTMLDivElement>(null);
     const token = localStorage.getItem("userToken");
     const {_id, notifications} = useSelector((state: RootState) => state.user);
+    const location = useLocation();
 
 
     useEffect(() => {
@@ -112,7 +113,7 @@ export const HomePage = () => {
                             <p className="text-xs font-semibold">{post.author.username}</p>
                             <p className="text-xs text-darkgray">· {post.createdAt && formatDate(new Date(post.createdAt))}</p>
                         </Link>
-                        <Link to={`/profile/${post.author.username}/post/${post._id}`}>
+                        <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }}>
                             <img src={post.photo} alt={`post-${post._id}`}
                                  className="w-[420px] h-[420px] object-contain cursor-pointer"/>
                         </Link>
@@ -121,7 +122,7 @@ export const HomePage = () => {
                                  alt='like'
                                  className="w-6 h-6 cursor-pointer"
                                  onClick={async (e) => onLikePostFromHomepage(e, post._id, setPosts)}/>
-                            <Link to={`/profile/${post.author.username}/post/${post._id}`}>
+                            <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }}>
                                 <img src={comment} alt="comment"/>
                             </Link>
                         </div>

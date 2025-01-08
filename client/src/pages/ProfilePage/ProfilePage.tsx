@@ -3,9 +3,10 @@ import { useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 import { useEffect, useState} from 'react';
 import {User} from "../../store/types/instanceTypes.ts";
 import {fetchProfile} from "../../uitls/apiCalls.ts";
-import {Link, Outlet, useParams} from "react-router";
+import {Link, useLocation, useParams} from "react-router";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
+import {PostModal} from "../../components/PostModal/PostModal.tsx";
 
 export const ProfilePage = () => {
     const redirected = useRedirectIfNotAuthenticated();
@@ -13,6 +14,9 @@ export const ProfilePage = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const user = useSelector((state: RootState) => state.user);
     const token = localStorage.getItem("userToken");
+    const location = useLocation();
+
+    const isModal = location.pathname.includes("/post/");
 
     useEffect(() => {
         const fetchUserFunc = async() => {
@@ -36,11 +40,10 @@ export const ProfilePage = () => {
             <div className="flex flex-col gap-8 lg:gap-16">
                 <ProfileHeader user={currentUser}/>
                 <div className="grid grid-cols-3 px-1 sm:px-6 gap-1 sm:gap-2">
-                    <Outlet />
                     {currentUser?.posts && currentUser.posts.length > 0 && [...currentUser?.posts].reverse().map((post) => (<div
                         key={post._id}
                         className="aspect-square">
-                        <Link to={`post/${post._id}`}>
+                        <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }}>
                             <img
                                 src={post.photo}
                                 alt={post._id}
@@ -50,6 +53,7 @@ export const ProfilePage = () => {
                     </div>))}
                 </div>
             </div>
+            {isModal && <PostModal />}
         </div>
     );
 };
