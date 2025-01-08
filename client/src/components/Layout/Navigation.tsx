@@ -28,13 +28,13 @@ export const Navigation = () => {
 
     const showNotifications = () => {
         if(notificationsRef.current) {
-            notificationsRef.current.hidden = notificationsRef.current.hidden ? false : true;
+            notificationsRef.current.hidden = !notificationsRef.current.hidden;
         }
     };
 
     const showSearch = () => {
         if(searchRef.current) {
-            searchRef.current.hidden = searchRef.current.hidden ? false : true;
+            searchRef.current.hidden = !searchRef.current.hidden;
         }
     };
 
