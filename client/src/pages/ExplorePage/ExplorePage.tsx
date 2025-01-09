@@ -5,7 +5,7 @@ import {Link} from "react-router";
 
 export const ExplorePage = () => {
     const [photos, setPhotos] = useState<Post[]>([]);
-    const [isFetching, setIsFetching] = useState(false); // Prevent redundant API calls
+    const [isFetching, setIsFetching] = useState(false);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
     const token = localStorage.getItem("userToken");
 
@@ -13,16 +13,11 @@ export const ExplorePage = () => {
         try {
             if (!token || isFetching) return; // Prevent redundant fetches
             setIsFetching(true); // Set fetching state to true
-
-            const result: Post[] = await getRandomPosts(token);
+            const fetchCount = window.innerHeight > window.innerWidth && photos.length === 0 ? 20 : 10;
+            const result: Post[] = await getRandomPosts(token, fetchCount);
 
             // Update photos state and remove duplicates
-            setPhotos((prevPosts) => {
-                const newPosts = result.filter(
-                    (newPost) => !prevPosts.some((post) => post._id === newPost._id)
-                );
-                return [...prevPosts, ...newPosts];
-            });
+            setPhotos((prevPosts) => [...prevPosts, ...result]);
 
             setIsFetching(false); // Reset fetching state
         } catch (error) {
@@ -48,7 +43,7 @@ export const ExplorePage = () => {
         return () => {
             if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
         };
-    }, [token]); // Observe changes based on the token
+    }, [token, photos ]);
 
     const getBlocks = () => {
         const blocks = [];
@@ -60,7 +55,7 @@ export const ExplorePage = () => {
     };
 
     return (
-        <div className="flex flex-col mx-auto my-20 gap-2 max-w-[989px]">
+        <div className="flex flex-col md:mx-auto md:my-20 my-2 mx-2 gap-2 lgg:max-w-[989px] lg:max-w-[820px] md:max-w-[640px]">
             {getBlocks().map((block: Post[], blockIndex: number) => (
                 <div
                     key={blockIndex}
@@ -68,13 +63,13 @@ export const ExplorePage = () => {
                 >
                     {block.map((post: Post, postIndex: number) => (
                         <Link
-                            to={`/profile/${post.author.username}/post/${post._id}`}
+                            to={`/post/${post._id}`}
                             key={post._id}
                             className={`
                                 ${(blockIndex % 2 === 0 && postIndex === 0) ||
                             (blockIndex % 2 !== 0 && postIndex === 4)
                                 ? "row-span-2"
-                                : "h-[316px]"} cursor-pointer
+                                : "lgg:h-[316px] lg:h-[280px] md:h-[200px] aspect-square"} cursor-pointer
                             `}
                         >
                             <img

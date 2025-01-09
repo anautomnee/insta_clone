@@ -67,7 +67,10 @@ export const ProfileHeader= ({user}: {user: User | null}) => {
                             h-7 w-20 sm:w-28 md:w-[132px]"
                             onClick={onUnfollow}>Unfollow</button>}
                             <button className="rounded-lg bg-[#EFEFEF] text-sm
-                            h-7 w-28 sm:w-36 md:w-[190px]">Message
+                            h-7 w-28 sm:w-36 md:w-[190px]">
+                                <Link to={`/messages/${user.username}`}>
+                                    Message
+                                </Link>
                             </button>
                         </div> : <Link to={`${window.location.pathname}/edit`}>
                             <button className="rounded-lg bg-[#EFEFEF] text-sm

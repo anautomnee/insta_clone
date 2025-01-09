@@ -78,7 +78,9 @@ export const getPostById = async (req: Request, res: Response) => {
 
 export const getRandomPosts = async (req: Request, res: Response) => {
     try {
-        const posts = await Post.aggregate().sample(10);
+        const {count} = req.query;
+        const countNumber = Number(count);
+        const posts = await Post.aggregate().sample(countNumber);
         const populatedPosts = await Post.populate(posts, { path: 'author', select: 'username' });
 
         res.status(200).send(populatedPosts);

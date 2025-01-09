@@ -235,7 +235,7 @@ export const fetchFollowedPosts = async (token: string, page: number) => {
 };
 
 
-export const getRandomPosts = async (token: string) => {
+export const getRandomPosts = async (token: string, fetchCount: number) => {
     try {
         const config = {
             headers: {
@@ -243,7 +243,7 @@ export const getRandomPosts = async (token: string) => {
             },
         };
         const response = await axios.get(
-            `${backendURL}/posts/random`,
+            `${backendURL}/posts/random?count=${fetchCount}`,
             config
         );
         return response.data;
