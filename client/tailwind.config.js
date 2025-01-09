@@ -25,7 +25,11 @@ export default {
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
     },
-    extend: {},
+    extend: {
+      animation: {
+        'pulse-short': 'pulse 0.5s ease-in-out infinite',
+      },
+    },
   },
   plugins: [
   ],

@@ -6,6 +6,7 @@ import {Link} from "react-router";
 export const ExplorePage = () => {
     const [photos, setPhotos] = useState<Post[]>([]);
     const [isFetching, setIsFetching] = useState(false);
+    const [isInitialLoading, setIsInitialLoading] = useState(true);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
     const token = localStorage.getItem("userToken");
 
@@ -19,14 +20,19 @@ export const ExplorePage = () => {
             // Update photos state and remove duplicates
             setPhotos((prevPosts) => [...prevPosts, ...result]);
 
-            setIsFetching(false); // Reset fetching state
+            setIsFetching(false);
+            setIsInitialLoading(false);
         } catch (error) {
             console.error("Error fetching posts:", error);
-            setIsFetching(false); // Reset fetching state on error
+            setIsFetching(false);
         }
     };
 
     useEffect(() => {
+        if (isInitialLoading) {
+            loadPosts(); // Trigger loading posts initially
+        }
+
         // Initialize the IntersectionObserver
         const observer = new IntersectionObserver(
             (entries) => {
@@ -54,8 +60,23 @@ export const ExplorePage = () => {
         return blocks;
     };
 
+    // Skeleton
+    if (isInitialLoading) return (<div className="h-full m-2">
+        {new Array(3).fill(0).map((_, ind) => <div key={ind}
+                className="grid grid-cols-3 grid-flow-col gap-2 mb-2 animate-pulse-short">
+            {new Array(5).fill(0).map((_, i) => (
+                <div key={i} className={`bg-gray ${(ind % 2 === 0 && i === 0) ||
+                (ind % 2 !== 0 && i === 4)
+                    ? "row-span-2"
+                    : "lgg:h-[316px] lg:h-[280px] md:h-[200px] aspect-square"} cursor-pointer`}>
+                </div>
+            ))}
+            </div>
+        )}
+    </div>);
+
     return (
-        <div className="flex flex-col md:mx-auto md:my-20 my-2 mx-2 gap-2 lgg:max-w-[989px] lg:max-w-[820px] md:max-w-[640px]">
+        <div className="flex flex-col md:mx-auto md:my-20 m-2 gap-2 lgg:max-w-[989px] lg:max-w-[820px] md:max-w-[640px]">
             {getBlocks().map((block: Post[], blockIndex: number) => (
                 <div
                     key={blockIndex}
