@@ -1,4 +1,4 @@
-import {ChangeEvent, MouseEvent, RefObject, useEffect, useState} from "react";
+import {ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useState} from "react";
 import {CondensedUser} from "../../store/types/instanceTypes.ts";
 import {getAllUsersForSearch} from "../../uitls/apiCalls.ts";
 import cancel from '../../assets/search_cancel.svg';
@@ -6,13 +6,15 @@ import {Link} from "react-router";
 import arrow_back from "../../assets/arrow_back.svg";
 
 type SearchModalProps = {
-    modalRef: RefObject<HTMLDivElement>;
+    isSearchOpen: boolean;
+    setIsSearchOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const SearchModal = ({modalRef}: SearchModalProps) => {
+export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) => {
    const [users, setUsers] = useState<CondensedUser[]>([]);
    const [matchingUsers, setMatchingUsers] = useState<CondensedUser[]>([]);
    const [searchInput, setSearchInput] = useState("");
+   const [isClosing, setIsClosing] = useState(false);
 
    useEffect(() => {
        const fetchUsers = async () => {
@@ -25,10 +27,12 @@ export const SearchModal = ({modalRef}: SearchModalProps) => {
    }, [users]);
 
     const closeModal = (e: MouseEvent<HTMLDivElement>) => {
-        if (modalRef.current) {
             e.stopPropagation();
-            modalRef.current.hidden = true;
-        }
+            setIsClosing(true);
+            setTimeout(() => {
+                setIsSearchOpen(false);
+                setIsClosing(false);
+            }, 250);
     };
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,8 +53,8 @@ export const SearchModal = ({modalRef}: SearchModalProps) => {
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
     >
-            <div className="bg-white opacity-100 h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl
-            md:w-[397px] w-full md:py-5 md:px-6"
+            <div className={`bg-white h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl transition-all duration-300
+            md:py-5 md:px-6 ${!isSearchOpen || isClosing  ? "w-0 opacity-0" : "md:w-[397px] w-full opacity-100" }`}
                  onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                 <div className="flex md:hidden justify-between p-3 border-b border-b-gray">
                     <img src={arrow_back} alt="Back" onClick={closeModal}/>

@@ -16,7 +16,7 @@ export const Navigation = () => {
     useFetchUserAfterReload(user);
     const createPostRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
-    const searchRef = useRef<HTMLDivElement>(null);
+    const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
     const userToken = localStorage.getItem("userToken");
     const location = useLocation();
 
@@ -28,13 +28,7 @@ export const Navigation = () => {
 
     const showNotifications = () => {
         if(notificationsRef.current) {
-            notificationsRef.current.hidden = !notificationsRef.current.hidden;
-        }
-    };
-
-    const showSearch = () => {
-        if(searchRef.current) {
-            searchRef.current.hidden = !searchRef.current.hidden;
+            notificationsRef.current.hidden = false;
         }
     };
 
@@ -64,7 +58,7 @@ export const Navigation = () => {
                     </div>
                 </Link>
                 <div className="hidden md:flex gap-4 cursor-pointer"
-                     onClick={showSearch}
+                     onClick={() => setIsSearchOpen(!isSearchOpen)}
                      onMouseOver={() => setHoveredLink(links[1].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
@@ -72,8 +66,8 @@ export const Navigation = () => {
                         alt={links[1].name}
                     />
                     <span className="hidden lgg:block">Search</span>
-                    <div ref={searchRef} hidden className="z-20">
-                        <SearchModal modalRef={searchRef} />
+                    <div className={isSearchOpen ? "opacity-100" : "opacity-0"}>
+                        <SearchModal isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
                     </div>
                 </div>
                 <Link
