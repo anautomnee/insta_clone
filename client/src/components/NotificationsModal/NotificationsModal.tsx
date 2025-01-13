@@ -22,7 +22,7 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
     };
     return (<div
         className="absolute h-[calc(100vh-81px)] md:h-screen top-0 w-screen
-            lg:w-[calc(100vw-60px)] left-0 md:left-[60px] lgg:left-[244px]"
+            lg:w-[calc(100%-60px)] lgg:w-[calc(100%-244px)] left-0 md:left-[60px] lgg:left-[244px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
     >

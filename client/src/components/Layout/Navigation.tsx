@@ -22,8 +22,10 @@ export const Navigation = () => {
 
 
     return (
-        <div className="flex md:flex-col items-center gap-4 bg-white
-        md:border-r border-t md:border-t-0  border-gray py-[28px] px-4 lgg:px-6 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
+        <div
+            className="flex md:flex-col items-center gap-4 bg-white md:border-r border-t md:border-t-0 border-gray
+            py-[28px] px-4 lgg:px-6 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
+
             <Link to='/' className="hidden md:flex">
                 <img src={logo}
                      alt="logo"
@@ -32,7 +34,7 @@ export const Navigation = () => {
                      alt="logo small"
                      className="block lgg:hidden"/>
             </Link>
-            <div className="flex md:flex-col items-center justify-around md:items-start gap-4 md:mt-6 w-full">
+            <div className="flex md:flex-col items-center justify-around md:items-start gap-4 md:mt-6 min-w-full">
                 <Link
                     to={links[0].href}
                 >
@@ -56,7 +58,7 @@ export const Navigation = () => {
                     />
                     <span className="hidden lgg:block">Search</span>
                     <div className={isSearchOpen ? "opacity-100" : "opacity-0 invisible"}>
-                        <SearchModal isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
+                        <SearchModal isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}/>
                     </div>
                 </div>
                 <Link
@@ -73,8 +75,8 @@ export const Navigation = () => {
                     </div>
                 </Link>
                 <Link to="/messages" className="flex gap-4 cursor-pointer"
-                     onMouseOver={() => setHoveredLink(links[3].name)}
-                     onMouseLeave={() => setHoveredLink(null)}>
+                      onMouseOver={() => setHoveredLink(links[3].name)}
+                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
                         src={
                             hoveredLink === links[3].name || location.pathname.startsWith('/messages')

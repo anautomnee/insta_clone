@@ -2,7 +2,7 @@ import image from '../../assets/login_back.png'
 
 export const ErrorPage = () => {
     return (
-        <div className="flex flex-col md:flex-row justify-center md:items-start items-center mt-20 md:mt-0 md:gap-12 px-3.5">
+        <div className="flex flex-col md:flex-row justify-center md:items-start items-center mt-20 md:gap-12 px-3.5">
             <img src={image} alt='Image'
             className="w-fit md:h-fit h-[320px]"/>
             <div className=" mt-12">

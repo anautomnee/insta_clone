@@ -13,9 +13,9 @@ function App() {
   } else {
     if (width > 768) {
       return (<div className="flex flex-col min-h-screen">
-        <div className="flex flex-col md:flex-row nav_height">
+        <div className="flex flex-col md:flex-row">
           <Navigation/>
-          <div className="flex-grow">
+          <div>
             <MainRouter/>
           </div>
         </div>
