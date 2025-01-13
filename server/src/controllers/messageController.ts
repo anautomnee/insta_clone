@@ -41,6 +41,22 @@ export const getChatByReceiverUsername  = async (req: Request, res: Response) =>
                 user2: receiver._id,
             });
             await chat.save();
+            await chat.populate({
+                path: 'messages',
+                select: 'content createdAt',
+                populate: [{
+                    path: 'author',
+                    select: 'profile_image username'
+                }]
+            });
+            await chat.populate({
+                path: 'user1',
+                select: 'profile_image username'
+            });
+            await chat.populate({
+                path: 'user2',
+                select: 'profile_image username'
+            });
         }
         res.status(200).send(chat);
     } catch (error) {
