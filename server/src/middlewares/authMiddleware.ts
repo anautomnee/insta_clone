@@ -9,7 +9,6 @@ const ifAuthenticated = (req: Request, res: Response, next: NextFunction): void 
         if (authHeader) {
             jwt.verify(authHeader, process.env.JWT_KEY, (err, decoded) => {
                 if (err) {
-                    console.error('JWT verification failed:', err);
                     res.status(403).send('Forbidden: Invalid or expired token');
                     return;
                 }

@@ -34,9 +34,9 @@ export const MessagesPage = () => {
             } sm:flex lg:min-w-[398px] md:min-w-64 min-w-full md:border-r border-r-gray flex-col`}>
                 <p className="font-semibold ml-4 lg:ml-6 mt-9 mb-14 text-xl">{user?.username}</p>
                 <div className="flex flex-col">
-                    {chats.length > 0 && chats.map((chat: Chat) => {
+                    {chats?.length > 0 && chats.map((chat: Chat) => {
                         const chatUsername =
-                            chat.user1.username === user.username ? chat.user2.username : chat.user1.username;
+                            chat?.user1?.username === user?.username ? chat?.user2.username : chat.user1.username;
 
                         // Add gray background class if this chat is selected
                         const isActive = username === chatUsername;
@@ -51,7 +51,7 @@ export const MessagesPage = () => {
                             >
                                 <img
                                     src={
-                                        chat.user1.username === user.username
+                                        chat?.user1?.username === user?.username
                                             ? chat.user2.profile_image
                                             : chat.user1.profile_image
                                     }
@@ -62,8 +62,8 @@ export const MessagesPage = () => {
                                 <div className="flex flex-col gap-1.5">
                                     <p className="text-sm">{chatUsername}</p>
                                     <p className="text-xs text-darkgray">
-                                        {chat.last_message.author.username === user.username ? "You" : chat.last_message.author.username}{" "}
-                                        sent a message. · {formatDate(new Date(chat.last_message.createdAt))}
+                                        {chat?.last_message?.author?.username === user?.username ? "You" : chat?.last_message?.author?.username}{" "}
+                                        sent a message. · {formatDate(new Date(chat?.last_message?.createdAt))}
                                     </p>
                                 </div>
                             </Link>

@@ -23,8 +23,8 @@ export const HomePage = () => {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
-    const notificationsRef = useRef<HTMLDivElement>(null);
-    const searchRef = useRef<HTMLDivElement>(null);
+    const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
     const token = localStorage.getItem("userToken");
     const {_id, notifications} = useSelector((state: RootState) => state.user);
     const location = useLocation();
@@ -71,18 +71,6 @@ export const HomePage = () => {
         };
     }, [hasMore]);
 
-    const showNotifications = () => {
-        if(notificationsRef.current) {
-            notificationsRef.current.hidden = false;
-        }
-    };
-
-    const showSearch = () => {
-        if(searchRef.current) {
-            searchRef.current.hidden = false;
-        }
-    };
-
     if (redirected) return null;
 
     return (
@@ -91,15 +79,18 @@ export const HomePage = () => {
                 <p className="w-14"></p>
                 <p className="font-semibold">Homepage</p>
                 <div className="flex gap-2">
-                    <img src={search} alt="Search" onClick={showSearch} />
-                    <img src={notifications_icon} alt="Notifications" onClick={showNotifications} />
+                    <img src={search} alt="Search" onClick={() => setIsSearchOpen(!isSearchOpen)} />
+                    <img src={notifications_icon} alt="Notifications" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} />
                 </div>
             </div>
-            <div ref={searchRef} hidden>
-                <SearchModal modalRef={searchRef}/>
+            <div className={isSearchOpen ? "opacity-100" : "opacity-0 invisible"}>
+                <SearchModal isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
             </div>
-            <div ref={notificationsRef} hidden>
-                <NotificationsModal modalRef={notificationsRef} notifications={notifications}/>
+            <div className={isNotificationsOpen ? "opacity-100" : "opacity-0 invisible"}>
+                <NotificationsModal
+                    isNotificationsOpen={isNotificationsOpen}
+                    setIsNotificationsOpen={setIsNotificationsOpen}
+                    notifications={notifications}/>
             </div>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-6 my-6 md:my-14 mx-[5vw] md:mx-[77px]">
                 {posts.length > 0 && posts.map((post, index) => (
