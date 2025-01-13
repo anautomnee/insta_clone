@@ -22,7 +22,7 @@ export const Navigation = () => {
 
 
     return (
-        <div className="relative md:border-r border-t md:border-t-0 border-gray py-7 px-4 lgg:px-6 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
+        <div className="relative flex justify-center md:border-r border-t md:border-t-0 border-gray py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
             <div
                 className="flex md:fixed top-7 md:flex-col items-center gap-4 bg-white">
 
@@ -34,9 +34,10 @@ export const Navigation = () => {
                          alt="logo small"
                          className="block lgg:hidden"/>
                 </Link>
-                <div className="flex md:flex-col items-center justify-around md:items-start gap-4 md:mt-6 min-w-full">
+                <div className="flex md:flex-col items-center justify-around lgg:md:items-start lgg:px-2 gap-4 md:mt-6 min-w-full">
                     <Link
                         to={links[0].href}
+                        className="mx-auto lgg:mx-0"
                     >
                         <div className="flex gap-4"
                              onMouseOver={() => setHoveredLink(links[0].name)}
@@ -48,7 +49,7 @@ export const Navigation = () => {
                             <span className="hidden lgg:block">{links[0].name}</span>
                         </div>
                     </Link>
-                    <div className="hidden md:flex gap-4 cursor-pointer"
+                    <div className="hidden md:flex lgg:gap-4 flex-col lgg:flex-row items-center cursor-pointer"
                          onClick={() => setIsSearchOpen(!isSearchOpen)}
                          onMouseOver={() => setHoveredLink(links[1].name)}
                          onMouseLeave={() => setHoveredLink(null)}>
@@ -63,6 +64,7 @@ export const Navigation = () => {
                     </div>
                     <Link
                         to={links[2].href}
+                        className="mx-auto lgg:mx-0"
                     >
                         <div className="flex gap-4 cursor-pointer"
                              onMouseOver={() => setHoveredLink(links[2].name)}
@@ -74,7 +76,7 @@ export const Navigation = () => {
                             <span className="hidden lgg:block">{links[2].name}</span>
                         </div>
                     </Link>
-                    <Link to="/messages" className="flex gap-4 cursor-pointer"
+                    <Link to="/messages" className="flex gap-4 cursor-pointer mx-auto lgg:mx-0"
                           onMouseOver={() => setHoveredLink(links[3].name)}
                           onMouseLeave={() => setHoveredLink(null)}>
                         <img
@@ -87,7 +89,7 @@ export const Navigation = () => {
                         />
                         <span className="hidden lgg:block">Messages</span>
                     </Link>
-                    <div className="hidden md:flex gap-4 cursor-pointer"
+                    <div className="hidden md:flex lgg:gap-4 flex-col lgg:flex-row items-center cursor-pointer"
                          onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                          onMouseOver={() => setHoveredLink(links[4].name)}
                          onMouseLeave={() => setHoveredLink(null)}>
@@ -103,7 +105,7 @@ export const Navigation = () => {
                                 notifications={user?.notifications}/>
                         </div>
                     </div>
-                    <div className="flex gap-4"
+                    <div className="hidden md:flex lgg:gap-4 flex-col lgg:flex-row items-center cursor-pointer"
                          onClick={() => setIsCreatePostOpen(!isCreatePostOpen)}
                          onMouseOver={() => setHoveredLink(links[5].name)}
                          onMouseLeave={() => setHoveredLink(null)}>
@@ -123,6 +125,7 @@ export const Navigation = () => {
                     </div>
                     <Link
                         to={`profile/${user?.username}`}
+                        className="mx-auto lgg:mx-0"
                     >
                         <div className="flex items-center gap-4 md:mt-12">
                             <img
