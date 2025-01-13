@@ -111,8 +111,8 @@ export const followUser = async (req: Request, res: Response) => {
             type: 'started following you'
         });
         profile.notifications.push(newNotification._id);
-        profile.save();
-        userProfile.save();
+        await profile.save();
+        await userProfile.save();
         res.status(201).send({
             _id: profile._id,
             profile_image: profile.profile_image,
@@ -137,8 +137,8 @@ export const unfollowUser = async (req: Request, res: Response) => {
 
         profile.followers = profile.followers.filter((f: mongoose.Types.ObjectId) => !f._id.equals(userProfile._id));
         userProfile.followings = userProfile.followings.filter((f: mongoose.Types.ObjectId) => !f._id.equals(profile._id));
-        profile.save();
-        userProfile.save();
+        await profile.save();
+        await userProfile.save();
         res.status(200).send({
             _id: profile._id,
             profile_image: profile.profile_image,

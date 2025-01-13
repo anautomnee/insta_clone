@@ -92,11 +92,11 @@ export const MessagesMain = () => {
     if (!user) return <p>Loading...</p>;
 
     return (<div className="w-full">
-        <div className="flex items-center gap-3 border-b border-b-gray p-4 w-full">
+        <Link to={`/profile/${receiver?.username}`} className="flex items-center gap-3 border-b border-b-gray p-4 w-full">
             <img src={receiver?.profile_image} alt={receiver?.username}
                  className="w-11 h-11 object-cover rounded-[50%]" />
             <p className="font-semibold">{receiver?.username}</p>
-        </div>
+        </Link>
         <div className="h-[72vh] md:h-[56vh] overflow-y-scroll">
             <div className="flex flex-col items-center mt-16 mb-20">
                 <img src={receiver?.profile_image} alt={receiver?.username}

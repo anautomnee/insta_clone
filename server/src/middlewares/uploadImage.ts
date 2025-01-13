@@ -9,7 +9,7 @@ const upload = multer({
             return callback(new Error('Unexpected field for image')); // Reject unexpected fields
         }
 
-        const allowedFileTypes = ['image/svg', 'image/svg+xml', 'image/jpeg', 'image/jpg', 'image/png'];
+        const allowedFileTypes = ['image/svg', 'image/svg+xml', 'image/webp', 'image/jpeg', 'image/jpg', 'image/png'];
 
         if (allowedFileTypes.includes(file.mimetype)) {
             callback(null, true); // Accept the file
