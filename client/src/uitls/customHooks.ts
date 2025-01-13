@@ -64,4 +64,16 @@ export const useFetchUserAfterReload = (user: UserState): void => {
             }
         }
     }, [user]);
-}
+};
+
+
+const useScrollToTop = () => {
+    useEffect(() => {
+        // Scroll to the top of the page when the component renders
+        window.scrollTo({
+            top: 0, // Smooth scroll to the top
+        });
+    }, []); // Empty dependency array ensures it runs only on mount
+};
+
+export default useScrollToTop;

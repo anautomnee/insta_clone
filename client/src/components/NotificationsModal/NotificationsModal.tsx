@@ -21,8 +21,8 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
         }, 300);
     };
     return (<div
-        className="absolute h-[calc(100vh-81px)] md:h-screen top-0 w-screen
-            lg:w-[calc(100%-60px)] lgg:w-[calc(100%-244px)] left-0 md:left-[60px] lgg:left-[244px]"
+            className="absolute left-0 -top-7 h-[calc(100vh-81px)] md:h-screen w-screen
+            md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] md:left-[60px] lgg:left-[220px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
     >

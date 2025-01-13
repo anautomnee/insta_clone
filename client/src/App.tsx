@@ -15,7 +15,7 @@ function App() {
       return (<div className="flex flex-col min-h-screen">
         <div className="flex flex-col md:flex-row">
           <Navigation/>
-          <div>
+          <div className="w-full min-h-[calc(100vh-176px)]">
             <MainRouter/>
           </div>
         </div>

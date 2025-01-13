@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import { getRandomPosts} from "../../uitls/apiCalls.ts";
 import {Post} from "../../store/types/instanceTypes.ts";
 import {Link} from "react-router";
+import useScrollToTop from "../../uitls/customHooks.ts";
 
 export const ExplorePage = () => {
     const [photos, setPhotos] = useState<Post[]>([]);
@@ -9,6 +10,7 @@ export const ExplorePage = () => {
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
     const token = localStorage.getItem("userToken");
+    useScrollToTop();
 
     const loadPosts = async (): Promise<void> => {
         try {
