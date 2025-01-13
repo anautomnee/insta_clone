@@ -2,7 +2,7 @@ import logo from "../../assets/logo.svg";
 import ich from "../../assets/nav_icons/ich.png"
 import links from "./navLinks.ts";
 import {Link, useLocation} from "react-router";
-import { useRef, useState} from "react";
+import { useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
@@ -14,23 +14,12 @@ export const Navigation = () => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const user = useSelector((state: RootState) => state.user);
     useFetchUserAfterReload(user);
-    const createPostRef = useRef<HTMLDivElement>(null);
-    const notificationsRef = useRef<HTMLDivElement>(null);
     const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
+    const [isCreatePostOpen, setIsCreatePostOpen] = useState<boolean>(false);
     const userToken = localStorage.getItem("userToken");
     const location = useLocation();
 
-    const showCreatePost = () => {
-        if(createPostRef.current) {
-            createPostRef.current.hidden = false;
-        }
-    };
-
-    const showNotifications = () => {
-        if(notificationsRef.current) {
-            notificationsRef.current.hidden = false;
-        }
-    };
 
     return (
         <div className="flex md:flex-col items-center gap-4 bg-white
@@ -66,7 +55,7 @@ export const Navigation = () => {
                         alt={links[1].name}
                     />
                     <span className="hidden lgg:block">Search</span>
-                    <div className={isSearchOpen ? "opacity-100" : "opacity-0"}>
+                    <div className={isSearchOpen ? "opacity-100" : "opacity-0 invisible"}>
                         <SearchModal isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
                     </div>
                 </div>
@@ -97,7 +86,7 @@ export const Navigation = () => {
                     <span className="hidden lgg:block">Messages</span>
                 </Link>
                 <div className="hidden md:flex gap-4 cursor-pointer"
-                     onClick={showNotifications}
+                     onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                      onMouseOver={() => setHoveredLink(links[4].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
@@ -105,12 +94,15 @@ export const Navigation = () => {
                         alt={links[4].name}
                     />
                     <span className="hidden lgg:block">Notifications</span>
-                    <div ref={notificationsRef} hidden className="z-20">
-                        <NotificationsModal modalRef={notificationsRef} notifications={user?.notifications}/>
+                    <div className={`z-20 ${isNotificationsOpen ? "opacity-100" : "opacity-0 invisible"}`}>
+                        <NotificationsModal
+                            isNotificationsOpen={isNotificationsOpen}
+                            setIsNotificationsOpen={setIsNotificationsOpen}
+                            notifications={user?.notifications}/>
                     </div>
                 </div>
                 <div className="flex gap-4"
-                     onClick={showCreatePost}
+                     onClick={() => setIsCreatePostOpen(!isCreatePostOpen)}
                      onMouseOver={() => setHoveredLink(links[5].name)}
                      onMouseLeave={() => setHoveredLink(null)}>
                     <img
@@ -119,8 +111,12 @@ export const Navigation = () => {
                         className="cursor-pointer"
                     />
                     <span className="cursor-pointer hidden lgg:block">Create</span>
-                    <div ref={createPostRef} hidden>
-                        <CreatePost userId={user?._id} profileImage={user?.profile_image} divRef={createPostRef} token={userToken} />
+                    <div className={isCreatePostOpen ? "opacity-100" : "opacity-0 invisible"}>
+                        <CreatePost userId={user?._id}
+                                    profileImage={user?.profile_image}
+                                    token={userToken}
+                                    setIsCreatePostOpen={setIsCreatePostOpen}
+                        />
                     </div>
                 </div>
                 <Link

@@ -32,7 +32,7 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
             setTimeout(() => {
                 setIsSearchOpen(false);
                 setIsClosing(false);
-            }, 250);
+            }, 300);
     };
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {

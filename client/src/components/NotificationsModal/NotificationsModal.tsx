@@ -1,19 +1,24 @@
-import {MouseEvent, RefObject} from "react";
+import {Dispatch, MouseEvent, SetStateAction, useState} from "react";
 import {Notification} from "../../store/types/instanceTypes.ts";
 import {formatDate} from "../../uitls/utils.ts";
 import arrow_back from '../../assets/arrow_back.svg'
 
 type NotificationsModalProps = {
-    modalRef: RefObject<HTMLDivElement>;
+    isNotificationsOpen: boolean;
+    setIsNotificationsOpen: Dispatch<SetStateAction<boolean>>;
     notifications: Notification[];
 }
 
-export const NotificationsModal = ({modalRef, notifications}: NotificationsModalProps) => {
+export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen, notifications}: NotificationsModalProps) => {
+    const [isClosing, setIsClosing] = useState(false);
+
     const closeModal = (e: MouseEvent<HTMLDivElement>) => {
-        if (modalRef.current) {
-            e.stopPropagation();
-            modalRef.current.hidden = true;
-        }
+        e.stopPropagation();
+        setIsClosing(true);
+        setTimeout(() => {
+            setIsNotificationsOpen(false);
+            setIsClosing(false);
+        }, 300);
     };
     return (<div
         className="absolute h-[calc(100vh-81px)] md:h-screen top-0 w-screen
@@ -21,8 +26,8 @@ export const NotificationsModal = ({modalRef, notifications}: NotificationsModal
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
     >
-        <div className="bg-white opacity-100 h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl
-            md:w-[397px] w-full md:py-5 md:px-6"
+        <div className={`bg-white h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl transition-all duration-300
+            md:py-5 md:px-6 ${!isNotificationsOpen || isClosing  ? "w-0 opacity-0" : "md:w-[397px] w-full opacity-100" }`}
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
             <div className="flex md:hidden justify-between p-3 border-b border-b-gray">
                 <img src={arrow_back} alt="Back" onClick={closeModal} />
