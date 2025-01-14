@@ -50,12 +50,6 @@ export type LikesFields = {
     user: string;
 }
 
-export type Like = {
-    user: string,
-    post?: string,
-    comment?: string
-}
-
 export type Post = {
     _id: string;
     author: CondensedUser;
@@ -79,4 +73,5 @@ export type User = {
     notifications: Notification[],
     followers: CondensedUser[],
     followings: CondensedUser[],
+    search_results: CondensedUser[],
 }

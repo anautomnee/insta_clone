@@ -1,4 +1,4 @@
-import User from "../db/models/User";
+import User, {UserType} from "../db/models/User";
 import {Request, Response} from "express";
 import mongoose from "mongoose";
 import Notification from "../db/models/Notification.ts";
@@ -34,7 +34,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                         select: 'username profile_image',
                     },
                 ]
-            });
+            }).populate('search_results', 'username profile_image');
         if (!user) {
             res.status(404).send('User not found');
             return;
@@ -149,3 +149,25 @@ export const unfollowUser = async (req: Request, res: Response) => {
         res.status(500).send('Error deleting a following');
     }
 };
+
+export const addUserToSearchResults = async (req: Request, res: Response) => {
+    try {
+        const {username} = req.body;
+        if (!username || !req.user) {
+            res.status(400).send('Users must be provided');
+            return;
+        }
+        const user: UserType | null = await User.findById(req.user.id);
+        const searchedUser: UserType | null = await User.findOne({username});
+        if (!user || !searchedUser) {
+            res.status(404).send('User not found');
+            return;
+        }
+        user.search_results.push(searchedUser._id);
+        await user.save();
+        res.status(200).send('User added to search results');
+     } catch (error) {
+        console.error('Error adding user to search results');
+        res.status(500).send('Error adding user to search results');
+    }
+}

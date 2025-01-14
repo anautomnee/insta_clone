@@ -39,16 +39,16 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
                 <p className="font-semibold mb-4">New</p>
                 <div className="flex flex-col gap-5">
 
-                    {notifications.length > 0 && notifications.map((notification: Notification) => (<div
-                        key={notification._id}
+                    {notifications.length > 0 && notifications?.slice()?.reverse()?.slice(0,10)?.map((notification: Notification) => (<div
+                        key={notification?._id}
                         className="flex justify-between">
                         <div className="flex gap-3.5">
-                            <img src={notification.actionMaker.profile_image}
+                            <img src={notification?.actionMaker?.profile_image}
                                  className="w-10 h-10 rounded-[50%] object-cover"
                                  alt="profile_image"/>
                             <p className="w-40">
-                                <span className="font-semibold mr-2">{notification.actionMaker.username}</span>
-                                <span>{notification.type}</span>
+                                <span className="font-semibold mr-2">{notification?.actionMaker?.username}</span>
+                                <span>{notification?.type}</span>
                                 <span
                                     className="text-darkgray ml-2">{formatDate(new Date(notification.createdAt))}</span>
                             </p>

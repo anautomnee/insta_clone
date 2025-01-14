@@ -1,9 +1,12 @@
 import {ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useState} from "react";
 import {CondensedUser} from "../../store/types/instanceTypes.ts";
-import {getAllUsersForSearch} from "../../uitls/apiCalls.ts";
+import {addUserToSearchResults, getAllUsersForSearch} from "../../uitls/apiCalls.ts";
 import cancel from '../../assets/search_cancel.svg';
 import {Link} from "react-router";
 import arrow_back from "../../assets/arrow_back.svg";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store.ts";
+import {addSearchResult} from "../../store/slices/userSlice.ts";
 
 type SearchModalProps = {
     isSearchOpen: boolean;
@@ -15,6 +18,8 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
    const [matchingUsers, setMatchingUsers] = useState<CondensedUser[]>([]);
    const [searchInput, setSearchInput] = useState("");
    const [isClosing, setIsClosing] = useState(false);
+   const dispatch = useDispatch<AppDispatch>();
+   const searchResults = useSelector((state: RootState) => state.user.search_results);
 
    useEffect(() => {
        const fetchUsers = async () => {
@@ -43,8 +48,16 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
         const regex = new RegExp(e.target.value, 'i');
         const filtered = users.filter((user: CondensedUser) => regex.test(user.username));
         setMatchingUsers(filtered);
-    }
+    };
 
+    const handleAddToSearch = async (user: CondensedUser) => {
+        await addUserToSearchResults(user.username);
+        dispatch(addSearchResult({
+            _id: user._id,
+            profile_image: user.profile_image,
+            username: user.username,
+        }));
+    };
     return (<div
         className="absolute left-0 top-0 md:-top-7 h-[calc(100vh-81px)] md:h-screen w-screen
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] md:left-[48px] lgg:left-[220px]"
@@ -74,13 +87,26 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
                              }}/>
                     </div>
                     <div className="flex flex-col mt-12 gap-3">
-                        {matchingUsers.length > 0 && matchingUsers.map((user: CondensedUser) => (
-                            <Link to={`/profile/${user.username}`} key={user._id} className="flex items-center gap-3">
+                        {matchingUsers.length > 0 ? (matchingUsers.map((user: CondensedUser) => (
+                            <Link to={`/profile/${user.username}`} key={user._id}
+                                  className="flex items-center gap-3"
+                                    onClick={() => handleAddToSearch({
+                                        _id: user._id,
+                                        profile_image: user.profile_image,
+                                        username: user.username,
+                                    })}>
                                 <img src={user.profile_image} alt="profile_image"
                                      className="w-10 h-10 object-cover rounded-[50%]"/>
                                 <p className="font-semibold">{user.username}</p>
                             </Link>
-                        ))}
+                        ))) : (searchResults?.length > 0 && searchResults?.slice()?.reverse()?.slice(0, 5)?.map((user: CondensedUser) => (
+                            <Link to={`/profile/${user.username}`}
+                                  key={user._id} className="flex items-center gap-3">
+                                <img src={user.profile_image} alt="profile_image"
+                                     className="w-10 h-10 object-cover rounded-[50%]"/>
+                                <p className="font-semibold">{user.username}</p>
+                            </Link>
+                        )))}
                     </div>
                 </div>
             </div>

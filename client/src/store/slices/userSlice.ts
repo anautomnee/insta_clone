@@ -14,6 +14,7 @@ const initialState: UserState = {
     notifications: [],
     followers: [],
     followings: [],
+    search_results: [],
     status: 'IDLE',
     error: null,
 };
@@ -32,6 +33,9 @@ const userSlice = createSlice({
             state.followings = state.followings.filter(f => {
                 return f._id !== action.payload._id
             });
+        },
+        addSearchResult: (state, action: PayloadAction<CondensedUser>) => {
+            state.search_results.push(action.payload);
         }
     },
     extraReducers: builder => {
@@ -51,6 +55,7 @@ const userSlice = createSlice({
             state.notifications = action.payload.notifications;
             state.followers = action.payload.followers;
             state.followings = action.payload.followings;
+            state.search_results = action.payload.search_results;
 
         }).addCase(fetchUser.rejected, (state, action) => {
             state.status = 'FAILED';
@@ -72,5 +77,5 @@ const userSlice = createSlice({
     }
 });
 
-export const {addPost, addFollowing, removeFollowing} = userSlice.actions;
+export const {addPost, addFollowing, removeFollowing, addSearchResult} = userSlice.actions;
 export default userSlice.reducer;

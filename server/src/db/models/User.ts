@@ -6,7 +6,7 @@ const defaultImagePath = path.join(__dirname, '../../public/default_image.png');
 const defaultImageBase64 = `data:image/png;base64,${fs.readFileSync(defaultImagePath).toString('base64')}`;
 
 export interface UserType extends Document {
-    _id: string | mongoose.Types.ObjectId;
+    _id: mongoose.Types.ObjectId;
     username: string;
     email: string;
     full_name: string;
@@ -18,6 +18,7 @@ export interface UserType extends Document {
     posts: mongoose.Types.ObjectId[];
     followers: mongoose.Types.ObjectId[];
     followings: mongoose.Types.ObjectId[];
+    search_results: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new mongoose.Schema<UserType>({
@@ -32,6 +33,7 @@ const UserSchema = new mongoose.Schema<UserType>({
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     followings: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+    search_results: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
 });
 
 const User = mongoose.model<UserType>("User", UserSchema);

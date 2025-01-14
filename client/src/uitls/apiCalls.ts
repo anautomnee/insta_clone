@@ -185,3 +185,15 @@ export const getRandomPosts = async (fetchCount: number) => {
         console.error('Error getting users', error);
     }
 };
+
+export const addUserToSearchResults = async(username: string) => {
+    try {
+        const response = await axiosInstance.post(
+            "/users/add_to_search_results",
+            {username}
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error adding user to search results', error);
+    }
+}
