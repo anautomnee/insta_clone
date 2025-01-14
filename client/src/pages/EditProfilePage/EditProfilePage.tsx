@@ -17,7 +17,6 @@ export const EditProfilePage = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: RootState) => state.user);
-    const token = localStorage.getItem("userToken");
 
     const {
         register,
@@ -60,23 +59,21 @@ export const EditProfilePage = () => {
     const onSubmit = async (data: FormInputs) => {
        try {
            console.log(data);
-           if (token) {
-               const result = await dispatch(
-                   editProfile({
-                       username: user.username,
-                       new_username: data.username,
-                       profile_image: data.profileImage,
-                       website: data.website,
-                       bio: data.about,
-                       token,
-                   })
-               );
-               if (result.type !== "user/editProfile/rejected") {
-                    await dispatch(fetchUser({username: data.username, token}));
-                   setShowNotification(true);
-                   setTimeout(() => setShowNotification(false), 3000);
-               }
+           const result = await dispatch(
+               editProfile({
+                   username: user.username,
+                   new_username: data.username,
+                   profile_image: data.profileImage,
+                   website: data.website,
+                   bio: data.about,
+               })
+           );
+           if (result.type !== "user/editProfile/rejected") {
+                await dispatch(fetchUser({username: data.username}));
+               setShowNotification(true);
+               setTimeout(() => setShowNotification(false), 3000);
            }
+
        } catch (error) {
            console.error('Failed to edit profile: ', error);
        }

@@ -13,7 +13,6 @@ import arrow_back from "../../assets/arrow_back.svg";
 export const PostModal = () => {
     const [post, setPost] = useState<Post | null>(null);
     const [postType, setPostType] = useState<'preview' | 'edit'>('preview');
-    const token = localStorage.getItem("userToken");
     const moreRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -26,8 +25,8 @@ export const PostModal = () => {
 
     useEffect(() => {
         const fetchPostFunc = async() => {
-            if (!postId || !token) return;
-            const result = await dispatch(fetchPost({ id: postId, token })).unwrap();
+            if (!postId) return;
+            const result = await dispatch(fetchPost({ id: postId })).unwrap();
             setPost(result);
         }
         fetchPostFunc();
@@ -36,7 +35,7 @@ export const PostModal = () => {
 
     return (<>
     <div hidden ref={moreRef}>
-        <PostMore modalRef={moreRef} postId={post?._id} token={token} setPostType={setPostType} />
+        <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType} />
     </div>
     <div
         className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
@@ -77,7 +76,7 @@ export const PostModal = () => {
                     className="w-full h-full object-contain"/>
                 </div>
             {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef} /> :
-                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} token={token} />}
+                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} />}
 
             </div>
         </div>

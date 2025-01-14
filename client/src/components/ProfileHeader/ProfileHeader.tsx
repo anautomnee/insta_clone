@@ -7,7 +7,7 @@ import {addFollowing, removeFollowing} from "../../store/slices/userSlice.ts";
 import {useEffect, useState} from "react";
 import {Link} from "react-router";
 
-export const ProfileHeader= ({user}: {user: User | null}) => {
+export const ProfileHeader= ({user, profileUsername}: {user: User | null, profileUsername: string}) => {
     const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
     const isFollowingFromRedux = useSelector((state: RootState) =>
@@ -20,10 +20,8 @@ export const ProfileHeader= ({user}: {user: User | null}) => {
         }
     }, [isFollowingFromRedux, user]);
 
-    const storageUsername = localStorage.getItem("username");
-    const ifUser = user ? user.username === storageUsername : false;
+    const ifUser = user ? user.username === profileUsername : false;
     const dispatch = useDispatch<AppDispatch>();
-    const token = localStorage.getItem("userToken");
 
     if (!user) {
         return <div>Loading...</div>;
@@ -31,8 +29,8 @@ export const ProfileHeader= ({user}: {user: User | null}) => {
 
     const onFollow = async () => {
         try {
-            if (!token || !user) return;
-            const condensedUser = await followUser(token, user.username);
+            if (!user) return;
+            const condensedUser = await followUser(user.username);
             dispatch(addFollowing(condensedUser));
             setIsFollowing(true);
         } catch (e) {
@@ -42,8 +40,8 @@ export const ProfileHeader= ({user}: {user: User | null}) => {
 
     const onUnfollow = async () => {
         try {
-            if (!token || !user) return;
-            const condensedUser = await unfollowUser(token, user.username);
+            if (!user) return;
+            const condensedUser = await unfollowUser(user.username);
             dispatch(removeFollowing(condensedUser));
             setIsFollowing(false);
         } catch (e) {

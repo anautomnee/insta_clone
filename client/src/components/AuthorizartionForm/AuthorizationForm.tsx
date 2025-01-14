@@ -61,10 +61,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                     const result = await dispatch(userLogin(dataLogin));
                     if (result.type !== "auth/userLogin/rejected") {
                         // Only navigate if the login was successful
-                        await dispatch(fetchUser({
-                            username: result.payload.data.info.username,
-                            token: result.payload.data.token
-                        }));
+                        await dispatch(fetchUser({username: result.payload.data.username}));
                         navigate('/');
                     } else {
                         console.error('Login failed');

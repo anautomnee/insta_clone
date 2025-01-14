@@ -1,32 +1,19 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {CreatePost, FetchPostParams, UpdatePostParams} from "../types/postTypes.ts";
-
-let backendURL;
-
-if(import.meta.env.VITE_ENV === 'local') {
-    backendURL = 'http://localhost:3001';
-} else {
-    backendURL = import.meta.env.VITE_BACKEND_URL;
-}
+import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
 
 export const createPost = createAsyncThunk(
     'post/createPost',
-    async ({photo, content, token}: CreatePost, { rejectWithValue }) => {
+    async ({photo, content}: CreatePost, { rejectWithValue }) => {
         try {
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            }
             const formData = new FormData();
             formData.append('photo', photo[0]);
             formData.append('content', content);
 
-                const response = await axios.post(
+                const response = await axiosInstance.post(
                 `${backendURL}/posts/create`,
-                formData,
-                config
+                formData
             );
             return response.data;
         } catch (error: unknown) {
@@ -45,16 +32,10 @@ export const createPost = createAsyncThunk(
 
 export const fetchPost = createAsyncThunk(
     'post/fetchPost',
-    async ({id, token}: FetchPostParams, {rejectWithValue}) => {
+    async ({id}: FetchPostParams, {rejectWithValue}) => {
         try {
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            };
-            const response = await axios.get(
-                `${backendURL}/posts/get/${id}`,
-                config
+            const response = await axiosInstance.get(
+                `${backendURL}/posts/get/${id}`
             );
             return response.data;
         } catch (error: unknown) {
@@ -73,18 +54,11 @@ export const fetchPost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
     'post/updatePost',
-    async ({id, token, content}: UpdatePostParams, { rejectWithValue }) => {
+    async ({id, content}: UpdatePostParams, { rejectWithValue }) => {
         try {
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            }
-
-            const response = await axios.put(
+            const response = await axiosInstance.put(
                 `${backendURL}/posts/${id}`,
-                {content},
-                config
+                {content}
             );
             return response.data;
         } catch (error: unknown) {

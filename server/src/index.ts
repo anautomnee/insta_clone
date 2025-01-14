@@ -6,6 +6,7 @@ import http from 'http';
 import {mainRouter} from "./routes/mainRouter";
 import {configureCors} from "./config/cors.ts";
 import {initializeSocket} from "./socket/socket.ts";
+import cookieParser from 'cookie-parser';
 
 const port: string | number = process.env.PORT || 3000;
 
@@ -20,6 +21,7 @@ const port: string | number = process.env.PORT || 3000;
         app.use(cors(corsOptions));
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
+        app.use(cookieParser());
 
         //Routes
         mainRouter(app);

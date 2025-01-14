@@ -25,7 +25,6 @@ export const HomePage = () => {
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
     const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
-    const token = localStorage.getItem("userToken");
     const {_id, notifications} = useSelector((state: RootState) => state.user);
     const location = useLocation();
 
@@ -33,8 +32,7 @@ export const HomePage = () => {
     useEffect(() => {
         const loadPosts = async (): Promise<void> => {
             try {
-                if (!token) return;
-                const result: Post[] = await fetchFollowedPosts(token, page);
+                const result: Post[] = await fetchFollowedPosts(page);
 
                 // Update posts state and remove duplicates
                 setPosts((prevPosts) => {
@@ -52,7 +50,7 @@ export const HomePage = () => {
         };
 
         loadPosts();
-    }, [page, token]);
+    }, [page]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(

@@ -21,5 +21,6 @@ export const configureCors = (): CorsOptions => {
         methods: ["GET", "POST", "DELETE", "PUT"],
         allowedHeaders: ["Content-Type", "Authorization"],
         preflightContinue: false,
+        credentials: true,
     };
 };

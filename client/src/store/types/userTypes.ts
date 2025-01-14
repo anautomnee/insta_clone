@@ -2,7 +2,6 @@ import {User} from "./instanceTypes.ts";
 
 export type fetchUserData = {
     username: string,
-    token: string,
 }
 
 export interface UserState extends User {
@@ -16,5 +15,4 @@ export type EditProfileData = {
     new_username: string,
     website: string,
     bio: string,
-    token: string,
 }

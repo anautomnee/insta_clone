@@ -8,17 +8,17 @@ if(import.meta.env.VITE_ENV === 'local') {
     backendURL = import.meta.env.VITE_BACKEND_URL;
 }
 
-export const addComment = async (content: string, token: string, postId: string) => {
+export const axiosInstance = axios.create({
+    baseURL: backendURL,
+    withCredentials: true,
+});
+
+export const addComment = async (content: string, postId: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.post(
+
+        const response = await axiosInstance.post(
             `${backendURL}/comments/${postId}/add`,
-            {content},
-            config
+            {content}
         );
         return response.data;
     } catch (error) {
@@ -26,17 +26,12 @@ export const addComment = async (content: string, token: string, postId: string)
     }
 };
 
-export const likeComment = async (token: string, commentId: string) => {
+export const likeComment = async (commentId: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.post(
+
+        const response = await axiosInstance.post(
             `${backendURL}/comments/${commentId}/like`,
-            {},
-            config
+            {}
         );
         return response.data;
     } catch (error) {
@@ -44,16 +39,11 @@ export const likeComment = async (token: string, commentId: string) => {
     }
 };
 
-export const unLikeComment = async (token: string, commentId: string) => {
+export const unLikeComment = async (commentId: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.delete(
-            `${backendURL}/comments/${commentId}/unlike`,
-            config
+
+        const response = await axiosInstance.delete(
+            `${backendURL}/comments/${commentId}/unlike`
         );
         return response.data;
     } catch (error) {
@@ -61,17 +51,12 @@ export const unLikeComment = async (token: string, commentId: string) => {
     }
 };
 
-export const likePost = async (token: string, postId: string) => {
+export const likePost = async (postId: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.post(
+
+        const response = await axiosInstance.post(
             `${backendURL}/posts/${postId}/like`,
-            {},
-            config
+            {}
         );
         return response.data;
     } catch (error) {
@@ -79,16 +64,11 @@ export const likePost = async (token: string, postId: string) => {
     }
 };
 
-export const unLikePost = async (token: string, postId: string) => {
+export const unLikePost = async (postId: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.delete(
-            `${backendURL}/posts/${postId}/unlike`,
-            config
+
+        const response = await axiosInstance.delete(
+            `${backendURL}/posts/${postId}/unlike`
         );
         return response.data;
     } catch (error) {
@@ -96,16 +76,11 @@ export const unLikePost = async (token: string, postId: string) => {
     }
 };
 
-export const fetchProfile = async (username: string, token: string) => {
+export const fetchProfile = async (username: string, ) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.get(
-            `${backendURL}/users/${username}`,
-            config
+
+        const response = await axiosInstance.get(
+            `${backendURL}/users/${username}`
         );
         return response.data[0];
     } catch (error) {
@@ -113,16 +88,11 @@ export const fetchProfile = async (username: string, token: string) => {
     }
 };
 
-export const deletePost = async (token: string, postId: string) => {
+export const deletePost = async (postId: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.delete(
-            `${backendURL}/posts/${postId}`,
-            config
+
+        const response = await axiosInstance.delete(
+            `${backendURL}/posts/${postId}`
         );
         return response.data;
     } catch (error) {
@@ -130,17 +100,12 @@ export const deletePost = async (token: string, postId: string) => {
     }
 };
 
-export const followUser = async (token: string, username: string) => {
+export const followUser = async (username: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.post(
+
+        const response = await axiosInstance.post(
             `${backendURL}/users/${username}/follow`,
-            {},
-            config
+            {}
         );
         return response.data;
     } catch (error) {
@@ -148,16 +113,11 @@ export const followUser = async (token: string, username: string) => {
     }
 };
 
-export const unfollowUser = async (token: string, username: string) => {
+export const unfollowUser = async (username: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.delete(
-            `${backendURL}/users/${username}/unfollow`,
-            config
+
+        const response = await axiosInstance.delete(
+            `${backendURL}/users/${username}/unfollow`
         );
         return response.data;
     } catch (error) {
@@ -165,16 +125,11 @@ export const unfollowUser = async (token: string, username: string) => {
     }
 };
 
-export const getAllUsersForSearch = async (token: string) => {
+export const getAllUsersForSearch = async () => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.get(
-            `${backendURL}/users`,
-            config
+
+        const response = await axiosInstance.get(
+            `${backendURL}/users`
         );
         return response.data;
     } catch (error) {
@@ -182,17 +137,12 @@ export const getAllUsersForSearch = async (token: string) => {
     }
 };
 
-export const fetchChat = async (receiverUsername: string, token: string) => {
+export const fetchChat = async (receiverUsername: string) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.post(
+
+        const response = await axiosInstance.post(
             `${backendURL}/messages/get_chat`,
-            {receiverUsername},
-            config
+            {receiverUsername}
         );
         return response.data;
     } catch (error) {
@@ -200,16 +150,11 @@ export const fetchChat = async (receiverUsername: string, token: string) => {
     }
 };
 
-export const fetchUserChats = async (token: string) => {
+export const fetchUserChats = async () => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.get(
-            `${backendURL}/messages/get_user_chats`,
-            config
+
+        const response = await axiosInstance.get(
+            `${backendURL}/messages/get_user_chats`
         );
         return response.data;
     } catch (error) {
@@ -217,16 +162,11 @@ export const fetchUserChats = async (token: string) => {
     }
 };
 
-export const fetchFollowedPosts = async (token: string, page: number) => {
+export const fetchFollowedPosts = async (page: number) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.get(
-            `${backendURL}/posts/get_followed?page=${page}`,
-            config
+
+        const response = await axiosInstance.get(
+            `${backendURL}/posts/get_followed?page=${page}`
         );
         return response.data;
     } catch (error) {
@@ -235,16 +175,10 @@ export const fetchFollowedPosts = async (token: string, page: number) => {
 };
 
 
-export const getRandomPosts = async (token: string, fetchCount: number) => {
+export const getRandomPosts = async (fetchCount: number) => {
     try {
-        const config = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        };
-        const response = await axios.get(
-            `${backendURL}/posts/random?count=${fetchCount}`,
-            config
+        const response = await axiosInstance.get(
+            `${backendURL}/posts/random?count=${fetchCount}`
         );
         return response.data;
     } catch (error) {

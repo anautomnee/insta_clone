@@ -27,8 +27,6 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     const location = useLocation();
     const isModal = location.state?.backgroundLocation;
 
-    const token = localStorage.getItem("userToken");
-
     type CommentFormInputs = {
         content: string
     };
@@ -52,8 +50,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
 
     const onComment: SubmitHandler<CommentFormInputs> = async (data: CommentFormInputs) => {
         try {
-            if (post && token) {
-                const newComment = await addComment(data.content, token, post?._id);
+            if (post) {
+                const newComment = await addComment(data.content, post?._id);
                 if (newComment) {
                     setPost(prev => ({
                         ...prev!,

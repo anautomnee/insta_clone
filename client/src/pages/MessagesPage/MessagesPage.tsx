@@ -12,13 +12,11 @@ export const MessagesPage = () => {
     const redirected: boolean = useRedirectIfNotAuthenticated();
     const [chats, setChats] = useState<Chat[]>([]);
     const user: UserState = useSelector((state: RootState) => state.user);
-    const token = localStorage.getItem("userToken");
     const { username } = useParams();
 
     useEffect(() => {
         const getChats = async() => {
-            if (!token) return;
-            const result = await fetchUserChats(token);
+            const result = await fetchUserChats();
             if (!result) return;
             setChats(result);
         }

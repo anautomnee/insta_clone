@@ -13,7 +13,6 @@ import {addPost} from "../../store/slices/userSlice.ts";
 interface CreatePostProps {
     userId: string | null;
     profileImage: string;
-    token: string | null;
     setIsCreatePostOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -22,7 +21,7 @@ type CreatePostFormInputs = {
     content: string
 };
 
-export const CreatePost = ({ userId, profileImage, token, setIsCreatePostOpen }: CreatePostProps) => {
+export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
     const [preview, setPreview] = useState<string | null>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -69,9 +68,9 @@ export const CreatePost = ({ userId, profileImage, token, setIsCreatePostOpen }:
     };
 
     const onSubmit: SubmitHandler<CreatePostFormInputs> = async (data: CreatePostFormInputs) => {
-        if (data && token) {
+        if (data) {
             try {
-                const result = await dispatch(createPost({ photo: data.photo, content: data.content, token })).unwrap();
+                const result = await dispatch(createPost({ photo: data.photo, content: data.content })).unwrap();
                 if (result && userId) {
                     dispatch(addPost(result));
                     setIsCreatePostOpen(false); // Hide the div

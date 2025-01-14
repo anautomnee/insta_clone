@@ -1,27 +1,18 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {EditProfileData, fetchUserData} from "../types/userTypes.ts";
-
-let backendURL;
-
-if(import.meta.env.VITE_ENV === 'local') {
-    backendURL = 'http://localhost:3001';
-} else {
-    backendURL = import.meta.env.VITE_BACKEND_URL;
-}
-
+import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
-    async ({username, token}: fetchUserData, { rejectWithValue }) => {
+    async ({username}: fetchUserData, { rejectWithValue }) => {
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
             },
         }
-        const response = await axios.get(
+        const response = await axiosInstance.get(
             `${backendURL}/users/${username}`,
             config
         );
@@ -42,13 +33,8 @@ export const fetchUser = createAsyncThunk(
 
 export const editProfile = createAsyncThunk(
     'user/editProfile',
-    async ({profile_image, username, new_username, website, bio, token}: EditProfileData, { rejectWithValue }) => {
+    async ({profile_image, username, new_username, website, bio}: EditProfileData, { rejectWithValue }) => {
         try {
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            }
             const formData = new FormData();
             if (profile_image) {
                 formData.append('photo', profile_image[0]);
@@ -57,10 +43,9 @@ export const editProfile = createAsyncThunk(
             formData.append('website', website);
             formData.append('bio', bio);
 
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 `${backendURL}/users/${username}/edit`,
-                formData,
-                config
+                formData
             );
             return response.data;
 

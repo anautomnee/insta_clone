@@ -9,15 +9,14 @@ export const ExplorePage = () => {
     const [isFetching, setIsFetching] = useState(false);
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
-    const token = localStorage.getItem("userToken");
     useScrollToTop();
 
     const loadPosts = async (): Promise<void> => {
         try {
-            if (!token || isFetching) return; // Prevent redundant fetches
+            if (isFetching) return; // Prevent redundant fetches
             setIsFetching(true); // Set fetching state to true
             const fetchCount = window.innerHeight > window.innerWidth && photos.length === 0 ? 20 : 10;
-            const result: Post[] = await getRandomPosts(token, fetchCount);
+            const result: Post[] = await getRandomPosts(fetchCount);
 
             // Update photos state and remove duplicates
             setPhotos((prevPosts) => [...prevPosts, ...result]);
@@ -51,7 +50,7 @@ export const ExplorePage = () => {
         return () => {
             if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
         };
-    }, [token, photos ]);
+    }, [photos ]);
 
     const getBlocks = () => {
         const blocks = [];

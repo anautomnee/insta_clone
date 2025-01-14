@@ -28,16 +28,15 @@ export const MessagesMain = () => {
     const [newMessage, setNewMessage] = useState<string>('');
     const [receiver, setReceiver] = useState<CondensedUser | null>(null);
     const [chatId, setChatId] = useState<string>('');
-    const token: string | null = localStorage.getItem("userToken");
     const {username} = useParams();
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect((): void => {
         const getMessages = async () => {
-            if (!token || !username) return;
+            if (!username) return;
 
             try {
-                const result: Chat = await fetchChat(username, token);
+                const result: Chat = await fetchChat(username);
                 setMessages(result.messages);
 
                 if (result.user1.username === username) {

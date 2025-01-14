@@ -18,9 +18,7 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
 
    useEffect(() => {
        const fetchUsers = async () => {
-           const token = localStorage.getItem("userToken");
-           if (!token) return;
-           const users = await getAllUsersForSearch(token);
+           const users = await getAllUsersForSearch();
            setUsers(users);
        }
        if (users.length === 0) fetchUsers();

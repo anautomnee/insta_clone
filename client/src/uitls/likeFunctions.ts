@@ -4,17 +4,12 @@ import {likeComment, likePost, unLikeComment, unLikePost} from "./apiCalls.ts";
 import liked from "../assets/reactions/liked.svg";
 import {Post} from "../store/types/instanceTypes.ts";
 
-const token = localStorage.getItem("userToken");
-
 export const onLikeComment = async (e: MouseEvent<HTMLImageElement>, commentId: string, post: Post | null, setPost: Dispatch<React.SetStateAction<Post | null>>) => {
     const target = e.target as HTMLImageElement;
-
-    if (!token || !target) {
-        return;
-    }
+    if (!target) return;
 
     if (target.src === like) {
-        await likeComment(token, commentId);
+        await likeComment(commentId);
 
         // Update the UI immediately after liking the comment
         if (!post) return;
@@ -33,7 +28,7 @@ export const onLikeComment = async (e: MouseEvent<HTMLImageElement>, commentId: 
 
         target.src = liked;
     } else {
-        await unLikeComment(token, commentId);
+        await unLikeComment(commentId);
 
         // Update the UI immediately after liking the comment
         if (!post) return;
@@ -56,12 +51,8 @@ export const onLikeComment = async (e: MouseEvent<HTMLImageElement>, commentId: 
 
 export const onLikePost = async (e: MouseEvent<HTMLImageElement>, postId: string, post: Post | null, setPost: Dispatch<React.SetStateAction<Post | null>>) => {
     const target = e.target as HTMLImageElement;
-    if (!token) {
-        return;
-    }
-
     if (target.src === like) {
-        await likePost(token, postId);
+        await likePost(postId);
 
         // Update the UI immediately after liking the comment
         if (post) {
@@ -70,7 +61,7 @@ export const onLikePost = async (e: MouseEvent<HTMLImageElement>, postId: string
 
         target.src = liked;
     } else {
-        await unLikePost(token, postId);
+        await unLikePost(postId);
 
         // Update the UI immediately after liking the comment
         if (post) {
@@ -83,12 +74,8 @@ export const onLikePost = async (e: MouseEvent<HTMLImageElement>, postId: string
 
 export const onLikePostFromHomepage = async (e: MouseEvent<HTMLImageElement>, postId: string, setPosts: Dispatch<React.SetStateAction<Post[]>>) => {
     const target = e.target as HTMLImageElement;
-    if (!token) {
-        return;
-    }
-
     if (target.src === like) {
-        await likePost(token, postId);
+        await likePost(postId);
 
         // Update the UI immediately after liking the comment
         setPosts((prevPosts) =>
@@ -102,7 +89,7 @@ export const onLikePostFromHomepage = async (e: MouseEvent<HTMLImageElement>, po
 
         target.src = liked;
     } else {
-        await unLikePost(token, postId);
+        await unLikePost(postId);
 
         // Update the UI immediately after liking the comment
         setPosts((prevPosts) =>

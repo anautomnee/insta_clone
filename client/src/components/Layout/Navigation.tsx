@@ -17,7 +17,6 @@ export const Navigation = () => {
     const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
     const [isCreatePostOpen, setIsCreatePostOpen] = useState<boolean>(false);
-    const userToken = localStorage.getItem("userToken");
     const location = useLocation();
 
 
@@ -118,7 +117,6 @@ export const Navigation = () => {
                         <div className={isCreatePostOpen ? "opacity-100" : "opacity-0 invisible"}>
                             <CreatePost userId={user?._id}
                                         profileImage={user?.profile_image}
-                                        token={userToken}
                                         setIsCreatePostOpen={setIsCreatePostOpen}
                             />
                         </div>

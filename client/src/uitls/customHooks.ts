@@ -1,40 +1,55 @@
 import { useEffect, useState } from 'react';
 import { useNavigate} from "react-router";
-import {isTokenExpired} from "./utils.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../store/store.ts";
-import {logout} from "../store/slices/authSlice.ts";
 import {fetchUser} from "../store/actionCreators/userActionCreators.ts";
 import {UserState} from "../store/types/userTypes.ts";
+import {axiosInstance} from "./apiCalls.ts";
+import {AxiosError} from "axios";
 
 export const useRedirectIfAuthenticated = (redirectPath: string = '/') => {
     const navigate = useNavigate();
     const [redirected, setRedirected] = useState(false);
-    const token = localStorage.getItem("userToken");
 
     useEffect(() => {
-        if (token) {
+        const checkAuth = async () => {
+            await axiosInstance.get("/auth/check-access-token");
             setRedirected(true); // Mark redirection state
             navigate(redirectPath, { replace: true }); // Perform redirection
-        }
-    }, [token, redirectPath, navigate]);
+        };
+
+        checkAuth();
+    }, [redirectPath, navigate]);
 
     return redirected; // Return the redirection state
 };
 
 export const useRedirectIfNotAuthenticated = () => {
     const [redirected, setRedirected] = useState(false);
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+
     useEffect(() => {
-        const token = localStorage.getItem("userToken");
-        if (!token || isTokenExpired(token)) {
-            localStorage.removeItem('userToken');
-            setRedirected(true);
-            dispatch(logout());
-            navigate('/login', { replace: true });
-        }
-    }, []);
+        const checkAuth = async () => {
+            try {
+                // Make an API call to check the validity of the token
+                await axiosInstance.get('/auth/check-access-token');
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    if (error.response?.status === 401) {
+                        // Token is invalid or expired, trigger logout and redirect
+                        setRedirected(true);
+                        navigate('/login', { replace: true }); // Redirect to the login page
+                    }
+                } else {
+                    console.log(error); // Handle other errors if needed
+                }
+            }
+        };
+
+        checkAuth(); // Perform the check
+
+    }, [navigate]); // Dependencies
+
     return redirected;
 };
 
@@ -54,15 +69,24 @@ export const useFetchUserAfterReload = (user: UserState): void => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     useEffect(() => {
-        if (user.username == '') {
-            const username = localStorage.getItem('username');
-            const token = localStorage.getItem('userToken');
-            if (!username || !token) {
-                navigate('/login');
-            } else {
-                dispatch(fetchUser({username, token}));
+        const checkToken = async () => {
+            try {
+                if (user.username == '') {
+                    // API call to validate the token
+                    const {data} = await axiosInstance.get('/auth/check-access-token');
+                    dispatch(fetchUser({username: data.username}));
+                }
+            } catch (error) {
+                if (error instanceof AxiosError && error.response?.status === 401) {
+                    // Token is invalid or expired
+                    navigate('/login', { replace: true }); // Redirect to login
+                } else {
+                    console.error('Unexpected error during auth check:', error);
+                }
             }
-        }
+        };
+
+        checkToken();
     }, [user]);
 };
 

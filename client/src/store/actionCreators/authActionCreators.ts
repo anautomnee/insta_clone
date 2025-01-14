@@ -1,14 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {LoginDataType, RegisterDataType, ResetDataType} from '../types/authTypes.ts';
-
-let backendURL;
-
-if(import.meta.env.VITE_ENV === 'local') {
-    backendURL = 'http://localhost:3001';
-} else {
-    backendURL = import.meta.env.VITE_BACKEND_URL;
-}
+import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
 
 export const registerUser = createAsyncThunk(
     'auth/register',
@@ -19,7 +12,7 @@ export const registerUser = createAsyncThunk(
                     'Content-Type': 'application/json',
                 },
             }
-            await axios.post(
+            await axiosInstance.post(
                 `${backendURL}/auth/register`,
                 { username, email, fullName, password },
                 config
@@ -48,14 +41,11 @@ export const userLogin = createAsyncThunk(
                     'Content-Type': 'application/json',
                 },
             }
-            const { data } = await axios.post(
+            const { data } = await axiosInstance.post(
                 `${backendURL}/auth/login`,
                 { usernameOrEmail, password },
                 config
             )
-            // store user's token in local storage
-            localStorage.setItem('userToken', data.data.token)
-            localStorage.setItem('username', data.data.info.username);
             return data
         } catch (error: unknown) {
             // return custom error message from API if any
@@ -81,7 +71,7 @@ export const resetPassword = createAsyncThunk(
                     'Content-Type': 'application/json',
                 },
             }
-            const { data } = await axios.post(
+            const { data } = await axiosInstance.post(
                 `${backendURL}/auth/reset`,
                 { usernameOrEmail },
                 config

@@ -5,11 +5,10 @@ import {deletePost} from "../../uitls/apiCalls.ts";
 type EditPostProps = {
     modalRef: RefObject<HTMLDivElement>;
     postId: string | undefined
-    token: string | null;
     setPostType: Dispatch<SetStateAction<'preview' | 'edit'>>;
 }
 
-export const PostMore = ({modalRef, postId, token, setPostType}: EditPostProps) => {
+export const PostMore = ({modalRef, postId, setPostType}: EditPostProps) => {
     const location = useLocation();
     const [showNotification, setShowNotification] = useState(false);
     const {username} = useParams();
@@ -38,8 +37,8 @@ export const PostMore = ({modalRef, postId, token, setPostType}: EditPostProps) 
 
     const handleDeletePost = async () => {
         try {
-            if (!postId || !token || !modalRef.current) return;
-            await deletePost(token, postId);
+            if (!postId || !modalRef.current) return;
+            await deletePost(postId);
             window.location.href = `/profile/${username}`;
         } catch (error) {
             console.error('Could not delete post', error);

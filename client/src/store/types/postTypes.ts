@@ -23,16 +23,13 @@ export type PostState = {
 export type CreatePost = {
     photo: FileList,
     content: string,
-    token: string,
 }
 
 export type FetchPostParams = {
     id: string,
-    token: string,
 }
 
 export type UpdatePostParams = {
     id: string,
-    token: string,
     content: string,
 }

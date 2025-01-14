@@ -14,14 +14,13 @@ export const PostPage = () => {
     const {postId} = useParams();
     const [post, setPost] = useState<Post | null>(null);
     const dispatch = useDispatch<AppDispatch>();
-    const token = localStorage.getItem("userToken");
     const [postType, setPostType] = useState<'preview' | 'edit'>('preview');
     const moreRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchPostFunc = async() => {
-            if (!postId || !token) return;
-            const result = await dispatch(fetchPost({ id: postId, token })).unwrap();
+            if (!postId) return;
+            const result = await dispatch(fetchPost({ id: postId })).unwrap();
             setPost(result);
         }
         fetchPostFunc();
@@ -31,7 +30,7 @@ export const PostPage = () => {
 
     return(<>
         <div hidden ref={moreRef}>
-            <PostMore modalRef={moreRef} postId={post?._id} token={token} setPostType={setPostType}/>
+            <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType}/>
         </div>
         <div className="grid md:grid-cols-[1.8fr_1fr] sm:mx-auto mx-6 lgg:w-[933px] lg:w-[820px]
             md:w-[640px] sm:w-[420px] xs:w-[90vw] border border-gray mt-8">
@@ -44,8 +43,7 @@ export const PostPage = () => {
                     className="md:w-full md:h-full sm:w-80 sm:h-80 object-contain"/>
             </div>
             {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef}/> :
-                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType}
-                              token={token}/>}
+                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType}/>}
         </div>
     </>)
 };

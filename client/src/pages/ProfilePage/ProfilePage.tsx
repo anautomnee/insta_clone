@@ -13,16 +13,15 @@ export const ProfilePage = () => {
     const {username} = useParams();
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const user = useSelector((state: RootState) => state.user);
-    const token = localStorage.getItem("userToken");
     const location = useLocation();
 
     const isModal = location.pathname.includes("/post/");
 
     useEffect(() => {
         const fetchUserFunc = async() => {
-            if (!username || !token) return;
+            if (!username) return;
             if (user.username !== username) {
-                const result = await fetchProfile(username, token);
+                const result = await fetchProfile(username);
                 setCurrentUser(result);
             } else {
                 setCurrentUser(user);
@@ -38,7 +37,7 @@ export const ProfilePage = () => {
             <div className="w-full text-center border-b border-b-gray md:hidden p-2 font-semibold">
                 {currentUser?.username}</div>
             <div className="flex flex-col gap-8 lg:gap-16">
-                <ProfileHeader user={currentUser}/>
+                <ProfileHeader user={currentUser} profileUsername={user.username} />
                 <div className="grid grid-cols-3 px-1 sm:px-6 gap-1 sm:gap-2">
                     {currentUser?.posts && currentUser.posts.length > 0 && [...currentUser?.posts].reverse().map((post) => (<div
                         key={post._id}

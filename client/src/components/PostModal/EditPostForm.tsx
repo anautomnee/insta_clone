@@ -12,10 +12,9 @@ type EditPostFormProps = {
     postId: string | undefined;
     setPostType: Dispatch<SetStateAction<'preview' | 'edit'>>;
     setPost: Dispatch<SetStateAction<Post | null>>;
-    token: string | null;
 }
 
-export const EditPostForm = ({postContent, postId, setPostType, setPost, token}: EditPostFormProps) => {
+export const EditPostForm = ({postContent, postId, setPostType, setPost}: EditPostFormProps) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -32,8 +31,8 @@ export const EditPostForm = ({postContent, postId, setPostType, setPost, token}:
     } = useForm<EditPostInputs>();
 
     const onEditPost: SubmitHandler<EditPostInputs> = async (data: EditPostInputs) => {
-        if (!token || !postId) return;
-        await dispatch(updatePost({id: postId, token, content: data.content })).unwrap();
+        if (!postId) return;
+        await dispatch(updatePost({id: postId, content: data.content })).unwrap();
         setPost((prevPost) => {
             if (!prevPost) return null;
 
