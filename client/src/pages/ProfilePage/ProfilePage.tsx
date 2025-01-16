@@ -1,5 +1,5 @@
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
-import { useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
+//import { useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 import { useEffect, useState} from 'react';
 import {User} from "../../store/types/instanceTypes.ts";
 import {fetchProfile} from "../../uitls/apiCalls.ts";
@@ -9,7 +9,7 @@ import {RootState} from "../../store/store.ts";
 import {PostModal} from "../../components/PostModal/PostModal.tsx";
 
 export const ProfilePage = () => {
-    const redirected = useRedirectIfNotAuthenticated();
+    //const redirected = useRedirectIfNotAuthenticated();
     const {username} = useParams();
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const user = useSelector((state: RootState) => state.user);
@@ -30,7 +30,7 @@ export const ProfilePage = () => {
         fetchUserFunc();
     }, [username, user]);
 
-    if (redirected) return null;
+    //if (redirected) return null;
 
     return (
         <div className="flex flex-col items-center gap-8 mx-auto md:mx-28 md:my-9 lg:gap-16">

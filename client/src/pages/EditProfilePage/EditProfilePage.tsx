@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store.ts";
 import {editProfile, fetchUser} from "../../store/actionCreators/userActionCreators.ts";
-import { useRedirectIfNotAuthenticated } from "../../uitls/customHooks.ts";
+//import { useRedirectIfNotAuthenticated } from "../../uitls/customHooks.ts";
 
 interface FormInputs {
     username: string;
@@ -13,7 +13,7 @@ interface FormInputs {
 }
 
 export const EditProfilePage = () => {
-    const redirected = useRedirectIfNotAuthenticated();
+    //const redirected = useRedirectIfNotAuthenticated();
 
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: RootState) => state.user);
@@ -79,7 +79,7 @@ export const EditProfilePage = () => {
        }
     };
 
-    if (redirected) return null;
+    //if (redirected) return null;
 
     return (
         <form className="flex flex-col ml-40 my-9 max-w-[610px]" onSubmit={handleSubmit(onSubmit)}>

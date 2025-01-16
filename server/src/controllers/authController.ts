@@ -115,6 +115,6 @@ export const checkAccessToken = (req: Request, res: Response) => {
     if (req.user) {
         res.status(200).json({message: 'Token is valid', username: req.user.username});
     } else {
-        res.status(401).send('Token is invalid or expired');
+        res.status(200).json({message: 'Token is not valid'});
     }
 }

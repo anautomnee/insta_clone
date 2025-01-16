@@ -7,10 +7,10 @@ import {PostMain} from "../../components/PostModal/PostMain.tsx";
 import {EditPostForm} from "../../components/PostModal/EditPostForm.tsx";
 import {PostMore} from "../../components/PostModal/PostMore.tsx";
 import {Post} from "../../store/types/instanceTypes.ts";
-import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
+//import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 
 export const PostPage = () => {
-    const redirected = useRedirectIfNotAuthenticated();
+    //const redirected = useRedirectIfNotAuthenticated();
     const {postId} = useParams();
     const [post, setPost] = useState<Post | null>(null);
     const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +26,7 @@ export const PostPage = () => {
         fetchPostFunc();
     }, [postId]);
 
-    if(redirected) return null;
+    //if(redirected) return null;
 
     return(<>
         <div hidden ref={moreRef}>

@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
-import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
+//import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 import {Link, Outlet, useParams} from "react-router";
 import {UserState} from "../../store/types/userTypes.ts";
 import {useEffect, useState} from "react";
@@ -9,7 +9,7 @@ import {Chat} from "../../store/types/instanceTypes.ts";
 import {formatDate} from "../../uitls/utils.ts";
 
 export const MessagesPage = () => {
-    const redirected: boolean = useRedirectIfNotAuthenticated();
+    //const redirected: boolean = useRedirectIfNotAuthenticated();
     const [chats, setChats] = useState<Chat[]>([]);
     const user: UserState = useSelector((state: RootState) => state.user);
     const { username } = useParams();
@@ -23,7 +23,7 @@ export const MessagesPage = () => {
         if (chats.length === 0) getChats();
     }, []);
 
-    if (redirected) return null;
+    //if (redirected) return null;
 
     return (
         <div className="flex h-full">

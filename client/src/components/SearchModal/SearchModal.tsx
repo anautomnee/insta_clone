@@ -26,7 +26,7 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
            const users = await getAllUsersForSearch();
            setUsers(users);
        }
-       if (users.length === 0) fetchUsers();
+       if (users?.length === 0) fetchUsers();
    }, [users]);
 
     const closeModal = (e: MouseEvent<HTMLDivElement>) => {
@@ -40,7 +40,7 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchInput(e.target.value)
-        if (e.target.value.length < 1) {
+        if (e.target.value?.length < 1) {
             setMatchingUsers([]);
             return;
         }
@@ -87,7 +87,7 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
                              }}/>
                     </div>
                     <div className="flex flex-col mt-12 gap-3">
-                        {matchingUsers.length > 0 ? (matchingUsers.map((user: CondensedUser) => (
+                        {matchingUsers?.length > 0 ? (matchingUsers.map((user: CondensedUser) => (
                             <Link to={`/profile/${user.username}`} key={user._id}
                                   className="flex items-center gap-3"
                                     onClick={() => handleAddToSearch({

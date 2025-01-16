@@ -13,6 +13,16 @@ export const axiosInstance = axios.create({
     withCredentials: true,
 });
 
+export const checkJWTToken = async () => {
+    try {
+        const result = await axiosInstance.get('/auth/check-access-token');
+        return result.data.message === 'Token is valid';
+    } catch(error) {
+        console.error('Unexpected error during auth check:', error);
+    }
+};
+
+
 export const addComment = async (content: string, postId: string) => {
     try {
 
@@ -127,7 +137,6 @@ export const unfollowUser = async (username: string) => {
 
 export const getAllUsersForSearch = async () => {
     try {
-
         const response = await axiosInstance.get(
             `${backendURL}/users`
         );

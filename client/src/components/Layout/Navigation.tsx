@@ -6,19 +6,18 @@ import { useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
-import {useFetchUserAfterReload} from "../../uitls/customHooks.ts";
 import {NotificationsModal} from "../NotificationsModal/NotificationsModal.tsx";
 import {SearchModal} from "../SearchModal/SearchModal.tsx";
+import {useFetchUserAfterReload} from "../../uitls/customHooks.ts";
 
 export const Navigation = () => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const user = useSelector((state: RootState) => state.user);
-    useFetchUserAfterReload(user);
     const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
     const [isCreatePostOpen, setIsCreatePostOpen] = useState<boolean>(false);
     const location = useLocation();
-
+    useFetchUserAfterReload(user);
 
     return (
         <div className="relative flex justify-center md:border-r border-t md:border-t-0 border-gray py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">

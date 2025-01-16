@@ -1,4 +1,3 @@
-import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
 import { useEffect, useRef, useState} from "react";
 import {Post} from "../../store/types/instanceTypes.ts";
 import {fetchFollowedPosts} from "../../uitls/apiCalls.ts";
@@ -18,7 +17,6 @@ import done from '../../assets/done.png';
 
 
 export const HomePage = () => {
-    const redirected = useRedirectIfNotAuthenticated();
     const [posts, setPosts] = useState<Post[]>([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -36,14 +34,14 @@ export const HomePage = () => {
 
                 // Update posts state and remove duplicates
                 setPosts((prevPosts) => {
-                    const newPosts = result.filter(
-                        (newPost) => !prevPosts.some((post) => post._id === newPost._id)
+                    const newPosts = result?.filter(
+                        (newPost) => !prevPosts?.some((post) => post._id === newPost._id)
                     );
-                    return [...prevPosts, ...newPosts];
+                    return newPosts ? [...prevPosts, ...newPosts] : [...prevPosts];
                 });
 
                 // Check if there are more posts to load
-                if (result.length < 10) setHasMore(false);
+                if (result?.length < 10) setHasMore(false);
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
@@ -69,8 +67,6 @@ export const HomePage = () => {
         };
     }, [hasMore]);
 
-    if (redirected) return null;
-
     return (
         <div className="flex flex-col justify-center">
             <div className="flex justify-between md:hidden p-3 border-b border-b-gray">
@@ -91,7 +87,7 @@ export const HomePage = () => {
                     notifications={notifications}/>
             </div>
             <div className="flex flex-wrap justify-center gap-x-10 gap-y-6 my-6 md:my-14 mx-[5vw] md:mx-[77px]">
-                {posts.length > 0 && posts.map((post, index) => (
+                {posts?.length > 0 && posts.map((post, index) => (
                     <div key={post._id}
                          className={`border-b border-b-gray ${index === posts.length - 1 ? "mr-auto" : ""}`}>
                         <Link to={`/profile/${post.author.username}`} className="flex gap-2 mb-3 cursor-pointer">
@@ -117,7 +113,7 @@ export const HomePage = () => {
                             </Link>
                         </div>
                         <p className="text-xs font-semibold mb-2">{post.like_count} likes</p>
-                        {post.content.length < 82 ?
+                        {post?.content?.length < 82 ?
                             <p className="text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
                             {post.author.username}</span>{post.content}</p> :
                             <div>
@@ -132,7 +128,7 @@ export const HomePage = () => {
                                         fullText.hidden = false;
                                     }}>  ...more</span></p>
                                 <p hidden className=" text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
-                            {post.author.username}</span>{post.content}
+                            {post?.author?.username}</span>{post.content}
                                     <span className="text-darkgray cursor-pointer"
                                           onClick={(e) => {
                                               const target = e.target as HTMLElement;
