@@ -13,19 +13,32 @@ export const getUserByUsername = async (req: Request, res: Response) => {
             }).populate({
                 path: 'followers',
                 select: 'profile_image username _id',
-            }).populate('posts').populate({
+            }).populate({
+                path: 'posts',
+                populate: [
+                {
+                    path: 'photos',
+                    select: 'string64'
+                }
+            ]
+            }).populate({
                 path: 'notifications',
                 populate: [
                     {
                         path: 'post',
-                        select: 'photo',
+                        populate: [
+                            {
+                                path: 'photos',
+                                select: 'string64'
+                            }
+                        ]
                     },
                     {
                         path: 'comment',
                         populate: [
                             {
-                                path: 'post',
-                                select: 'photo'
+                                path: 'photos',
+                                select: 'string64'
                             }
                         ]
                     },

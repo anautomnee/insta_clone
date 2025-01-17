@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store.ts";
 import {createPost} from "../../store/actionCreators/postActionCreators.ts";
 import {addPost} from "../../store/slices/userSlice.ts";
+import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel.tsx";
 
 interface CreatePostProps {
     userId: string | null;
@@ -17,12 +18,12 @@ interface CreatePostProps {
 }
 
 type CreatePostFormInputs = {
-    photo: FileList;
+    photos: FileList;
     content: string
 };
 
 export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
-    const [preview, setPreview] = useState<string | null>(null);
+    const [previews, setPreviews] = useState<string[]>([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     const { status, error } = useSelector((state: RootState) => state.post);
@@ -47,15 +48,19 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
     };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];  // Get the first file (if any)
+        const files = e.target.files;
 
-        if (file) {
+        if (files) {
             // Generate a preview for the file (if it's an image)
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreview(reader.result as string);  // Set the preview URL
-            };
-            reader.readAsDataURL(file);  // Read the file as a Data URL (base64)
+            const fileArray = Array.from(files);
+            const previewUrls = fileArray.map((file) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                return new Promise<string>((resolve) => {
+                    reader.onload = () => resolve(reader.result as string);
+                });
+            });
+            Promise.all(previewUrls).then((urls) => setPreviews(urls)); // Update previews
         }
     };
 
@@ -63,19 +68,20 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
         e.stopPropagation();
         setIsCreatePostOpen(false);
         reset();
-        setPreview(null);
+        setPreviews([]);
         setValue("content", "");
     };
 
     const onSubmit: SubmitHandler<CreatePostFormInputs> = async (data: CreatePostFormInputs) => {
         if (data) {
+            console.log(data);
             try {
-                const result = await dispatch(createPost({ photo: data.photo, content: data.content })).unwrap();
+                const result = await dispatch(createPost({ photos: data.photos, content: data.content })).unwrap();
                 if (result && userId) {
                     dispatch(addPost(result));
                     setIsCreatePostOpen(false); // Hide the div
                     reset(); // Reset the form fields
-                    setPreview(null); // Clear the image preview
+                    setPreviews([]); // Clear the image preview
                     setValue("content", ""); // Reset content value
                 }
             } catch (error) {
@@ -84,18 +90,18 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
             }
         }
     };
-    const photo = watch("photo");
+    const photos = watch("photos");
     const content = watch("content");
 
     return (
         <div
-            className="absolute left-0 -top-7 h-[calc(100vh-81px)] md:h-screen w-screen
+            className="absolute z-20 left-0 -top-7 h-[calc(100vh-81px)] md:h-screen w-screen
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] md:left-[60px] lgg:left-[220px]"
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
             onClick={closeCreatePost}
         >
-            <div className="bg-white opacity-100 mt-8 md:mt-36 mx-auto rounded-xl
-            xl:w-[913px] lg:w-[720px] md:w-[510px] w-[90vw]"
+            <div className="bg-white opacity-100 mt-8 md:mt-20 mx-auto rounded-xl
+            xl:w-[913px] lg:w-[800px] md:w-[510px] w-[90vw]"
             onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                 {status === 'FAILED' && error && <div className="p-4 text-error text-center">Image should be less than 5MB and svg/jpg/png</div>}
                 <form
@@ -107,12 +113,16 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
                         className="cursor-pointer"
                         onClick={closeCreatePost}/>
                     <p className="font-semibold">Create new post</p>
-                    <input type="submit"
-                           disabled={currentContent.length === 0 || !photo?.length}
-                           className={currentContent.length === 0 || !photo?.length ? "text-gray" : "text-blue cursor-pointer"} value="Share"/>
-                    {errors.photo && <p className="pl-3.5 pt-2 text-xs text-error">Photo should be less than 5MB</p>}
-                    {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200
-                        characters</p>}
+                    <input
+                        type="submit"
+                        disabled={currentContent.length === 0 || !photos?.length}
+                        className={currentContent.length === 0 || !photos?.length ? "text-gray" : "text-blue cursor-pointer"}
+                        value="Share"
+                    />
+                    {errors.photos && <p className="pl-3.5 pt-2 text-xs text-error">Photo should be less than 5MB</p>}
+                    {errors.content &&
+                        <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200
+                            characters</p>}
 
                 </form>
                 <div className="flex flex-col md:flex-row">
@@ -122,19 +132,14 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
                     lg:w-[420px] lg:h-[420px]
                     xl:w-[520px] xl:h-[520px]
                     bg-lightgray">
-                        {preview ? (
-                            <img
-                                src={preview}
-                                alt="Preview"
-                                className="absolute top-0 left-0 right-0 bottom-0 w-full h-full object-cover"
-                            />
-                        ) : (
+                        {previews.length > 0 ? <PhotoCarousel photos={previews} /> : (
                             <img src={upload} alt="upload" />
                         )}
                         <input type="file"
-                               {...register("photo", { required: "Photo is required" })}
+                               {...register("photos", { required: "Photos are required" })}
                                className="cursor-pointer opacity-0 absolute top-0 left-0 bottom-0 right-0 w-full h-full"
-                               onChange={handleFileChange}/>
+                               onChange={handleFileChange}
+                               multiple />
 
                     </div>
                     <div className="flex flex-col px-4 py-6 md:w-[42%]">

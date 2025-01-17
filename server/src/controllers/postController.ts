@@ -5,6 +5,8 @@ import multer from "multer";
 import Like from "../db/models/Like.ts";
 import mongoose from "mongoose";
 import Notification from "../db/models/Notification.ts";
+import {MulterRequest} from "../middlewares/uploadImage.ts";
+import Photo from "../db/models/Photo.ts";
 
 export const createPost = async (req: Request, res: Response) => {
     try {
@@ -18,21 +20,45 @@ export const createPost = async (req: Request, res: Response) => {
             return;
         }
         const user = await User.findById(req.user.id);
-        if (req.file && user) {
-            const base64Image = req.file.buffer.toString('base64');
-            const base64EncodedImage = `data:image/${req.file.mimetype};base64,${base64Image}`;
-
-            const post = await Post.create({
-                photo: base64EncodedImage,
-                content,
-                author: user._id
+        if (req.files && user) {
+            const base64EncodedImages: string[] = (req as MulterRequest).files.map((file) => {
+                // Properly encode each file as a Base64 string
+                return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
             });
-            await user.posts.push(post._id);
+
+            // Save each image to the `Photo` collection
+            const photoDocuments = await Promise.all(
+                base64EncodedImages.map(async (base64Image) => {
+                    const photo = new Photo({
+                        string64: base64Image,
+                        post: null, // You can assign the post ID after creating the post
+                    });
+                    await photo.save();
+                    return photo._id; // Collect the IDs for the post
+                })
+            );
+
+            // Create the post with photo IDs
+            const post = await Post.create({
+                photos: photoDocuments, // Link the photo ObjectIds
+                content,
+                author: user._id,
+            });
+
+            // Update the `post` field in the `Photo` documents
+            await Promise.all(
+                photoDocuments.map(async (photoId) => {
+                    await Photo.findByIdAndUpdate(photoId, { post: post._id });
+                })
+            );
+
+            // Add the post to the user's list
+            user.posts.push(post._id);
             await user.save();
+
             res.status(201).send(post);
-        }else {
-            res.status(500).send('Photo error occurred');
-            return;
+        } else {
+            res.status(400).send("No files uploaded or user not found");
         }
     } catch (error) {
         console.error('Error creating post: ', error);
@@ -68,7 +94,7 @@ export const getPostById = async (req: Request, res: Response) => {
                         select: 'user',
                     }
                 ]
-        });
+        }).populate('photos', 'string64');
         res.status(200).send(post);
     } catch (error) {
         console.error('Error getting post by id: ', error);
@@ -81,7 +107,8 @@ export const getRandomPosts = async (req: Request, res: Response) => {
         const {count} = req.query;
         const countNumber = Number(count);
         const posts = await Post.aggregate().sample(countNumber);
-        const populatedPosts = await Post.populate(posts, { path: 'author', select: 'username' });
+        const populatedPosts = await Post.populate(posts, [{ path: 'author', select: 'username' },
+            { path: 'photos', select: 'string64' }]);
 
         res.status(200).send(populatedPosts);
     } catch (error) {
@@ -216,7 +243,8 @@ export const getFollowedPosts = async (req: Request, res: Response) => {
             .skip((page - 1) * limit)
             .limit(limit)
             .populate("author", "username profile_image")
-            .populate('likes', 'user');
+            .populate('likes', 'user')
+            .populate('photos', 'string64');
 
         res.status(200).json(posts);
     } catch (error) {

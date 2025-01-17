@@ -12,7 +12,7 @@ export type PostState = {
     error: string | null,
     _id: string,
     author: PostUserFields | null,
-    photo: string,
+    photos: string[],
     content: string,
     createdAt: Date | null,
     like_count: number,
@@ -21,7 +21,7 @@ export type PostState = {
 }
 
 export type CreatePost = {
-    photo: FileList,
+    photos: FileList,
     content: string,
 }
 

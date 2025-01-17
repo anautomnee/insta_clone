@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const PostSchema = new mongoose.Schema({
     author: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-    photo: {type: String, required: true},
+    photos: [{type: mongoose.Schema.Types.ObjectId, ref: "Photo"}],
     content: {type: String, required: true, maxlength: 2200},
     website: {type: String},
     createdAt: {type: Date, default: Date.now},

@@ -9,6 +9,7 @@ import {PostMain} from "./PostMain.tsx";
 import {EditPostForm} from "./EditPostForm.tsx";
 import more from "../../assets/more.svg";
 import arrow_back from "../../assets/arrow_back.svg";
+import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel.tsx";
 
 export const PostModal = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -70,12 +71,13 @@ export const PostModal = () => {
                  md:border-r border-b md:border-b-0 border-gray lgg:w-[577px] lgg:h-[577px]
                  lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]
                  max-h-[400px]">
-            <img
-                    src={post?.photo}
-                    alt="Post"
-                    className="w-full h-full object-contain"/>
-                </div>
-            {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef} /> :
+                {post?.photos &&post?.photos?.length > 0 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.string64 || "")}/> : <img
+                    src={post?.photos[0].string64}
+                alt="Post"
+                className="w-full h-full object-contain"/>
+            }
+        </div>
+        {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef} /> :
                 <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} />}
 
             </div>

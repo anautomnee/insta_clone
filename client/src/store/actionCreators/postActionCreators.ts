@@ -5,10 +5,12 @@ import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
 
 export const createPost = createAsyncThunk(
     'post/createPost',
-    async ({photo, content}: CreatePost, { rejectWithValue }) => {
+    async ({photos, content}: CreatePost, { rejectWithValue }) => {
         try {
             const formData = new FormData();
-            formData.append('photo', photo[0]);
+            Array.from(photos).forEach((photo) => {
+                formData.append('photos', photo);
+            });
             formData.append('content', content);
 
                 const response = await axiosInstance.post(

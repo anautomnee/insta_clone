@@ -14,6 +14,7 @@ import notifications_icon from '../../assets/nav_icons/notifications/notificatio
 import {SearchModal} from "../../components/SearchModal/SearchModal.tsx";
 import {NotificationsModal} from "../../components/NotificationsModal/NotificationsModal.tsx";
 import done from '../../assets/done.png';
+import {PhotoCarousel} from "../../components/PhotoCarousel/PhotoCarousel.tsx";
 
 
 export const HomePage = () => {
@@ -99,9 +100,16 @@ export const HomePage = () => {
                             <p className="text-xs font-semibold">{post.author.username}</p>
                             <p className="text-xs text-darkgray">· {post.createdAt && formatDate(new Date(post.createdAt))}</p>
                         </Link>
-                        <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }}>
-                            <img src={post.photo} alt={`post-${post._id}`}
-                                 className="w-[420px] h-[420px] object-contain cursor-pointer"/>
+                        <Link to={`/post/${post._id}`} state={{backgroundLocation: location}}>
+                            {post.photos?.length > 1 ? (
+                                <PhotoCarousel photos={post.photos}/>
+                            ) : (
+                                <img
+                                    src={post.photos[0]}
+                                    alt={post._id}
+                                    className="w-[420px] h-[420px] object-contain cursor-pointer"
+                                />
+                            )}
                         </Link>
                         <div className="flex gap-2 mt-1.5 mb-2.5">
                             <img src={_id && post?.likes && isLikedByUser(post?.likes, _id) ? liked : like}

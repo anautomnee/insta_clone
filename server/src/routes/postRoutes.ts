@@ -18,7 +18,7 @@ const router = express.Router();
 router.get('/get/:postId', ifAuthenticated, getPostById);
 router.get('/get_followed', ifAuthenticated, getFollowedPosts);
 router.get('/random', ifAuthenticated, getRandomPosts);
-router.post('/create', upload.single('photo'), ifAuthenticated, createPost);
+router.post('/create', upload.array('photos', 8), ifAuthenticated, createPost);
 router.put('/:postId', ifAuthenticated, ifPostAuthor, updatePost);
 router.post('/:postId/like', ifAuthenticated, likePost);
 router.delete('/:postId', ifAuthenticated, ifPostAuthor, deletePost);

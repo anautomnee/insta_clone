@@ -1,13 +1,16 @@
-import multer from "multer";
+import { Request } from 'express';
+import multer from 'multer';
+
+// Extend Express's Request interface to include 'files'
+export interface MulterRequest extends Request {
+    files: Express.Multer.File[]; // Type files explicitly
+}
 
 const storage = multer.memoryStorage()
 const upload = multer({
     storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
-    fileFilter: (req, file, callback) => {
-        if (file.fieldname !== 'photo') {
-            return callback(new Error('Unexpected field for image')); // Reject unexpected fields
-        }
+    fileFilter: (_req, file, callback) => {
 
         const allowedFileTypes = ['image/svg', 'image/svg+xml', 'image/webp', 'image/jpeg', 'image/jpg', 'image/png'];
 

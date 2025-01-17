@@ -6,7 +6,7 @@ export type CondensedUser = {
 
 export type CondensedPost = {
     _id: string;
-    photo: string;
+    photos: string[];
 }
 
 export type Message = {
@@ -45,6 +45,11 @@ export type Comment = {
     likes: LikesFields[];
 }
 
+type PhotosFields = {
+    _id: string,
+    string64: string,
+}
+
 export type LikesFields = {
     _id: string;
     user: string;
@@ -53,7 +58,7 @@ export type LikesFields = {
 export type Post = {
     _id: string;
     author: CondensedUser;
-    photo: string;
+    photos: PhotosFields[];
     content: string;
     createdAt: Date | null;
     like_count: number;

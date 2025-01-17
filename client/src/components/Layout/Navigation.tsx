@@ -20,7 +20,7 @@ export const Navigation = () => {
     useFetchUserAfterReload(user);
 
     return (
-        <div className="relative flex justify-center md:border-r border-t md:border-t-0 border-gray py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
+        <div className="relative z-20 flex justify-center md:border-r border-t md:border-t-0 border-gray py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
             <div
                 className="flex md:fixed top-7 md:flex-col items-center gap-4 bg-white">
 
@@ -103,7 +103,7 @@ export const Navigation = () => {
                                 notifications={user?.notifications}/>
                         </div>
                     </div>
-                    <div className="hidden md:flex lgg:gap-4 flex-col lgg:flex-row items-center cursor-pointer"
+                    <div className="flex lgg:gap-4 flex-col lgg:flex-row items-center cursor-pointer"
                          onClick={() => setIsCreatePostOpen(!isCreatePostOpen)}
                          onMouseOver={() => setHoveredLink(links[5].name)}
                          onMouseLeave={() => setHoveredLink(null)}>

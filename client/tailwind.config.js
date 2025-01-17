@@ -20,7 +20,8 @@ export default {
       'white': '#FFFFFF',
       'lightgray': '#FAFAFA',
       'purple': '#4D00FF',
-      'error': '#FF0000'
+      'error': '#FF0000',
+      'black': '#000000',
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
