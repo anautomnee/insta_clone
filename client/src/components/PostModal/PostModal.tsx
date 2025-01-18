@@ -39,7 +39,7 @@ export const PostModal = () => {
         <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType} />
     </div>
     <div
-        className="fixed h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
+        className="fixed z-20 h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
             md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
