@@ -6,6 +6,7 @@ import {followUser, unfollowUser} from "../../uitls/apiCalls.ts";
 import {addFollowing, removeFollowing} from "../../store/slices/userSlice.ts";
 import {useEffect, useState} from "react";
 import {Link} from "react-router";
+import website_link from "../../assets/website_link.svg";
 
 export const ProfileHeader= ({user, profileUsername}: {user: User | null, profileUsername: string}) => {
     const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -53,7 +54,7 @@ export const ProfileHeader= ({user, profileUsername}: {user: User | null, profil
         <>
             <div className="flex gap-4 px-6 md:gap-12 lg:gap-20">
                 <img className="rounded-[50%] border border-gray
-                w-28 h-28 object-cover md:w-[150px] md:h-[150px]" src={user?.profile_image} alt="Profile pic"/>
+                w-28 h-28 object-cover md:min-w-[150px] md:h-[150px]" src={user?.profile_image} alt="Profile pic"/>
                 <div>
                     <div className="flex flex-col items-start md:flex-row md:items-center gap-2 mb-3">
                         <p className="text-lg mr-3">{user?.username}</p>
@@ -81,9 +82,21 @@ export const ProfileHeader= ({user, profileUsername}: {user: User | null, profil
                     </div>
                     {user.bio ? <p className="hidden md:block text-sm w-[434px] break-words">{user.bio}</p> :
                         <p className="hidden md:block text-sm text-darkgray">No bio yet</p>}
+                    {user.website && <div className="hidden md:flex gap-1 text-darkblue text-sm mt-4">
+                        <img src={website_link} alt="Website"/>
+                        <a href={user?.website?.startsWith('http') ? user.website : `https://${user.website}`}
+                           target="_blank"
+                           rel="noopener noreferrer">{user?.website}</a>
+                    </div>}
                 </div>
             </div>
-            <p className="md:hidden pl-6 text-sm w-[90vw] break-words">{user?.bio}</p>
+            <div className="md:hidden pl-6 text-sm w-[90vw] break-words">
+                {user?.bio && <p>{user?.bio}</p>}
+                {user?.website && <div className="flex gap-1 text-darkblue text-sm mt-4">
+                    <img src={website_link} alt="Website"/>
+                    <p>{user?.website}</p>
+                </div>}
+            </div>
         </>
     );
 };

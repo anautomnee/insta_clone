@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store.ts";
 import {editProfile, fetchUser} from "../../store/actionCreators/userActionCreators.ts";
-//import { useRedirectIfNotAuthenticated } from "../../uitls/customHooks.ts";
+import website_link from "../../assets/website_link.svg";
 
 interface FormInputs {
     username: string;
@@ -13,8 +13,6 @@ interface FormInputs {
 }
 
 export const EditProfilePage = () => {
-    //const redirected = useRedirectIfNotAuthenticated();
-
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: RootState) => state.user);
 
@@ -58,7 +56,6 @@ export const EditProfilePage = () => {
 
     const onSubmit = async (data: FormInputs) => {
        try {
-           console.log(data);
            const result = await dispatch(
                editProfile({
                    username: user.username,
@@ -79,12 +76,10 @@ export const EditProfilePage = () => {
        }
     };
 
-    //if (redirected) return null;
-
     return (
-        <form className="flex flex-col ml-40 my-9 max-w-[610px]" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col mx-auto my-9 max-w-[610px]" onSubmit={handleSubmit(onSubmit)}>
             <p className="font-semibold text-xl mb-11">Edit profile</p>
-            <div className="flex justify-between items-center mb-8 p-4 bg-gray rounded-[20px]">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-8 p-4 bg-gray rounded-[20px]">
                 <div className="flex gap-4">
                     <img
                         src={preview || user.profile_image}
@@ -93,7 +88,7 @@ export const EditProfilePage = () => {
                     />
                     <div>
                         <p className="font-semibold mb-2">{user.username}</p>
-                        <p className="w-[265px] break-words line-clamp-2">{user.bio}</p>
+                        <p className="w-[210px] sm:w-[265px] break-words line-clamp-2">{user.bio}</p>
                     </div>
                 </div>
                 <input
@@ -117,12 +112,16 @@ export const EditProfilePage = () => {
             />
             {errors.username && <p className="pt-2 text-xs text-error">{errors.username.message}</p>}
 
-            <p className="font-semibold mb-2">Website</p>
-            <input
-                {...register("website", { maxLength: 120 })}
-                className="border border-gray rounded-xl mb-5 h-10 px-4"
-            />
-            {errors.website && <p className="pt-2 text-xs text-error">{errors.website.message}</p>}
+            <div className="relative flex flex-col">
+                <p className="font-semibold mb-2">Website</p>
+                <input
+                    {...register("website", { maxLength: 120 })}
+                    className="border border-gray rounded-xl mb-5 h-10 pr-4 pl-8 text-darkblue"
+                />
+                <img src={website_link} alt="Website"
+                    className="absolute bottom-8 left-4"/>
+                {errors.website && <p className="pt-2 text-xs text-error">{errors.website.message}</p>}
+            </div>
 
             <p className="font-semibold mb-2">About</p>
             <div className="relative h-16 mb-16 w-full">
@@ -138,7 +137,7 @@ export const EditProfilePage = () => {
                 type="submit"
                 className={`${
                     isDirty ? "bg-blue" : "bg-gray cursor-not-allowed"
-                } text-white py-2 w-[268px] rounded-lg text-sm`}
+                } text-white py-2 w-full sm:w-[268px] rounded-lg text-sm`}
                 disabled={!isDirty}
             >
                 Save

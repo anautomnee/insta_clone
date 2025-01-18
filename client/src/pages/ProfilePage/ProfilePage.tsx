@@ -34,7 +34,7 @@ export const ProfilePage = () => {
                 {currentUser?.username}</div>
             <div className="flex flex-col gap-8 lg:gap-16">
                 <ProfileHeader user={currentUser} profileUsername={user.username}/>
-                <div className="grid grid-cols-3 px-1 sm:px-6 gap-1 sm:gap-2">
+                <div className="grid grid-cols-3 px-2 sm:px-6 gap-1 sm:gap-2">
                     {currentUser?.posts &&
                         currentUser.posts.length > 0 &&
                         [...currentUser.posts].reverse().map((post) => (
