@@ -46,7 +46,7 @@ export const ProfilePage = () => {
                                         className="w-full h-full object-cover"
                                     />
                                 </Link>
-                                {post.photos.length > 0 &&
+                                {post.photos.length > 1 &&
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                                          width="24px" fill="#FFF"
                                          className="absolute top-3 right-3">

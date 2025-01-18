@@ -56,6 +56,9 @@ export const createPost = async (req: Request, res: Response) => {
             user.posts.push(post._id);
             await user.save();
 
+            // Populate photos
+            await post.populate('photos', 'string64');
+
             res.status(201).send(post);
         } else {
             res.status(400).send("No files uploaded or user not found");

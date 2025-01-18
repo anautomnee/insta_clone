@@ -8,7 +8,7 @@ const initialState: PostState = {
         error: null,
         _id: '',
         author: null,
-        photo: '',
+        photos: [],
         content: '',
         createdAt: null,
         like_count: 0,
@@ -39,7 +39,7 @@ const postSlice = createSlice({
             state.error = null;
             state._id = action.payload._id;
             state.author = action.payload.author;
-            state.photo = action.payload.photo;
+            state.photos = action.payload.photos;
             state.content = action.payload.content;
             state.createdAt = action.payload.createdAt;
             state.like_count = action.payload.like_count;

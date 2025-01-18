@@ -14,7 +14,6 @@ import notifications_icon from '../../assets/nav_icons/notifications/notificatio
 import {SearchModal} from "../../components/SearchModal/SearchModal.tsx";
 import {NotificationsModal} from "../../components/NotificationsModal/NotificationsModal.tsx";
 import done from '../../assets/done.png';
-import {PhotoCarousel} from "../../components/PhotoCarousel/PhotoCarousel.tsx";
 
 
 export const HomePage = () => {
@@ -87,10 +86,11 @@ export const HomePage = () => {
                     setIsNotificationsOpen={setIsNotificationsOpen}
                     notifications={notifications}/>
             </div>
-            <div className="flex flex-wrap justify-center gap-x-10 gap-y-6 my-6 md:my-14 mx-[5vw] md:mx-[77px]">
-                {posts?.length > 0 && posts.map((post, index) => (
+            <div className="grid grid-cols-1 lg:grid-cols-2
+             gap-x-10 gap-y-6 my-6 md:my-14 mx-[5vw] sm:mx-auto">
+                {posts?.length > 0 && posts.map((post) => (
                     <div key={post._id}
-                         className={`border-b border-b-gray ${index === posts.length - 1 ? "mr-auto" : ""}`}>
+                         className={`border-b border-b-gray max-w-[473px] md:h-[670px]`}>
                         <Link to={`/profile/${post.author.username}`} className="flex gap-2 mb-3 cursor-pointer">
                             <img
                                 src={post.author.profile_image}
@@ -100,23 +100,28 @@ export const HomePage = () => {
                             <p className="text-xs font-semibold">{post.author.username}</p>
                             <p className="text-xs text-darkgray">· {post.createdAt && formatDate(new Date(post.createdAt))}</p>
                         </Link>
-                        <Link to={`/post/${post._id}`} state={{backgroundLocation: location}}>
-                            {post.photos?.length > 1 ? (
-                                <PhotoCarousel photos={post.photos}/>
-                            ) : (
+                        <div className="relative aspect-square">
+                            <Link to={`/post/${post._id}`} state={{backgroundLocation: location}}>
                                 <img
-                                    src={post.photos[0]}
+                                    src={post.photos[0].string64}
                                     alt={post._id}
-                                    className="w-[420px] h-[420px] object-contain cursor-pointer"
+                                    className="w-full h-full object-cover"
                                 />
-                            )}
-                        </Link>
+                            </Link>
+                            {post.photos.length > 1 &&
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                     width="24px" fill="#FFF"
+                                     className="absolute top-3 right-3">
+                                    <path
+                                        d="M240-400v80h-80q-33 0-56.5-23.5T80-400v-400q0-33 23.5-56.5T160-880h400q33 0 56.5 23.5T640-800v80h-80v-80H160v400h80ZM400-80q-33 0-56.5-23.5T320-160v-400q0-33 23.5-56.5T400-640h400q33 0 56.5 23.5T880-560v400q0 33-23.5 56.5T800-80H400Zm0-80h400v-400H400v400Zm200-200Z"/>
+                                </svg>}
+                        </div>
                         <div className="flex gap-2 mt-1.5 mb-2.5">
                             <img src={_id && post?.likes && isLikedByUser(post?.likes, _id) ? liked : like}
                                  alt='like'
                                  className="w-6 h-6 cursor-pointer"
                                  onClick={async (e) => onLikePostFromHomepage(e, post._id, setPosts)}/>
-                            <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }}>
+                            <Link to={`/post/${post._id}`} state={{backgroundLocation: location}}>
                                 <img src={comment} alt="comment"/>
                             </Link>
                         </div>
@@ -128,13 +133,13 @@ export const HomePage = () => {
                                 <p className="text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
                             {post.author.username}</span>{post.content.slice(0, 82)}
                                     <span className="text-darkgray cursor-pointer"
-                                    onClick={(e) => {
-                                        const target = e.target as HTMLElement;
-                                        const contentP = target.parentElement as HTMLElement;
-                                        const fullText = contentP.nextElementSibling as HTMLElement;
-                                        contentP.hidden = true;
-                                        fullText.hidden = false;
-                                    }}>  ...more</span></p>
+                                          onClick={(e) => {
+                                              const target = e.target as HTMLElement;
+                                              const contentP = target.parentElement as HTMLElement;
+                                              const fullText = contentP.nextElementSibling as HTMLElement;
+                                              contentP.hidden = true;
+                                              fullText.hidden = false;
+                                          }}>  ...more</span></p>
                                 <p hidden className=" text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
                             {post?.author?.username}</span>{post.content}
                                     <span className="text-darkgray cursor-pointer"

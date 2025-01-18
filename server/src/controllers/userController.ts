@@ -6,48 +6,69 @@ import Notification from "../db/models/Notification.ts";
 export const getUserByUsername = async (req: Request, res: Response) => {
     try {
         const { username } = req.params;
-        const user = await User.find({username}).select('-password')
-            .populate({
-                path: 'followings',
-                select: 'profile_image username _id',
-            }).populate({
-                path: 'followers',
-                select: 'profile_image username _id',
-            }).populate({
-                path: 'posts',
-                populate: [
-                {
-                    path: 'photos',
-                    select: 'string64'
-                }
-            ]
-            }).populate({
-                path: 'notifications',
-                populate: [
+        if (!req.user) return;
+        let user;
+        if (username === req.user.username) {
+            user = await User.find({username}).select('-password')
+                .populate({
+                    path: 'followings',
+                    select: 'profile_image username _id',
+                }).populate({
+                    path: 'followers',
+                    select: 'profile_image username _id',
+                }).populate({
+                    path: 'posts',
+                    populate: [
                     {
-                        path: 'post',
-                        populate: [
-                            {
-                                path: 'photos',
-                                select: 'string64'
-                            }
-                        ]
-                    },
-                    {
-                        path: 'comment',
-                        populate: [
-                            {
-                                path: 'photos',
-                                select: 'string64'
-                            }
-                        ]
-                    },
-                    {
-                        path: 'actionMaker',
-                        select: 'username profile_image',
-                    },
+                        path: 'photos',
+                        select: 'string64'
+                    }
                 ]
-            }).populate('search_results', 'username profile_image');
+                }).populate({
+                    path: 'notifications',
+                    populate: [
+                        {
+                            path: 'post',
+                            populate: [
+                                {
+                                    path: 'photos',
+                                    select: 'string64'
+                                }
+                            ]
+                        },
+                        {
+                            path: 'comment',
+                            populate: [
+                                {
+                                    path: 'photos',
+                                    select: 'string64'
+                                }
+                            ]
+                        },
+                        {
+                            path: 'actionMaker',
+                            select: 'username profile_image',
+                        },
+                    ]
+                }).populate('search_results', 'username profile_image');
+        } else {
+            user = await User.find({username}).select('-password')
+                .populate({
+                    path: 'followings',
+                    select: 'profile_image username _id',
+                }).populate({
+                    path: 'followers',
+                    select: 'profile_image username _id',
+                }).populate({
+                    path: 'posts',
+                    populate: [
+                        {
+                            path: 'photos',
+                            select: 'string64'
+                        }
+                    ]
+                })
+        }
         if (!user) {
             res.status(404).send('User not found');
             return;

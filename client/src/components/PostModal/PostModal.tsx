@@ -71,7 +71,7 @@ export const PostModal = () => {
                  md:border-r border-b md:border-b-0 border-gray lgg:w-[577px] lgg:h-[577px]
                  lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]
                  max-h-[400px]">
-                {post?.photos &&post?.photos?.length > 0 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.string64 || "")}/> : <img
+                {post?.photos && post?.photos?.length > 0 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.string64 || "")}/> : <img
                     src={post?.photos[0].string64}
                 alt="Post"
                 className="w-full h-full object-contain"/>

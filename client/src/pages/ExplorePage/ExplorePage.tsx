@@ -95,7 +95,7 @@ export const ExplorePage = () => {
                             `}
                         >
                             <img
-                                src={post.photos[0]}
+                                src={post.photos[0].string64}
                                 alt="Photo"
                                 className="w-full h-full object-cover"
                             />
