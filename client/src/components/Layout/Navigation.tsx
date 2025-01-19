@@ -24,7 +24,7 @@ export const Navigation = () => {
          py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
             <div
                 className="flex justify-around w-full md:w-fit mx-10 md:mx-0
-                 md:justify-start md:fixed top-7 md:flex-col items-center gap-4 ">
+                 md:justify-start md:fixed top-7 md:flex-col items-center gap-4 min-w-[60px]">
 
                 <Link to='/' className="hidden md:flex">
                     <img src={logo}

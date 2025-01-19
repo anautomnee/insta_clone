@@ -1,4 +1,4 @@
-import {Link, useLocation} from "react-router";
+import {Link} from "react-router";
 import more from "../../assets/more.svg";
 import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
 import liked from "../../assets/reactions/liked.svg";
@@ -24,9 +24,6 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [commentError, setCommentError] = useState<string | null>(null);
     const userId = useSelector((state: RootState) => state.user._id);
-    const location = useLocation();
-    const isModal = location.state?.backgroundLocation;
-    console.log(post, post?.comments && post?.comments.length > 0)
 
     type CommentFormInputs = {
         content: string
@@ -68,7 +65,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     };
 
     return (
-        <div className={`flex flex-col overflow-y-scroll h-[calc(100%-150px)] ${isModal ? "" : "sm:mb-40 h-[36vh]"}`}>
+        <div className="flex flex-col overflow-y-scroll h-[calc(100%-150px)]">
             <div className="hidden lg:flex justify-between border-b border-b-gray">
                 <Link
                     to={`/profile/${post?.author?.username}`}
@@ -146,8 +143,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     ))
                 )}
             </div>
-            <div className={`bg-white w-full ${isModal ? "absolute bottom-0"
-                : "sm:absolute lgg:top-[460px] lg:top-[400px] md:top-[280px] sm:top-[460px] "}`}>
+            <div className="bg-white w-full absolute bottom-0">
                 <div className="pl-3.5 mb-3 mt-2">
                     <div className="flex gap-3 mb-2">
                         <img src={userId && post?.likes && isLikedByUser(post?.likes, userId) ? liked : like}
@@ -169,8 +165,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120
                         characters</p>}
                     {commentError && <p className="pl-3.5 pt-2 text-xs text-error">{commentError}</p>}
-                    <form className={`flex items-center justify-between pl-3.5 bg-white
-                            ${isModal ? "w-full" : ""}`}
+                    <form className="flex items-center justify-between pl-3.5 bg-white w-full"
                           onSubmit={handleSubmit(onComment)}>
                         <div className="flex items-center gap-4 w-full mr-4">
                             <img src={smiley}
@@ -185,12 +180,10 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                             )}
                             <input {...register('content', {required: true, maxLength: 120})}
                                    placeholder="Add comment"
-                                   className={`placeholder:text-xs py-2.5
-                                     ${isModal ? "w-full" :
-                                       "lgg:w-52 lg:w-40 md:w-28 sm:w-[310px] w-[26vh]"}`}/>
+                                   className="placeholder:text-xs py-2.5 w-full"/>
                         </div>
                         <button type="submit"
-                                className={`text-blue text-xs font-semibold pr-6 ${isModal ? "lg:pr-10" : ""}`}>Send
+                                className="text-blue text-xs font-semibold pr-6 lg:pr-10">Send
                         </button>
                     </form>
                 </div>

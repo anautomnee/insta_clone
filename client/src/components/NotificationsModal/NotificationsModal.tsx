@@ -53,7 +53,7 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
                                     className="text-darkgray ml-2">{formatDate(new Date(notification.createdAt))}</span>
                             </p>
                         </div>
-                        {(notification?.post?.photos || notification?.comment?.post.photos) && (
+                        {(notification?.post?.photos || notification?.comment?.post?.photos) && (
                             <img src={notification?.post?.photos[0].url || notification?.comment?.post.photos[0].url}
                                  alt="photo"
                                  className="w-11 h-11 object-cover"/>

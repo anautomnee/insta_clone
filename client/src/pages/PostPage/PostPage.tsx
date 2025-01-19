@@ -33,20 +33,23 @@ export const PostPage = () => {
         <div hidden ref={moreRef}>
             <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType}/>
         </div>
-        <div className="grid md:grid-cols-[1.8fr_1fr] sm:mx-auto m-6 lgg:w-[933px] lg:w-[820px]
-            md:w-[640px] sm:w-[420px] xs:w-[90vw] border border-gray">
-            <div className="flex md:max-h-[80vh] sm:h-[420px] justify-center items-center
-                     md:border-r border-b md:border-b-0 border-gray
-                     ">
-                {post?.photos && post?.photos?.length > 0 ? <PhotoCarousel
-                    photos={post?.photos.map((photoField) => photoField.url || "")}/> :
-                    <img
-                    src={post?.photos[0].url}
-                    alt="Post"
-                    className="w-full h-full object-contain"/>}
+        <div className="mx-auto w-[90vw] md:w-fit max-h-[80vh] my-9">
+            <div className="flex flex-col md:flex-row justify-center border border-gray overflow-auto h-full">
+                <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px] md:max-w-[460px]
+                        max-h-[360px] md:max-h-[680px]">
+                    {post?.photos && post?.photos?.length > 1 ?
+                        <PhotoCarousel photos={post?.photos.map((photoField) => photoField.url || "")}/> : <img
+                            src={post?.photos[0].url}
+                            alt="Post"
+                            className="h-full w-full object-contain"/>
+                    }
+                </div>
+                {postType === "preview" ? <div className="relative border-l  border-gray
+                        w-full  md:min-h-full md:w-[423px] overflow-y-auto">
+                        <PostMain post={post} setPost={setPost} moreRef={moreRef}/></div> :
+                    <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost}
+                                  setPostType={setPostType}/>}
             </div>
-            {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef}/> :
-                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType}/>}
         </div>
     </>)
 };

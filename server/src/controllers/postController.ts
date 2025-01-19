@@ -8,6 +8,7 @@ import Notification from "../db/models/Notification.ts";
 import {MulterRequest} from "../middlewares/uploadImage.ts";
 import Photo from "../db/models/Photo.ts";
 import {cloudinary} from "../config/cloudinary.ts";
+import sharp from "sharp";
 
 // Create a post with Cloudinary photo uploads
 export const createPost = async (req: Request, res: Response) => {
@@ -35,12 +36,24 @@ export const createPost = async (req: Request, res: Response) => {
             return;
         }
 
-        // Upload each photo to Cloudinary
         const uploadedPhotos = await Promise.all(
             (req as MulterRequest).files.map(async (file) => {
+                // Analyze image orientation
+                const { width, height } = await sharp(file.buffer).metadata();
+                if (!height || !width) return;
+                const isVertical = height > width;
+
+                // Set aspect ratio based on orientation
+                const aspectRatio = isVertical ? "3:4" : "16:9";
+
                 return new Promise<string>((resolve, reject) => {
                     cloudinary.uploader.upload_stream(
-                        { folder: 'posts' }, // Optional folder in Cloudinary
+                        {
+                            folder: 'posts',
+                            transformation: [
+                                { aspect_ratio: aspectRatio, crop: "fill", gravity: "auto" },
+                            ],
+                        },
                         (error, result) => {
                             if (error) {
                                 reject(error);
@@ -53,6 +66,7 @@ export const createPost = async (req: Request, res: Response) => {
                 });
             })
         );
+
 
         // Save uploaded photo URLs to the `Photo` collection
         const photoDocuments = await Promise.all(

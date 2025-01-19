@@ -40,8 +40,8 @@ export const PostModal = () => {
             <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType} />
         </div>
         <div
-            className="fixed z-20 h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
-                md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
+            className="fixed z-20 h-[calc(100vh-81px)] md:h-screen w-screen
+                md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] top-0 left-0 md:left-[60px] lgg:left-[244px]"
             style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
             onClick={closeModal}>
             <div className="flex justify-center mt-6 h-[90%] md:h-[80vh] md:mt-0 md:items-center  w-full">
@@ -65,15 +65,17 @@ export const PostModal = () => {
                             }}
                         />
                     </div>
-                    <div className="flex flex-col md:flex-row overflow-auto h-full">
-                        <div className="md:border-r border-b md:border-b-0 border-gray">
+                    <div className="flex flex-col md:flex-row justify-center  overflow-auto h-full">
+                        <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px] max-w-[460px]
+                        max-h-[360px] md:max-h-[680px]">
                             {post?.photos && post?.photos?.length > 1 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.url || "")}/> : <img
                                 src={post?.photos[0].url}
                             alt="Post"
-                            className="max-h-[360px] md:max-h-[800px] w-full object-contain"/>
+                            className="w-full object-contain"/>
                         }
-                    </div>
-                    {postType === "preview" ? <div className="relative w-full h-[400px] md:h-full md:w-[423px] overflow-y-auto">
+                        </div>
+                    {postType === "preview" ? <div className="relative border-l  border-gray
+                    w-full h-[460px] md:min-h-full md:w-[423px] overflow-y-auto">
                             <PostMain post={post} setPost={setPost} moreRef={moreRef} /></div> :
                         <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} />}
                     </div>
