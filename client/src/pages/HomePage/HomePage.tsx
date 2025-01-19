@@ -105,9 +105,9 @@ export const HomePage = () => {
                               state={{backgroundLocation: location}}>
                             {post?.photos && post?.photos?.length > 1 ? <PhotoCarousel
                                     type='home'
-                                    photos={post?.photos.map((photoField) => photoField.string64 || "")}/> :
+                                    photos={post?.photos.map((photoField) => photoField.url || "")}/> :
                                 <img
-                                    src={post?.photos[0].string64}
+                                    src={post?.photos[0].url}
                                     alt="Post"
                                     className="h-[473px] w-full object-contain"/>}
                         </Link>

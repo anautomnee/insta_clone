@@ -2,6 +2,7 @@ import User, {UserType} from "../db/models/User";
 import {Request, Response} from "express";
 import mongoose from "mongoose";
 import Notification from "../db/models/Notification.ts";
+import {cloudinary} from "../config/cloudinary.ts";
 
 export const getUserByUsername = async (req: Request, res: Response) => {
     try {
@@ -21,7 +22,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                     populate: [
                     {
                         path: 'photos',
-                        select: 'string64'
+                        select: 'url'
                     }
                 ]
                 }).populate({
@@ -32,7 +33,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                             populate: [
                                 {
                                     path: 'photos',
-                                    select: 'string64'
+                                    select: 'url'
                                 }
                             ]
                         },
@@ -41,7 +42,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                             populate: [
                                 {
                                     path: 'photos',
-                                    select: 'string64'
+                                    select: 'url'
                                 }
                             ]
                         },
@@ -64,7 +65,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                     populate: [
                         {
                             path: 'photos',
-                            select: 'string64'
+                            select: 'url'
                         }
                     ]
                 })
@@ -88,36 +89,65 @@ export const searchUsers = async (_req: Request, res: Response) => {
         console.error('Error searching users: ', error);
         res.status(500).send('Error searching users');
     }
-}
+};
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
         const { username } = req.params;
+
         // Check if user exists
-        const user = await User.findOne({username}).select('-password');
+        const user = await User.findOne({ username }).select('-password');
         if (!user) {
             res.status(404).send('User not found');
             return;
         }
-        const { bio, website, new_username} = req.body;
-        // Check if username already exists
-        if (new_username !== username) {
+
+        const { bio, website, new_username } = req.body;
+
+        // Check if new username already exists
+        if (new_username && new_username !== username) {
             const newUsernameUser = await User.findOne({ username: new_username });
             if (newUsernameUser) {
                 res.status(400).json({ message: 'Username already exists' });
                 return;
             }
+            user.username = new_username;
         }
-        if(new_username.length > 0 && new_username !== user.username && new_username.length <= 120) user.username = new_username;
-        if(website.length > 0 && website !== user.username && website.length <= 120) user.website = website;
-        if(bio.length > 0 && bio.length <= 150 && bio !== user.bio ) user.bio = bio;
 
-        if (req.file) {
-            const base64Image = req.file.buffer.toString('base64');
-            if (user.profile_image !== base64Image) {
-                user.profile_image = `data:image/${req.file.mimetype};base64,${base64Image}`;
-            }
+        // Update bio and website
+        if (website && website.length <= 120) {
+            user.website = website;
         }
+        if (bio && bio.length <= 150) {
+            user.bio = bio;
+        }
+
+        // Upload new profile image to Cloudinary
+        const file = req.file;
+        if (!file) return;
+        const uploadedImage = await new Promise<string>((resolve, reject) => {
+            cloudinary.uploader.upload_stream(
+                {
+                    folder: 'profiles', // Optional folder in Cloudinary
+                    public_id: `${username}-profile`, // Optional custom public ID
+                    overwrite: true, // Overwrite existing image for the user
+                },
+                (error, result) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (!result) return;
+                        resolve(result.secure_url); // Get the secure URL
+                    }
+                }
+            ).end(file.buffer); // Upload the file buffer
+        });
+
+        if (user.profile_image !== uploadedImage) {
+            user.profile_image = uploadedImage;
+        }
+
+        // Save updated user
         const updatedUser = await user.save();
         res.status(200).send(updatedUser);
     } catch (error) {
@@ -125,6 +155,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         res.status(500).send('Error updating a user profile');
     }
 };
+
 
 export const followUser = async (req: Request, res: Response) => {
     try {

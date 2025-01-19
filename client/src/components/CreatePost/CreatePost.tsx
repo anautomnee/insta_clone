@@ -24,7 +24,8 @@ type CreatePostFormInputs = {
 
 export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
     const [previews, setPreviews] = useState<string[]>([]);
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+    const [creating, setCreating] = useState<boolean>(false);
 
     const { status, error } = useSelector((state: RootState) => state.post);
 
@@ -75,6 +76,7 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
     const onSubmit: SubmitHandler<CreatePostFormInputs> = async (data: CreatePostFormInputs) => {
         if (data) {
             console.log(data);
+            setCreating(true);
             try {
                 const result = await dispatch(createPost({ photos: data.photos, content: data.content })).unwrap();
                 if (result && userId) {
@@ -83,6 +85,7 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
                     reset(); // Reset the form fields
                     setPreviews([]); // Clear the image preview
                     setValue("content", ""); // Reset content value
+                    setCreating(false);
                 }
             } catch (error) {
                 console.error('Unexpected error:', error);
@@ -113,12 +116,20 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
                         className="cursor-pointer"
                         onClick={closeCreatePost}/>
                     <p className="font-semibold">Create new post</p>
-                    <input
-                        type="submit"
-                        disabled={currentContent.length === 0 || !photos?.length}
-                        className={currentContent.length === 0 || !photos?.length ? "text-gray" : "text-blue cursor-pointer"}
-                        value="Share"
-                    />
+                    <div className="relative">
+                        {creating &&
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                                 fill="#0095F6" className="absolute -left-8 animate-spin">
+                                <path
+                                    d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/>
+                            </svg>}
+                        <input
+                            type="submit"
+                            disabled={currentContent.length === 0 || !photos?.length}
+                            className={currentContent.length === 0 || !photos?.length ? "text-gray" : "text-blue cursor-pointer"}
+                            value="Share"
+                        />
+                    </div>
                     {errors.photos && <p className="pl-3.5 pt-2 text-xs text-error">Photo should be less than 5MB</p>}
                     {errors.content &&
                         <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200

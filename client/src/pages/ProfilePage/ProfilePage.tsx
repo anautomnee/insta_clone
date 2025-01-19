@@ -41,7 +41,7 @@ export const ProfilePage = () => {
                             <div key={post._id} className="relative aspect-square">
                                 <Link to={`/post/${post._id}`} state={{backgroundLocation: location}}>
                                     <img
-                                        src={post.photos[0].string64}
+                                        src={post.photos[0].url}
                                         alt={post._id}
                                         className="w-full h-full object-cover"
                                     />

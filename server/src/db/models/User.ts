@@ -1,9 +1,4 @@
 import mongoose, {Document} from "mongoose";
-import fs from "fs";
-import path from "path";
-
-const defaultImagePath = path.join(__dirname, '../../public/default_image.png');
-const defaultImageBase64 = `data:image/png;base64,${fs.readFileSync(defaultImagePath).toString('base64')}`;
 
 export interface UserType extends Document {
     _id: mongoose.Types.ObjectId;
@@ -28,7 +23,7 @@ const UserSchema = new mongoose.Schema<UserType>({
     password: {type: String, required: true},
     bio: {type: String, default: "", maxlength: 180},
     website: {type: String, maxlength: 120},
-    profile_image: {type: String, default: defaultImageBase64},
+    profile_image: {type: String, default: 'https://res.cloudinary.com/dkmunyorn/image/upload/v1737282562/profiles/cxjlx87qkz06ucag1ny4.png'},
     notifications: [{type: mongoose.Types.ObjectId, ref: "Notification"}],
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],

@@ -86,7 +86,7 @@ export const ExplorePage = () => {
                     {block.map((post: Post, postIndex: number) => (
                         <Link
                             to={`/post/${post._id}`}
-                            key={post._id}
+                            key={postIndex}
                             className={`
                                 ${(blockIndex % 2 === 0 && postIndex === 0) ||
                             (blockIndex % 2 !== 0 && postIndex === 4)
@@ -95,7 +95,7 @@ export const ExplorePage = () => {
                             `}
                         >
                             <img
-                                src={post.photos[0].string64}
+                                src={post.photos[0].url}
                                 alt="Photo"
                                 className="w-full h-full object-cover"
                             />

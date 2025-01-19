@@ -47,7 +47,7 @@ export type Comment = {
 
 type PhotosFields = {
     _id: string,
-    string64: string,
+    url: string,
 }
 
 export type LikesFields = {

@@ -7,72 +7,97 @@ import mongoose from "mongoose";
 import Notification from "../db/models/Notification.ts";
 import {MulterRequest} from "../middlewares/uploadImage.ts";
 import Photo from "../db/models/Photo.ts";
+import {cloudinary} from "../config/cloudinary.ts";
 
+// Create a post with Cloudinary photo uploads
 export const createPost = async (req: Request, res: Response) => {
     try {
         const { content } = req.body;
+
+        // Validate request data
         if (!content) {
-            res.status(400).send('Photo and content are required');
+            res.status(400).send('Content is required');
             return;
         }
         if (!req.user) {
-            res.status(401).send('User not found');
+            res.status(401).send('User not authenticated');
             return;
         }
+
         const user = await User.findById(req.user.id);
-        if (req.files && user) {
-            const base64EncodedImages: string[] = (req as MulterRequest).files.map((file) => {
-                // Properly encode each file as a Base64 string
-                return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-            });
-
-            // Save each image to the `Photo` collection
-            const photoDocuments = await Promise.all(
-                base64EncodedImages.map(async (base64Image) => {
-                    const photo = new Photo({
-                        string64: base64Image,
-                        post: null, // You can assign the post ID after creating the post
-                    });
-                    await photo.save();
-                    return photo._id; // Collect the IDs for the post
-                })
-            );
-
-            // Create the post with photo IDs
-            const post = await Post.create({
-                photos: photoDocuments, // Link the photo ObjectIds
-                content,
-                author: user._id,
-            });
-
-            // Update the `post` field in the `Photo` documents
-            await Promise.all(
-                photoDocuments.map(async (photoId) => {
-                    await Photo.findByIdAndUpdate(photoId, { post: post._id });
-                })
-            );
-
-            // Add the post to the user's list
-            user.posts.push(post._id);
-            await user.save();
-
-            // Populate photos
-            await post.populate('photos', 'string64');
-
-            res.status(201).send(post);
-        } else {
-            res.status(400).send("No files uploaded or user not found");
+        if (!user) {
+            res.status(404).send('User not found');
+            return
         }
+
+        if (!req.files || (req as MulterRequest).files.length === 0) {
+            res.status(400).send('No files uploaded');
+            return;
+        }
+
+        // Upload each photo to Cloudinary
+        const uploadedPhotos = await Promise.all(
+            (req as MulterRequest).files.map(async (file) => {
+                return new Promise<string>((resolve, reject) => {
+                    cloudinary.uploader.upload_stream(
+                        { folder: 'posts' }, // Optional folder in Cloudinary
+                        (error, result) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                if (!result) return;
+                                resolve(result.secure_url); // Get the secure URL
+                            }
+                        }
+                    ).end(file.buffer); // Upload the buffer data
+                });
+            })
+        );
+
+        // Save uploaded photo URLs to the `Photo` collection
+        const photoDocuments = await Promise.all(
+            uploadedPhotos.map(async (url) => {
+                const photo = new Photo({
+                    url: url,
+                    post: null, // Assign post ID after creating the post
+                });
+                await photo.save();
+                return photo._id; // Return the ID for linking with the post
+            })
+        );
+
+        // Create the post with linked photo IDs
+        const post = await Post.create({
+            photos: photoDocuments, // Array of photo ObjectIds
+            content,
+            author: user._id,
+        });
+
+        // Update the `post` field in each `Photo` document
+        await Promise.all(
+            photoDocuments.map(async (photoId) => {
+                await Photo.findByIdAndUpdate(photoId, { post: post._id });
+            })
+        );
+
+        // Add the post to the user's list of posts
+        user.posts.push(post._id);
+        await user.save();
+
+        // Populate photos before sending the response
+        await post.populate('photos', 'url');
+
+        res.status(201).send(post);
     } catch (error) {
         console.error('Error creating post: ', error);
-        // Catch specific errors like Multer errors
         if (error instanceof multer.MulterError) {
-            res.status(400).send(error.message);  // Send Multer's error message
+            res.status(400).send(error.message); // Handle Multer errors
         } else {
             res.status(500).send('Error creating post');
         }
     }
 };
+
 
 export const getPostById = async (req: Request, res: Response) => {
     try {
@@ -97,7 +122,7 @@ export const getPostById = async (req: Request, res: Response) => {
                         select: 'user',
                     }
                 ]
-        }).populate('photos', 'string64');
+        }).populate('photos', 'url');
         res.status(200).send(post);
     } catch (error) {
         console.error('Error getting post by id: ', error);
@@ -111,7 +136,7 @@ export const getRandomPosts = async (req: Request, res: Response) => {
         const countNumber = Number(count);
         const posts = await Post.aggregate().sample(countNumber);
         const populatedPosts = await Post.populate(posts, [{ path: 'author', select: 'username' },
-            { path: 'photos', select: 'string64' }]);
+            { path: 'photos', select: 'url' }]);
 
         res.status(200).send(populatedPosts);
     } catch (error) {
@@ -247,7 +272,7 @@ export const getFollowedPosts = async (req: Request, res: Response) => {
             .limit(limit)
             .populate("author", "username profile_image")
             .populate('likes', 'user')
-            .populate('photos', 'string64');
+            .populate('photos', 'url');
 
         res.status(200).json(posts);
     } catch (error) {

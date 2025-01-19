@@ -39,9 +39,9 @@ export const PostPage = () => {
                      md:border-r border-b md:border-b-0 border-gray
                      ">
                 {post?.photos && post?.photos?.length > 0 ? <PhotoCarousel
-                    photos={post?.photos.map((photoField) => photoField.string64 || "")}/> :
+                    photos={post?.photos.map((photoField) => photoField.url || "")}/> :
                     <img
-                    src={post?.photos[0].string64}
+                    src={post?.photos[0].url}
                     alt="Post"
                     className="w-full h-full object-contain"/>}
             </div>
