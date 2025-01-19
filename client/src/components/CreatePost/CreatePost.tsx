@@ -23,10 +23,17 @@ type CreatePostFormInputs = {
     content: string
 };
 
+export type PreviewType = {
+    url: string;
+    width: number;
+    height: number;
+}
+
 export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
-    const [previews, setPreviews] = useState<string[]>([]);
+    const [previews, setPreviews] = useState<PreviewType[]>([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
     const [creating, setCreating] = useState<boolean>(false);
+    console.log(previews)
 
     const { status, error } = useSelector((state: RootState) => state.post);
 
@@ -53,18 +60,34 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
         const files = e.target.files;
 
         if (files) {
-            // Generate a preview for the file (if it's an image)
             const fileArray = Array.from(files);
-            const previewUrls = fileArray.map((file) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                return new Promise<string>((resolve) => {
-                    reader.onload = () => resolve(reader.result as string);
+            const previewPromises = fileArray.map((file) => {
+                return new Promise<{ url: string; width: number; height: number }>((resolve) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+
+                    reader.onload = () => {
+                        const img = new Image();
+                        img.src = reader.result as string;
+
+                        img.onload = () => {
+                            resolve({
+                                url: reader.result as string,
+                                width: img.width,
+                                height: img.height,
+                            });
+                        };
+                    };
                 });
             });
-            Promise.all(previewUrls).then((urls) => setPreviews(urls)); // Update previews
+
+            Promise.all(previewPromises).then((previews) => {
+                console.log(previews); // Array of objects with url, width, and height
+                setPreviews(previews); // Update previews state with image data
+            });
         }
     };
+
 
     const closeCreatePost = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -144,7 +167,10 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
                     lg:w-[420px] lg:h-[420px]
                     xl:w-[520px] xl:h-[520px]
                     bg-lightgray">
-                        {previews.length > 0 ? <PhotoCarousel photos={previews} /> : (
+                        {previews.length > 0 ? <PhotoCarousel
+                            croppedStyle={true}
+                            photos={previews.map(preview => preview.url || "")}
+                            previews={previews}/> : (
                             <img src={upload} alt="upload" />
                         )}
                         <input type="file"
