@@ -14,6 +14,7 @@ import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel.tsx";
 interface CreatePostProps {
     userId: string | null;
     profileImage: string;
+    username: string;
     setIsCreatePostOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -22,7 +23,7 @@ type CreatePostFormInputs = {
     content: string
 };
 
-export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
+export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
     const [previews, setPreviews] = useState<string[]>([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
     const [creating, setCreating] = useState<boolean>(false);
@@ -163,7 +164,7 @@ export const CreatePost = ({ userId, profileImage, setIsCreatePostOpen }: Create
                                     alt="Profile image"
                                     className="w-6 h-6 rounded-[50%] border border-gray"
                                 />
-                                <p className="font-semibold">Profile</p>
+                                <p className="font-semibold">{username}</p>
                             </div>
                         </Link>
                         <textarea

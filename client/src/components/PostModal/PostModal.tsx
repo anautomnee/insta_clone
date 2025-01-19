@@ -44,9 +44,9 @@ export const PostModal = () => {
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
     >
-        <div className="relative flex flex-col md:grid bg-white z-10 opacity-100 md:mt-24 mx-auto rounded
+        <div className="relative flex flex-col md:grid bg-white z-10 opacity-100 mx-auto rounded
             lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
-            h-[80vh] md:h-fit mt-[6vh]
+            h-[80vh] mt-[6vh] md:mt-[10vh]
             lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
             <div className="md:hidden flex w-full justify-between border-b border-b-gray px-4 py-2 font-semibold">

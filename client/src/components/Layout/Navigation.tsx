@@ -116,6 +116,7 @@ export const Navigation = () => {
                         <span className="cursor-pointer hidden lgg:block">Create</span>
                         <div className={isCreatePostOpen ? "opacity-100" : "opacity-0 invisible"}>
                             <CreatePost userId={user?._id}
+                                        username={user?.username}
                                         profileImage={user?.profile_image}
                                         setIsCreatePostOpen={setIsCreatePostOpen}
                             />
