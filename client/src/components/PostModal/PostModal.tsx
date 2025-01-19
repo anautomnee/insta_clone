@@ -34,52 +34,50 @@ export const PostModal = () => {
     }, [postId]);
 
 
-    return (<>
-    <div hidden ref={moreRef}>
-        <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType} />
-    </div>
-    <div
-        className="fixed z-20 h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
-            md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
-        style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
-        onClick={closeModal}
-    >
-        <div className="relative flex flex-col md:grid bg-white z-10 opacity-100 mx-auto rounded
-            lgg:grid-cols-[577px_423px] lg:grid-cols-[484px_356px] md:grid-cols-[358px_262px]
-            h-[80vh] mt-[6vh] md:mt-[10vh]
-            lgg:min-w-[1000px] lg:w-[840px] md:w-[620px] w-[90vw]"
-             onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
-            <div className="md:hidden flex w-full justify-between border-b border-b-gray px-4 py-2 font-semibold">
-                <img
-                    src={arrow_back}
-                    alt="Back"
-                    className="cursor-pointer"
-                    onClick={closeModal}/>
-                {post?.author.username}
-                <img
-                    src={more}
-                    alt="More"
-                    className="justify-self-end"
-                    onClick={() => {
-                        if (moreRef.current) {
-                            moreRef.current.hidden = false;
-                        }
-                    }}
-                />
-            </div>
-            <div className="flex justify-center items-center
-                 md:border-r border-b md:border-b-0 border-gray lgg:w-[577px] lgg:h-[577px]
-                 lg:w-[484px] lg:h-[484px] md:w-[358px] md:h-[358px]
-                 max-h-[400px]">
-                {post?.photos && post?.photos?.length > 0 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.url || "")}/> : <img
-                    src={post?.photos[0].url}
-                alt="Post"
-                className="w-full h-full object-contain"/>
-            }
+    return (
+    <>
+        <div hidden ref={moreRef}>
+            <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType} />
         </div>
-        {postType === "preview" ? <PostMain post={post} setPost={setPost} moreRef={moreRef} /> :
-                <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} />}
-
+        <div
+            className="fixed z-20 h-[calc(100vh-81px)] md:min-h-screen top-0 w-screen
+                md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] left-0 md:left-[60px] lgg:left-[244px]"
+            style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
+            onClick={closeModal}>
+            <div className="flex justify-center items-center h-full w-full">
+                <div className="flex flex-col h-[80vh] mx-6 opacity-100 z-10 rounded bg-white"
+                     onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
+                    <div className="md:hidden flex w-full justify-between border-b border-b-gray px-4 py-2 font-semibold">
+                        <img
+                            src={arrow_back}
+                            alt="Back"
+                            className="cursor-pointer"
+                            onClick={closeModal}/>
+                        {post?.author.username}
+                        <img
+                            src={more}
+                            alt="More"
+                            className="justify-self-end"
+                            onClick={() => {
+                                if (moreRef.current) {
+                                    moreRef.current.hidden = false;
+                                }
+                            }}
+                        />
+                    </div>
+                    <div className="flex h-full">
+                        <div className="md:border-r border-b md:border-b-0 border-gray">
+                            {post?.photos && post?.photos?.length > 0 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.url || "")}/> : <img
+                                src={post?.photos[0].url}
+                            alt="Post"
+                            className="w-full h-full object-contain"/>
+                        }
+                    </div>
+                    {postType === "preview" ? <div className="relative w-[423px] overflow-y-auto">
+                            <PostMain post={post} setPost={setPost} moreRef={moreRef} /></div> :
+                        <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost} setPostType={setPostType} />}
+                    </div>
+                </div>
             </div>
         </div>
     </>

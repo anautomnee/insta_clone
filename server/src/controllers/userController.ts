@@ -39,10 +39,16 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                         },
                         {
                             path: 'comment',
+                            select: 'author',
                             populate: [
                                 {
-                                    path: 'photos',
-                                    select: 'url'
+                                    path: 'post',
+                                    populate: [
+                                        {
+                                            path: 'photos',
+                                            select: 'url'
+                                        }
+                                    ]
                                 }
                             ]
                         },

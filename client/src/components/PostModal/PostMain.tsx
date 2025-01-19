@@ -26,6 +26,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     const userId = useSelector((state: RootState) => state.user._id);
     const location = useLocation();
     const isModal = location.state?.backgroundLocation;
+    console.log(post, post?.comments && post?.comments.length > 0)
 
     type CommentFormInputs = {
         content: string
@@ -67,8 +68,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     };
 
     return (
-        <div className={`flex flex-col overflow-y-scroll lgg:h-[520px] h-[120px]
-            lg:h-[370px] md:h-[220px] ${isModal ? "" : "sm:mb-40 h-[36vh]"} md:max-h-full`}>
+        <div className={`flex flex-col overflow-y-scroll h-[80%] ${isModal ? "" : "sm:mb-40 h-[36vh]"}`}>
             <div className="hidden lg:flex justify-between border-b border-b-gray">
                 <Link
                     to={`/profile/${post?.author?.username}`}
@@ -125,7 +125,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                                 <Link to={`/profile/${comment.author.username}`}>
                                     <img src={comment.author.profile_image}
                                          alt={comment.author.username}
-                                         className="w-6 h-6 rounded-[50%] border border-gray"/>
+                                         className="min-w-6 h-6 rounded-[50%] border border-gray"/>
                                 </Link>
                                 <div>
                                     <Link to={`/profile/${comment.author.username}`}>
@@ -146,7 +146,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     ))
                 )}
             </div>
-            <div className={`bg-white ${isModal ? "absolute bottom-0" 
+            <div className={`bg-white ${isModal ? "absolute bottom-0"
                 : "sm:absolute lgg:top-[460px] lg:top-[400px] md:top-[280px] sm:top-[460px] "}`}>
                 <div className="pl-3.5 mb-3 mt-2">
                     <div className="flex gap-3 mb-2">

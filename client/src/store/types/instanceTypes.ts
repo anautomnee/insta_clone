@@ -29,8 +29,8 @@ export type Notification = {
     _id: string,
     user: string,
     actionMaker: CondensedUser,
-    post?: CondensedPost,
-    comment?: { post: CondensedPost },
+    post?: Post,
+    comment?: { post: Post },
     createdAt: string,
     type: "liked your post" | "liked your comment" | "commented on your post" | "started following you"
 }
@@ -40,6 +40,7 @@ export type Comment = {
     author: CondensedUser;
     content: string;
     postId: string;
+    post?: Post;
     createdAt: Date;
     like_count: number;
     likes: LikesFields[];
