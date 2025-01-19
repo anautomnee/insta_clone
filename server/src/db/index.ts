@@ -1,14 +1,7 @@
 import mongoose from 'mongoose'
 import 'dotenv/config';
 
-let uri: string;
-if (process.env.ENV && process.env.ENV === 'local') {
-    uri ='mongodb://localhost:27017/insta_clone';
-} else {
-    if(process.env.MONGO_URI) {
-        uri = process.env.MONGO_URI ;
-    }
-}
+const uri: string = process.env.MONGO_URI || 'mongodb://localhost:27017';
 async function connectToDb() {
     try {
         await mongoose.connect(uri);

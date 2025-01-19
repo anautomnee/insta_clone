@@ -15,7 +15,7 @@ import {SearchModal} from "../../components/SearchModal/SearchModal.tsx";
 import {NotificationsModal} from "../../components/NotificationsModal/NotificationsModal.tsx";
 import done from '../../assets/done.png';
 import {PhotoCarousel} from "../../components/PhotoCarousel/PhotoCarousel.tsx";
-
+import logo from "../../assets/logo.svg";
 
 export const HomePage = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -67,6 +67,13 @@ export const HomePage = () => {
             if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
         };
     }, [hasMore]);
+
+    if (posts.length === 0) {
+        return (<div className="flex flex-col gap-4 justify-center items-center mt-8 mx-4">
+            <img src={logo} alt="Ichgram" />
+            <p className="text-xl ">Follow users to see their posts here</p>
+        </div>);
+    }
 
     return (
         <div className="flex flex-col justify-center">
