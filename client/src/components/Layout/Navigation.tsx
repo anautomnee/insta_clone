@@ -20,10 +20,11 @@ export const Navigation = () => {
     useFetchUserAfterReload(user);
 
     return (
-        <div className="z-20 flex justify-center md:border-r border-t md:border-t-0 border-gray py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
+        <div className="z-20 bg-white flex justify-center md:border-r border-t md:border-t-0 border-gray
+         py-7 lgg:px-4 min-w-full md:min-w-[60px] lgg:min-w-[244px]">
             <div
                 className="flex justify-around w-full md:w-fit mx-10 md:mx-0
-                 md:justify-start md:fixed top-7 md:flex-col items-center gap-4 bg-white">
+                 md:justify-start md:fixed top-7 md:flex-col items-center gap-4 ">
 
                 <Link to='/' className="hidden md:flex">
                     <img src={logo}

@@ -68,7 +68,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
     };
 
     return (
-        <div className={`flex flex-col overflow-y-scroll h-[80%] ${isModal ? "" : "sm:mb-40 h-[36vh]"}`}>
+        <div className={`flex flex-col overflow-y-scroll h-[calc(100%-150px)] ${isModal ? "" : "sm:mb-40 h-[36vh]"}`}>
             <div className="hidden lg:flex justify-between border-b border-b-gray">
                 <Link
                     to={`/profile/${post?.author?.username}`}
@@ -146,7 +146,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                     ))
                 )}
             </div>
-            <div className={`bg-white ${isModal ? "absolute bottom-0"
+            <div className={`bg-white w-full ${isModal ? "absolute bottom-0"
                 : "sm:absolute lgg:top-[460px] lg:top-[400px] md:top-[280px] sm:top-[460px] "}`}>
                 <div className="pl-3.5 mb-3 mt-2">
                     <div className="flex gap-3 mb-2">
@@ -170,9 +170,9 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                         characters</p>}
                     {commentError && <p className="pl-3.5 pt-2 text-xs text-error">{commentError}</p>}
                     <form className={`flex items-center justify-between pl-3.5 bg-white
-                            ${isModal ? "lgg:w-[423px] lg:w-[356px] md:w-[262px] w-[90vw]" : ""}`}
+                            ${isModal ? "w-full" : ""}`}
                           onSubmit={handleSubmit(onComment)}>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 w-full mr-4">
                             <img src={smiley}
                                  alt="Emoji"
                                  className="w-6 h-6 cursor-pointer"
@@ -186,7 +186,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                             <input {...register('content', {required: true, maxLength: 120})}
                                    placeholder="Add comment"
                                    className={`placeholder:text-xs py-2.5
-                                     ${isModal ? "w-[54vw] sm:w-[62vw] md:w-36 lg:w-52 lgg:w-64 outline-0" :
+                                     ${isModal ? "w-full" :
                                        "lgg:w-52 lg:w-40 md:w-28 sm:w-[310px] w-[26vh]"}`}/>
                         </div>
                         <button type="submit"
