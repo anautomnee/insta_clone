@@ -7,6 +7,7 @@ export const configureCors = (): CorsOptions => {
 
     return {
         origin: (origin, callback) => {
+            console.log('Origin and host ip',origin, hostIp)
             if (
                 origin === `http://${hostIp}` ||
                 origin === `http://${hostIp}:3001` ||
