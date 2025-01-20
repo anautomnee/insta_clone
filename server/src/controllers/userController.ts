@@ -1,8 +1,8 @@
 import User, {UserType} from "../db/models/User";
 import {Request, Response} from "express";
 import mongoose from "mongoose";
-import Notification from "../db/models/Notification.ts";
-import {cloudinary} from "../config/cloudinary.ts";
+import Notification from "../db/models/Notification";
+import {cloudinary} from "../config/cloudinary";
 
 export const getUserByUsername = async (req: Request, res: Response) => {
     try {

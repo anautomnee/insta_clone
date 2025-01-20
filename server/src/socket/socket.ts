@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import http from "http";
-import Chat from "../db/models/Chat.ts";
-import Message from "../db/models/Message.ts";
+import Chat from "../db/models/Chat";
+import Message from "../db/models/Message";
 
 export const initializeSocket = (server: http.Server) => {
     const io = new Server(server, {

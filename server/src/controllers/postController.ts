@@ -2,12 +2,12 @@ import User, {UserType} from "../db/models/User";
 import Post from "../db/models/Post";
 import { Request, Response } from 'express';
 import multer from "multer";
-import Like from "../db/models/Like.ts";
+import Like from "../db/models/Like";
 import mongoose from "mongoose";
-import Notification from "../db/models/Notification.ts";
-import {MulterRequest} from "../middlewares/uploadImage.ts";
-import Photo from "../db/models/Photo.ts";
-import {cloudinary} from "../config/cloudinary.ts";
+import Notification from "../db/models/Notification";
+import {MulterRequest} from "../middlewares/uploadImage";
+import Photo from "../db/models/Photo";
+import {cloudinary} from "../config/cloudinary";
 import sharp from "sharp";
 
 // Create a post with Cloudinary photo uploads

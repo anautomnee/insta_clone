@@ -11,7 +11,7 @@ import {
     getFollowedPosts,
     getRandomPosts
 } from "../controllers/postController";
-import ifPostAuthor from "../middlewares/authorMiddleware.ts";
+import ifPostAuthor from "../middlewares/authorMiddleware";
 
 const router = express.Router();
 

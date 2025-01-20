@@ -33,7 +33,7 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
     const [previews, setPreviews] = useState<PreviewType[]>([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
     const [creating, setCreating] = useState<boolean>(false);
-    console.log(previews)
+    //console.log(previews)
 
     const { status, error } = useSelector((state: RootState) => state.post);
 

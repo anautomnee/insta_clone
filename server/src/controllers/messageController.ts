@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import User, {UserType} from "../db/models/User.ts";
-import Chat from "../db/models/Chat.ts";
+import User, {UserType} from "../db/models/User";
+import Chat from "../db/models/Chat";
 
 export const getChatByReceiverUsername  = async (req: Request, res: Response) => {
     try {

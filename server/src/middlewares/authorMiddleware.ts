@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import Post from "../db/models/Post.ts";
+import Post from "../db/models/Post";
 import mongoose from "mongoose";
 
 const ifPostAuthor = async (req: Request, res: Response, next: NextFunction) => {

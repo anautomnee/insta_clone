@@ -4,8 +4,8 @@ import connectToDb from "./db";
 import cors from "cors";
 import http from 'http';
 import {mainRouter} from "./routes/mainRouter";
-import {configureCors} from "./config/cors.ts";
-import {initializeSocket} from "./socket/socket.ts";
+import {configureCors} from "./config/cors";
+import {initializeSocket} from "./socket/socket";
 import cookieParser from 'cookie-parser';
 
 const port: string | number = process.env.PORT || 3000;

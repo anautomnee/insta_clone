@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import ifAuthenticated from "../middlewares/authMiddleware.ts";
-import {getChatByReceiverUsername, getUserChats} from "../controllers/messageController.ts";
+import ifAuthenticated from "../middlewares/authMiddleware";
+import {getChatByReceiverUsername, getUserChats} from "../controllers/messageController";
 
 const router: Router = Router();
 

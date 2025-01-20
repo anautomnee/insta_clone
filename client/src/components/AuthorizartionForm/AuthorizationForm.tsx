@@ -116,7 +116,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                         <span className={style.error}>Username or email must be less that 24 characters</span>}
                 </>)}
             {type !== "reset" && (<>
-                <input {...register("password", {required: true, minLength: 8})} placeholder="Password"/>
+                <input type="password" {...register("password", {required: true, minLength: 8})} placeholder="Password"/>
                 {errors.password && <span className={style.error}>Password must be more than 8 characters</span>}
             </>)}
             {type === "register" && (

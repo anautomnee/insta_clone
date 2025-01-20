@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import User, {UserType} from "../db/models/User.ts";
+import User, {UserType} from "../db/models/User";
 
 export const ifFollowed = async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.params;
@@ -15,10 +15,6 @@ export const ifFollowed = async (req: Request, res: Response, next: NextFunction
         return;
     }
 
-    // Check if already followed
-    if (typeof (user._id) === 'string') {
-        return;
-    }
     (req as any).followed = profile.followers.includes(user._id);
     (req as any).userProfile = user;
     (req as any).profile = profile;

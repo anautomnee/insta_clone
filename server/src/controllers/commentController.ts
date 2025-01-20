@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
-import Post from "../db/models/Post.ts";
-import Comment from "../db/models/Comment.ts";
-import Like from "../db/models/Like.ts";
+import Post from "../db/models/Post";
+import Comment from "../db/models/Comment";
+import Like from "../db/models/Like";
 import mongoose from "mongoose";
-import User from "../db/models/User.ts";
-import Notification from "../db/models/Notification.ts";
+import User from "../db/models/User";
+import Notification from "../db/models/Notification";
 
 export const addCommentToPost = async (req: Request, res: Response) => {
     try {

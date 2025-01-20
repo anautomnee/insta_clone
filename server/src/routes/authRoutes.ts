@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import 'dotenv/config';
 import {loginUser, registerUser, resetPassword, checkAccessToken} from "../controllers/authController";
-import ifAuthenticated from "../middlewares/authMiddleware.ts";
+import ifAuthenticated from "../middlewares/authMiddleware";
 
 const router: Router = express.Router();
 

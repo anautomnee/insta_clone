@@ -9,7 +9,7 @@ import {
     unfollowUser,
     updateProfile
 } from "../controllers/userController";
-import {ifFollowed} from "../middlewares/followMiddleware.ts";
+import {ifFollowed} from "../middlewares/followMiddleware";
 
 const router = express.Router();
 
