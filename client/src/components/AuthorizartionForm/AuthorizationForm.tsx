@@ -5,7 +5,7 @@ import {AppDispatch, RootState} from "../../store/store.ts";
 import {useNavigate} from "react-router";
 import {registerUser, resetPassword, userLogin} from "../../store/actionCreators/authActionCreators.ts";
 import {LoginDataType, RegisterDataType, ResetDataType} from "../../store/types/authTypes.ts";
-import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
+//import {fetchUser} from "../../store/actionCreators/userActionCreators.ts";
 
 type FormInputs = {
     email?: string,
@@ -61,7 +61,7 @@ export const AuthorizationForm = ({type}: AuthorizationFormProps) => {
                     const result = await dispatch(userLogin(dataLogin));
                     if (result.type !== "auth/userLogin/rejected") {
                         // Only navigate if the login was successful
-                        await dispatch(fetchUser({username: result.payload.data.username}));
+                        // await dispatch(fetchUser({username: result.payload.data.username}));
                         navigate('/');
                     } else {
                         console.error('Login failed');
