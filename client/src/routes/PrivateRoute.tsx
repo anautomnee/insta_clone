@@ -20,7 +20,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
     }
 
     return isNotAuthenticated ? (
-        <Navigate to="/Login" replace />
+        <Navigate to="/login" replace />
     ) : (
         children
     );
