@@ -10,7 +10,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
         const handleCheck = async () => {
             const response = await checkJWTToken();
             setIsNotAuthenticated(!response);
-            setIsLoading(false);
+            if(response) setIsLoading(false);
         }
         handleCheck();
     }, [[location.pathname]]);
