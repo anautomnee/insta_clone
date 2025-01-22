@@ -28,8 +28,8 @@ export const loginUser = async (req: Request, res: Response) => {
             const token = await jwt.sign(info, process.env.JWT_KEY, {expiresIn: "1h"});
             res.cookie('token', token, {
                 httpOnly: true, // Prevent access to cookies via JavaScript
-                secure: true,  // Set to false to allow sending cookies over HTTP
-                sameSite: 'none', // You can adjust this based on your requirements
+                secure: false,  // Set to false to allow sending cookies over HTTP
+                sameSite: 'strict', // You can adjust this based on your requirements
                 maxAge: 3600 * 1000, // 1 hour in milliseconds
             });
             res.status(200).json({message: 'Successfully logged in with token', data: {

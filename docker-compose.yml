@@ -7,7 +7,7 @@ services:
     ports:
       - "80:80"
     env_file:
-      - ./frontend/.env
+      - ./client/.env
     depends_on:
       - backend
     networks:
@@ -19,7 +19,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - ./backend/.env
+      - ./server/.env
     networks:
       - app_network
 
