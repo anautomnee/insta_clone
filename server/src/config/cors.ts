@@ -4,9 +4,9 @@ import 'dotenv/config';
 export const configureCors = (): CorsOptions => {
     //const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
     const hostIp = process.env.ENV === "local" ? "localhost" : process.env.HOST_IP;
-
     return {
         origin: (origin, callback) => {
+            console.log('Host ip is ', hostIp, 'origin is ', origin);
             if (
                 origin === `https://${hostIp}` || !origin
             ) {
