@@ -1,3 +1,5 @@
+ARG VITE_BACKEND_URL=http://localhost:3001
+
 # Use an official Node.js image as a base
 FROM node:latest AS build
 
@@ -10,6 +12,9 @@ RUN npm install
 
 # Copy the source code
 COPY . .
+
+ENV VITE_ENV=local
+ARG VITE_BACKEND_URL
 
 # Build the React app
 RUN npm run build
@@ -25,6 +30,8 @@ COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for the web server
 EXPOSE 80
+
+ARG VITE_BACKEND_URL
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

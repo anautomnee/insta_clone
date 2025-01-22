@@ -25,18 +25,22 @@ export const loginUser = async (req: Request, res: Response) => {
         }
         if (process.env.JWT_KEY) {
             const info: TokenPayload = {username: user.username, id: user._id.toString()};
-            const token = await jwt.sign(info, process.env.JWT_KEY, {expiresIn: "1h"});
+            const token = jwt.sign(info, process.env.JWT_KEY, {expiresIn: "1h"});
             res.cookie('token', token, {
                 httpOnly: true, // Prevent access to cookies via JavaScript
                 secure: true,  // Set to false to allow sending cookies over HTTP
                 sameSite: 'none', // You can adjust this based on your requirements
                 maxAge: 3600 * 1000, // 1 hour in milliseconds
+                path: "/",
             });
-            res.status(200).json({message: 'Successfully logged in with token', data: {
-                        username: user.username,
-                        id: user.id,
-                        profile_image: user.profile_image
-            }});
+            res.status(200).json({
+                message: 'Successfully logged in with token',
+                data: {
+                    username: user.username,
+                    id: user.id,
+                    profile_image: user.profile_image
+                }
+            });
         } else {
             res.status(401).send('Something went wrong');
         }

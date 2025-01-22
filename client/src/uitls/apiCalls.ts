@@ -1,12 +1,9 @@
 import axios from "axios";
 
-export let backendURL: string;
+export const backendURL = import.meta.env.VITE_ENV === 'local'
+    ? 'http://localhost:3001'
+    : import.meta.env.VITE_BACKEND_URL;
 
-if(import.meta.env.VITE_ENV === 'local') {
-    backendURL = 'https://localhost:3001';
-} else {
-    backendURL = import.meta.env.VITE_BACKEND_URL;
-}
 
 export const axiosInstance = axios.create({
     baseURL: backendURL,
