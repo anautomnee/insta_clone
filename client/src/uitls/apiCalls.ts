@@ -3,7 +3,7 @@ import axios from "axios";
 export let backendURL: string;
 
 if(import.meta.env.VITE_ENV === 'local') {
-    backendURL = 'http://localhost:3001';
+    backendURL = 'https://localhost:3001';
 } else {
     backendURL = import.meta.env.VITE_BACKEND_URL;
 }

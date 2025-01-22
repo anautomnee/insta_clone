@@ -8,7 +8,7 @@ export const configureCors = (): CorsOptions => {
     return {
         origin: (origin, callback) => {
             if (
-                origin === `http://${hostIp}` || !origin
+                origin === `https://${hostIp}` || !origin
             ) {
                 callback(null, true);
             } else {
