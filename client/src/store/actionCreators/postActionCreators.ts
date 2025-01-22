@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {CreatePost, FetchPostParams, UpdatePostParams} from "../types/postTypes.ts";
-import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
+import {axiosInstance} from "../../uitls/apiCalls.ts";
 
 export const createPost = createAsyncThunk(
     'post/createPost',
@@ -14,7 +14,7 @@ export const createPost = createAsyncThunk(
             formData.append('content', content);
 
                 const response = await axiosInstance.post(
-                `${backendURL}/posts/create`,
+                `/posts/create`,
                 formData
             );
             return response.data;
@@ -37,7 +37,7 @@ export const fetchPost = createAsyncThunk(
     async ({id}: FetchPostParams, {rejectWithValue}) => {
         try {
             const response = await axiosInstance.get(
-                `${backendURL}/posts/get/${id}`
+                `/posts/get/${id}`
             );
             return response.data;
         } catch (error: unknown) {
@@ -59,7 +59,7 @@ export const updatePost = createAsyncThunk(
     async ({id, content}: UpdatePostParams, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.put(
-                `${backendURL}/posts/${id}`,
+                `/posts/${id}`,
                 {content}
             );
             return response.data;

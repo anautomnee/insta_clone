@@ -25,7 +25,7 @@ export const addComment = async (content: string, postId: string) => {
     try {
 
         const response = await axiosInstance.post(
-            `${backendURL}/comments/${postId}/add`,
+            `/comments/${postId}/add`,
             {content}
         );
         return response.data;
@@ -38,7 +38,7 @@ export const likeComment = async (commentId: string) => {
     try {
 
         const response = await axiosInstance.post(
-            `${backendURL}/comments/${commentId}/like`,
+            `/comments/${commentId}/like`,
             {}
         );
         return response.data;
@@ -51,7 +51,7 @@ export const unLikeComment = async (commentId: string) => {
     try {
 
         const response = await axiosInstance.delete(
-            `${backendURL}/comments/${commentId}/unlike`
+            `/comments/${commentId}/unlike`
         );
         return response.data;
     } catch (error) {
@@ -63,7 +63,7 @@ export const likePost = async (postId: string) => {
     try {
 
         const response = await axiosInstance.post(
-            `${backendURL}/posts/${postId}/like`,
+            `/posts/${postId}/like`,
             {}
         );
         return response.data;
@@ -76,7 +76,7 @@ export const unLikePost = async (postId: string) => {
     try {
 
         const response = await axiosInstance.delete(
-            `${backendURL}/posts/${postId}/unlike`
+            `/posts/${postId}/unlike`
         );
         return response.data;
     } catch (error) {
@@ -88,7 +88,7 @@ export const fetchProfile = async (username: string, ) => {
     try {
 
         const response = await axiosInstance.get(
-            `${backendURL}/users/${username}`
+            `/users/${username}`
         );
         return response.data[0];
     } catch (error) {
@@ -100,7 +100,7 @@ export const deletePost = async (postId: string) => {
     try {
 
         const response = await axiosInstance.delete(
-            `${backendURL}/posts/${postId}`
+            `/posts/${postId}`
         );
         return response.data;
     } catch (error) {
@@ -112,7 +112,7 @@ export const followUser = async (username: string) => {
     try {
 
         const response = await axiosInstance.post(
-            `${backendURL}/users/${username}/follow`,
+            `/users/${username}/follow`,
             {}
         );
         return response.data;
@@ -125,7 +125,7 @@ export const unfollowUser = async (username: string) => {
     try {
 
         const response = await axiosInstance.delete(
-            `${backendURL}/users/${username}/unfollow`
+            `/users/${username}/unfollow`
         );
         return response.data;
     } catch (error) {
@@ -136,7 +136,7 @@ export const unfollowUser = async (username: string) => {
 export const getAllUsersForSearch = async () => {
     try {
         const response = await axiosInstance.get(
-            `${backendURL}/users`
+            `/users`
         );
         return response.data;
     } catch (error) {
@@ -148,7 +148,7 @@ export const fetchChat = async (receiverUsername: string) => {
     try {
 
         const response = await axiosInstance.post(
-            `${backendURL}/messages/get_chat`,
+            `/messages/get_chat`,
             {receiverUsername}
         );
         return response.data;
@@ -161,7 +161,7 @@ export const fetchUserChats = async () => {
     try {
 
         const response = await axiosInstance.get(
-            `${backendURL}/messages/get_user_chats`
+            `/messages/get_user_chats`
         );
         return response.data;
     } catch (error) {
@@ -173,7 +173,7 @@ export const fetchFollowedPosts = async (page: number) => {
     try {
 
         const response = await axiosInstance.get(
-            `${backendURL}/posts/get_followed?page=${page}`
+            `/posts/get_followed?page=${page}`
         );
         return response.data;
     } catch (error) {
@@ -185,7 +185,7 @@ export const fetchFollowedPosts = async (page: number) => {
 export const getRandomPosts = async (fetchCount: number) => {
     try {
         const response = await axiosInstance.get(
-            `${backendURL}/posts/random?count=${fetchCount}`
+            `/posts/random?count=${fetchCount}`
         );
         return response.data;
     } catch (error) {

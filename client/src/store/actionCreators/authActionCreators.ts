@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {LoginDataType, RegisterDataType, ResetDataType} from '../types/authTypes.ts';
-import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
+import {axiosInstance} from "../../uitls/apiCalls.ts";
 
 export const registerUser = createAsyncThunk(
     'auth/register',
@@ -13,7 +13,7 @@ export const registerUser = createAsyncThunk(
                 },
             }
             await axiosInstance.post(
-                `${backendURL}/auth/register`,
+                `/auth/register`,
                 { username, email, fullName, password },
                 config
             )
@@ -42,7 +42,7 @@ export const userLogin = createAsyncThunk(
                 },
             }
             const { data } = await axiosInstance.post(
-                `${backendURL}/auth/login`,
+                `/auth/login`,
                 { usernameOrEmail, password },
                 config
             )
@@ -72,7 +72,7 @@ export const resetPassword = createAsyncThunk(
                 },
             }
             const { data } = await axiosInstance.post(
-                `${backendURL}/auth/reset`,
+                `/auth/reset`,
                 { usernameOrEmail },
                 config
             )

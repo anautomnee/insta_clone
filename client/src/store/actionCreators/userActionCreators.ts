@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {EditProfileData, fetchUserData} from "../types/userTypes.ts";
-import {axiosInstance, backendURL} from "../../uitls/apiCalls.ts";
+import {axiosInstance} from "../../uitls/apiCalls.ts";
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',
@@ -13,7 +13,7 @@ export const fetchUser = createAsyncThunk(
             },
         }
         const response = await axiosInstance.get(
-            `${backendURL}/users/${username}`,
+            `/users/${username}`,
             config
         );
         return response.data[0];
@@ -44,7 +44,7 @@ export const editProfile = createAsyncThunk(
             formData.append('bio', bio);
 
             const response = await axiosInstance.post(
-                `${backendURL}/users/${username}/edit`,
+                `/users/${username}/edit`,
                 formData
             );
             return response.data;
