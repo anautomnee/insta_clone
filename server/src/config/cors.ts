@@ -6,7 +6,7 @@ export const configureCors = (): CorsOptions => {
     const hostIp = process.env.ENV === "local" ? "localhost" : process.env.HOST_IP;
     return {
         origin: (origin, callback) => {
-            console.log('Host ip is ', hostIp, 'origin is ', origin);
+            //console.log('Host ip is ', hostIp, 'origin is ', origin);
             if (
                 origin === `https://${hostIp}` || !origin
             ) {
@@ -17,6 +17,7 @@ export const configureCors = (): CorsOptions => {
         },
         methods: ["GET", "POST", "DELETE", "PUT"],
         allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Set-Cookie"],
         preflightContinue: false,
         credentials: true,
     };
