@@ -1,25 +1,23 @@
-# Base image
-FROM node:18
-
-LABEL authors="anastasiakozlova"
+# Use the Node.js image
+FROM node:18-alpine
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json first (to leverage caching)
-COPY package*.json ./
+# Copy package.json and package-lock.json
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the entire server folder (including src, .env, and other files)
+# Copy the rest of the application code
 COPY . .
 
 # Build the TypeScript code
 RUN npm run build
 
-# Specify the command to run your app (using the `dist` folder as output)
-CMD ["node", "dist/index.js"]
-
-# Expose the port your app runs on (optional, e.g., 3000)
+# Expose port 3001
 EXPOSE 3001
+
+# Start the application
+CMD ["node", "dist/index.js"]
