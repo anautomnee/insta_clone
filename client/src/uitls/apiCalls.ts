@@ -15,6 +15,7 @@ export const axiosInstance = axios.create({
 
 export const checkJWTToken = async () => {
     try {
+        console.log("backendURL: ",backendURL);
         const result = await axiosInstance.get('/auth/check-access-token');
         return result.data.message === 'Token is valid';
     } catch(error) {

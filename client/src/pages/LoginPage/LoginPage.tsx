@@ -2,11 +2,10 @@ import {Link} from "react-router";
 import logo from "../../assets/logo.svg";
 import login_back from "../../assets/login_back.png"
 import {AuthorizationForm} from "../../components/AuthorizartionForm/AuthorizationForm.tsx";
-//import {useRedirectIfAuthenticated} from "../../uitls/customHooks.ts";
+import {backendURL} from "../../uitls/apiCalls.ts";
 
 export const LoginPage = () => {
-    // const redirected = useRedirectIfAuthenticated();
-    // if (redirected) return null;
+    console.log('backendURL', backendURL);
 
     return (<div className="flex flex-col items-center justify-center w-full">
         <div className="flex gap-8 mt-20">
