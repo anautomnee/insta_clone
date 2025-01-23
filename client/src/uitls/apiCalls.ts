@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const backendURL = import.meta.env.VITE_ENV === 'local'
-    ? 'http://localhost:3001'
+    ? 'http://localhost:3001/api'
     : import.meta.env.VITE_BACKEND_URL;
 
 
@@ -12,7 +12,6 @@ export const axiosInstance = axios.create({
 
 export const checkJWTToken = async () => {
     try {
-        console.log("backendURL: ",backendURL);
         const result = await axiosInstance.get('/auth/check-access-token');
         return result.data.message === 'Token is valid';
     } catch(error) {
