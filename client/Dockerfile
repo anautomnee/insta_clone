@@ -28,7 +28,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Set the default value for nginx proxy destination
-ARG BACKEND_URL=http://backend:3001
+ARG BACKEND_URL=http://backend:3001/api
 
 # Replace template value with the actual url
 RUN sed -i "s|<BACKEND_URL>|${BACKEND_URL}|g" /etc/nginx/conf.d/default.conf
