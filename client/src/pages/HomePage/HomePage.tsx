@@ -19,6 +19,7 @@ import logo from "../../assets/logo.svg";
 
 export const HomePage = () => {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -34,6 +35,7 @@ export const HomePage = () => {
                 const result: Post[] = await fetchFollowedPosts(page);
 
                 // Update posts state and remove duplicates
+                if (result && page === 1) setIsInitialLoading(false);
                 setPosts((prevPosts) => {
                     const newPosts = result?.filter(
                         (newPost) => !prevPosts?.some((post) => post._id === newPost._id)
@@ -68,11 +70,36 @@ export const HomePage = () => {
         };
     }, [hasMore]);
 
-    if (posts.length === 0) {
+    if (posts.length === 0 && !isInitialLoading) {
         return (<div className="flex flex-col gap-4 justify-center items-center mt-8 mx-4">
             <img src={logo} alt="Ichgram" />
             <p className="text-xl ">Follow users to see their posts here</p>
         </div>);
+    } else if (posts.length === 0) {
+        // Skeleton
+        return (<div className="flex flex-col justify-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2
+             gap-x-10 gap-y-6 my-6 md:my-14 mx-[5vw] sm:mx-auto animate-pulse-short">
+                {new Array(6).fill(0).map((_, ind) => <div
+                    key={ind} className="border-b border-b-gray max-w-[473px]">
+                    <div className="flex gap-2 mb-3">
+                        <div className="w-7 h-7 bg-gray rounded-[50%]"></div>
+                        <div className="w-32 h-7 bg-gray"></div>
+                    </div>
+                    <div className="aspect-square w-[90vw] sm:w-[420px] lgg:w-[473px] bg-gray"></div>
+                    <div className="flex gap-2 mt-1.5 mb-2.5 opacity-30">
+                        <img src={like}
+                             alt='like'
+                             className="w-6 h-6 cursor-pointer"/>
+                        <img src={comment} alt="comment"/>
+                    </div>
+                    <div className="flex gap-2 mb-3">
+                        <div className="w-7 h-7 bg-gray rounded-[50%]"></div>
+                        <div className="w-full h-12 bg-gray"></div>
+                    </div>
+                </div>)}
+            </div>
+        </div>)
     }
 
     return (
@@ -81,8 +108,9 @@ export const HomePage = () => {
                 <p className="w-14"></p>
                 <p className="font-semibold">Homepage</p>
                 <div className="flex gap-2">
-                    <img src={search} alt="Search" onClick={() => setIsSearchOpen(!isSearchOpen)} />
-                    <img src={notifications_icon} alt="Notifications" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} />
+                    <img src={search} alt="Search" onClick={() => setIsSearchOpen(!isSearchOpen)}/>
+                    <img src={notifications_icon} alt="Notifications"
+                         onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}/>
                 </div>
             </div>
             <div className={isSearchOpen ? "opacity-100" : "opacity-0 invisible"}>
@@ -98,7 +126,7 @@ export const HomePage = () => {
              gap-x-10 gap-y-6 my-6 md:my-14 mx-[5vw] sm:mx-auto">
                 {posts?.length > 0 && posts.map((post) => (
                     <div key={post._id}
-                         className={`border-b border-b-gray max-w-[473px]`}>
+                         className="border-b border-b-gray max-w-[473px]">
                         <Link to={`/profile/${post.author.username}`} className="flex gap-2 mb-3 cursor-pointer">
                             <img
                                 src={post.author.profile_image}

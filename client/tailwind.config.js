@@ -28,7 +28,7 @@ export default {
     },
     extend: {
       animation: {
-        'pulse-short': 'pulse 0.5s ease-in-out infinite',
+        'pulse-short': 'pulse 1.2s ease-in-out infinite',
       },
     },
   },
