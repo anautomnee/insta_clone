@@ -1,5 +1,6 @@
 import logo from "../../assets/logo.svg";
 import ich from "../../assets/nav_icons/ich.png"
+import default_profile_pic from "../../assets/default_profile_pic.png";
 import links from "./navLinks.ts";
 import {Link, useLocation} from "react-router";
 import { useState} from "react";
@@ -130,7 +131,7 @@ export const Navigation = () => {
                     >
                         <div className="flex items-center gap-4 md:mt-12">
                             <img
-                                src={user?.profile_image}
+                                src={user?.profile_image || default_profile_pic}
                                 alt="Profile image"
                                 className="w-6 h-6 object-cover rounded-[50%] border border-gray"
                             />

@@ -6,6 +6,7 @@ import {Link, useLocation, useParams} from "react-router";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
 import {PostModal} from "../../components/PostModal/PostModal.tsx";
+import {ProfilePageSkeleton} from "../../skeletons/ProfilePageSkeleton.tsx";
 
 export const ProfilePage = () => {
     const {username} = useParams();
@@ -27,6 +28,8 @@ export const ProfilePage = () => {
         }
         fetchUserFunc();
     }, [username, user]);
+
+    if (!currentUser) return <ProfilePageSkeleton/>;
 
     return (
         <div className="flex flex-col items-center gap-8 mx-auto max-w-[930px] md:my-9 lg:gap-16 w-full">
