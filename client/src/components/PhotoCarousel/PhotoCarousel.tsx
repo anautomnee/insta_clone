@@ -8,7 +8,7 @@ type PhotoCarouselProps = {
     previews?: PreviewType[];
 }
 
-export const PhotoCarousel = ({photos, type, croppedStyle, previews}: PhotoCarouselProps) => {
+export const PhotoCarousel = ({photos, type, croppedStyle=false, previews}: PhotoCarouselProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handlePrev = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -29,9 +29,9 @@ export const PhotoCarousel = ({photos, type, croppedStyle, previews}: PhotoCarou
 
 
     return (
-        <div className={`relative flex justify-center items-center w-full ${type ? 'h-[473px]' : 'h-full'}`}>
+        <div className={`relative flex justify-center items-center w-full max-w-[473px] ${type ? 'h-[473px]' : 'h-full'}`}>
             {/* Image */}
-            <div
+            {croppedStyle ? <div
                 className={` ${
                     croppedStyle ? "bg-black" : ""
                 }`}
@@ -52,7 +52,11 @@ export const PhotoCarousel = ({photos, type, croppedStyle, previews}: PhotoCarou
                         croppedStyle ? "object-cover" : "object-contain"
                     }`}
                 />
-            </div>
+            </div> : <img
+                src={photos[currentIndex]}
+                alt={`Photo ${currentIndex + 1}`}
+                className="w-full h-full object-contain"
+            />}
 
 
             {/* Navigation Buttons */}

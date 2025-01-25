@@ -33,7 +33,7 @@ export const PostPage = () => {
         <div hidden ref={moreRef}>
             <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType}/>
         </div>
-        <div className="mx-auto w-[90vw] md:w-fit max-h-[80vh] my-9">
+        <div className="mx-auto w-[90vw] md:w-fit  lg:max-h-[80vh] my-9">
             <div className="flex flex-col md:flex-row justify-center border border-gray overflow-auto h-full">
                 <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px] md:max-w-[460px]
                         max-h-[360px] md:max-h-[680px]">
@@ -45,7 +45,7 @@ export const PostPage = () => {
                     }
                 </div>
                 {postType === "preview" ? <div className="relative border-l  border-gray
-                        w-full  md:min-h-full md:w-[423px] overflow-y-auto">
+                        w-full min-h-[40vh] md:min-h-full md:w-[423px] overflow-y-auto">
                         <PostMain post={post} setPost={setPost} moreRef={moreRef}/></div> :
                     <EditPostForm postContent={post?.content} postId={post?._id} setPost={setPost}
                                   setPostType={setPostType}/>}

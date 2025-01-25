@@ -66,7 +66,7 @@ export const PostModal = () => {
                         />
                     </div>
                     <div className="flex flex-col md:flex-row justify-center  overflow-auto h-full">
-                        <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px] max-w-[460px]
+                        <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px]
                         max-h-[360px] md:max-h-[680px]">
                             {post?.photos && post?.photos?.length > 1 ? <PhotoCarousel photos={post?.photos.map((photoField) => photoField.url || "")}/> : <img
                                 src={post?.photos[0].url}
