@@ -173,14 +173,13 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                                  className="w-6 h-6 cursor-pointer"
                                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
                             {showEmojiPicker && (
-                                <div className="absolute bottom-28 md:bottom-0 z-10
-                                            -right-0 sm:right-50 md:right-72 lg:right-16 xl:right-96">
-                                    <Picker onEmojiClick={onEmojiClick}/>
+                                <div className="absolute bottom-14">
+                                    <Picker width={300} height={300} searchDisabled={true} onEmojiClick={onEmojiClick}/>
                                 </div>
                             )}
                             <input {...register('content', {required: true, maxLength: 120})}
                                    placeholder="Add comment"
-                                   className="placeholder:text-xs py-2.5 w-full"/>
+                                   className="placeholder:text-xs p-2.5 w-full"/>
                         </div>
                         <button type="submit"
                                 className="text-blue text-xs font-semibold pr-6 lg:pr-10">Send
