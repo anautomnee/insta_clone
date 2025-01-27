@@ -2,7 +2,7 @@ import { MouseEvent, useEffect, useRef, useState} from "react";
 import { useNavigate, useParams} from "react-router";
 import {PostMore} from "./PostMore.tsx";
 import {useDispatch, } from "react-redux";
-import {AppDispatch, } from "../../store/store.ts";
+import {AppDispatch} from "../../store/store.ts";
 import {Post} from "../../store/types/instanceTypes.ts";
 import {fetchPost} from "../../store/actionCreators/postActionCreators.ts";
 import {PostMain} from "./PostMain.tsx";
@@ -10,6 +10,7 @@ import {EditPostForm} from "./EditPostForm.tsx";
 import more from "../../assets/more.svg";
 import arrow_back from "../../assets/arrow_back.svg";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel.tsx";
+import {PostModalSkeleton} from "../../skeletons/PostModalSkeleton.tsx";
 
 export const PostModal = () => {
     const [post, setPost] = useState<Post | null>(null);
@@ -33,6 +34,7 @@ export const PostModal = () => {
         fetchPostFunc();
     }, [postId]);
 
+    if (!post) return <PostModalSkeleton/>;
 
     return (
     <>

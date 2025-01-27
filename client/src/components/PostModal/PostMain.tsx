@@ -150,7 +150,10 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                              alt='like'
                              className="w-6 h-6 cursor-pointer"
                              onClick={(e) => {
-                                 post?._id && onLikePost(e, post._id, post, setPost)
+                                 if(post?._id) {
+                                     onLikePost(e, post._id, post, setPost);
+                                     return;
+                                 }
                              }}/>
                         <img src={comment}
                              alt="comment"
