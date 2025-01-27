@@ -9,7 +9,7 @@ export const PostModalSkeleton = () => {
         <div className="fixed z-20 h-[calc(100vh-81px)] md:h-screen w-screen
                 md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] top-0 left-0 md:left-[60px] lgg:left-[244px]"
              style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}>
-            <div className="animate-pulse-short flex justify-center mt-6 h-[90%] md:h-full md:mt-0 md:items-center  w-full">
+            <div className="flex justify-center mt-6 h-[90%] md:h-full md:mt-0 md:items-center  w-full">
                 <div className="flex flex-col  w-[80vw] md:w-fit mx-6 opacity-100 z-10 rounded bg-white">
                     <div
                         className="md:hidden flex w-full justify-between border-b border-b-gray px-4 py-2 font-semibold">
@@ -25,7 +25,7 @@ export const PostModalSkeleton = () => {
                             className="justify-self-end"
                         />
                     </div>
-                    <div className="flex flex-col md:flex-row justify-center  overflow-auto h-full">
+                    <div className="animate-pulse-short flex flex-col md:flex-row justify-center  overflow-auto h-full">
                         <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px]
                         max-h-[360px] md:max-h-[680px]">
                             <div className="w-full h-full bg-gray"></div>

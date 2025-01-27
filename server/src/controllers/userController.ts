@@ -27,6 +27,7 @@ export const getUserByUsername = async (req: Request, res: Response) => {
                 ]
                 }).populate({
                     path: 'notifications',
+                    options: { sort: { createdAt: -1 }, limit: 10 },
                     populate: [
                         {
                             path: 'post',
