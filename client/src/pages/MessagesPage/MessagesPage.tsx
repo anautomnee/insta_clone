@@ -55,11 +55,13 @@ export const MessagesPage = () => {
                                 />
                                 <div className="flex flex-col gap-1.5">
                                     <p className="text-sm">{chatUsername}</p>
-                                    <p className="text-xs text-darkgray">
-                                        {chat?.last_message?.author?.username === user?.username ?
-                                            "You" : chat?.last_message?.author?.username}{" "}
-                                        sent a message. · {formatDate(new Date(chat?.last_message?.createdAt))}
-                                    </p>
+                                    {chat?.last_message ?
+                                        <p className="text-xs text-darkgray">
+                                            {chat?.last_message?.author?.username === user?.username ?
+                                                "You" : chat?.last_message?.author?.username}{" "}
+                                            sent a message. · {formatDate(new Date(chat?.last_message?.createdAt))}
+                                        </p> :
+                                    <p className="text-xs text-darkgray">No messages yet</p>}
                                 </div>
                             </Link>
                         );

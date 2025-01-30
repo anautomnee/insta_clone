@@ -92,17 +92,25 @@ export const MessagesMain = () => {
     if (!user) return <p>Loading...</p>;
 
     return (<div className="w-full">
-        <Link to={`/profile/${receiver?.username}`} className="flex items-center gap-3
-         border-b border-b-gray p-4 w-full">
-            <img src={receiver?.profile_image} alt={receiver?.username}
-                 className="w-11 h-11 object-cover rounded-[50%]" />
-            <p className="font-semibold">{receiver?.username}</p>
-        </Link>
+        <div className="border-b border-b-gray p-4 w-full">
+            <Link
+                to={`/profile/${receiver?.username}`}
+                className="flex items-center gap-3 w-fit"
+            >
+                <img src={receiver?.profile_image} alt={receiver?.username}
+                     className="w-11 h-11 object-cover rounded-[50%]" />
+                <p className="font-semibold">{receiver?.username}</p>
+            </Link>
+        </div>
         <div className="h-[72vh] md:h-[56vh] overflow-y-scroll">
             <div className="flex flex-col items-center mt-16 mb-20">
-                <img src={receiver?.profile_image} alt={receiver?.username}
-                     className="w-24 h-24 object-cover mb-4 rounded-[50%]"/>
-                <p className="font-semibold text-xl mb-4">{receiver?.username}</p>
+                <Link to={`/profile/${username}`}>
+                    <img src={receiver?.profile_image} alt={receiver?.username}
+                         className="w-24 h-24 object-cover mb-4 rounded-[50%]"/>
+                </Link>
+                <Link to={`/profile/${username}`}>
+                    <p className="font-semibold text-xl mb-4">{receiver?.username}</p>
+                </Link>
                 <Link to={`/profile/${username}`}
                       className="bg-gray text-sm py-2 w-[173px] rounded-lg text-center">
                     View profile</Link>
