@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
+import {Link} from "react-router";
 import { getRandomPosts} from "../../uitls/apiCalls.ts";
 import {Post} from "../../store/types/instanceTypes.ts";
-import {Link} from "react-router";
 import useScrollToTop from "../../uitls/customHooks.ts";
 import {SearchPageSkeleton} from "../../skeletons/SearchPageSkeleton.tsx";
 
@@ -66,7 +66,8 @@ export const ExplorePage = () => {
     if (isInitialLoading) return <SearchPageSkeleton/>;
 
     return (
-        <div className="flex flex-col md:mx-auto md:my-20 m-2 gap-2 lgg:max-w-[989px] lg:max-w-[820px] md:max-w-[640px]">
+        <div className="flex flex-col md:mx-auto md:my-20 m-2 gap-2
+        lgg:max-w-[989px] lg:max-w-[820px] md:max-w-[640px]">
             {getBlocks().map((block: Post[], blockIndex: number) => (
                 <div
                     key={blockIndex}

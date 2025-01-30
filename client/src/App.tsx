@@ -1,8 +1,8 @@
 import './App.css';
+import {useLocation} from "react-router";
 import {MainRouter} from './routes/MainRouter.tsx';
 import {Navigation} from "./components/Layout/Navigation.tsx";
 import {Footer} from "./components/Layout/Footer.tsx";
-import {useLocation} from "react-router";
 import {useScreenWidth} from "./uitls/customHooks.ts";
 import {AuthRoute} from "./routes/AuthRoute.tsx";
 import {PrivateRoute} from "./routes/PrivateRoute.tsx";

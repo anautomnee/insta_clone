@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState} from "react";
-import {Post} from "../../store/types/instanceTypes.ts";
-import {fetchFollowedPosts} from "../../uitls/apiCalls.ts";
-import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
+import {Link, useLocation} from "react-router";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store.ts";
 import like from '../../assets/reactions/like.svg';
 import comment from '../../assets/reactions/comment.svg';
 import liked from "../../assets/reactions/liked.svg";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/store.ts";
-import {Link, useLocation} from "react-router";
-import {onLikePostFromHomepage} from "../../uitls/likeFunctions.ts";
 import search from '../../assets/nav_icons/search/search.svg';
 import notifications_icon from '../../assets/nav_icons/notifications/notifications.svg';
+import done from '../../assets/done.png';
+import logo from "../../assets/logo.svg";
+import {Post} from "../../store/types/instanceTypes.ts";
 import {SearchModal} from "../../components/SearchModal/SearchModal.tsx";
 import {NotificationsModal} from "../../components/NotificationsModal/NotificationsModal.tsx";
-import done from '../../assets/done.png';
 import {PhotoCarousel} from "../../components/PhotoCarousel/PhotoCarousel.tsx";
-import logo from "../../assets/logo.svg";
 import {HomePageSkeleton} from "../../skeletons/HomePageSkeleton.tsx";
+import {fetchFollowedPosts} from "../../uitls/apiCalls.ts";
+import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
+import {onLikePostFromHomepage} from "../../uitls/likeFunctions.ts";
 
 export const HomePage = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -103,41 +103,51 @@ export const HomePage = () => {
                 {posts?.length > 0 && posts.map((post) => (
                     <div key={post._id}
                          className="border-b border-b-gray max-w-[473px]">
-                        <Link to={`/profile/${post.author.username}`} className="flex gap-2 mb-3 cursor-pointer">
+                        <Link
+                            to={`/profile/${post.author.username}`}
+                            className="flex gap-2 mb-3 cursor-pointer">
                             <img
                                 src={post.author.profile_image}
                                 alt={post.author.username}
                                 className="w-7 h-7 object-cover"
                             />
                             <p className="text-xs font-semibold">{post.author.username}</p>
-                            <p className="text-xs text-darkgray">· {post.createdAt && formatDate(new Date(post.createdAt))}</p>
+                            <p className="text-xs text-darkgray">·
+                                {post.createdAt && formatDate(new Date(post.createdAt))}</p>
                         </Link>
                         <Link to={`/post/${post._id}`}
                               state={{backgroundLocation: location}}>
-                            {post?.photos && post?.photos?.length > 1 ? <PhotoCarousel
+                            {post?.photos && post?.photos?.length > 1 ?
+                                <PhotoCarousel
                                     type='home'
-                                    photos={post?.photos.map((photoField) => photoField.url || "")}/> :
+                                    photos={post?.photos.map((photoField) => photoField.url || "")}
+                                /> :
                                 <img
                                     src={post?.photos[0].url}
                                     alt="Post"
-                                    className="h-[473px] w-full object-contain"/>}
+                                    className="h-[473px] w-full object-contain"
+                                />}
                         </Link>
                         <div className="flex gap-2 mt-1.5 mb-2.5">
                             <img src={_id && post?.likes && isLikedByUser(post?.likes, _id) ? liked : like}
                                  alt='like'
                                  className="w-6 h-6 cursor-pointer"
-                                 onClick={async (e) => onLikePostFromHomepage(e, post._id, setPosts)}/>
+                                 onClick={async (e) =>
+                                     onLikePostFromHomepage(e, post._id, setPosts)}/>
                             <Link to={`/post/${post._id}`} state={{backgroundLocation: location}}>
                                 <img src={comment} alt="comment"/>
                             </Link>
                         </div>
                         <p className="text-xs font-semibold mb-2">{post.like_count} likes</p>
                         {post?.content?.length < 82 ?
-                            <p className="text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
-                            {post.author.username}</span>{post.content}</p> :
+                            <p className="text-xs mb-2 max-w-[420px]">
+                                <span className="font-semibold pr-2">
+                                {post.author.username}</span>{post.content}
+                            </p> :
                             <div>
-                                <p className="text-xs mb-2 max-w-[420px]"><span className="font-semibold pr-2">
-                            {post.author.username}</span>{post.content.slice(0, 82)}
+                                <p className="text-xs mb-2 max-w-[420px]">
+                                    <span className="font-semibold pr-2">{post.author.username}</span>
+                                    {post.content.slice(0, 82)}
                                     <span className="text-darkgray cursor-pointer"
                                           onClick={(e) => {
                                               const target = e.target as HTMLElement;
@@ -163,9 +173,14 @@ export const HomePage = () => {
                 <div ref={loadMoreRef} className="load-more-trigger"></div>
             </div>
             {!hasMore && (<div className="flex flex-col items-center mx-auto pb-16">
-                <img src={done} alt='done' className="mb-2.5"/>
+                <img
+                    src={done}
+                    alt='done'
+                    className="mb-2.5"
+                />
                 <p>You've seen all the posts</p>
-                <p className="text-xs text-darkgray">You have viewed all the posts from followed users</p>
+                <p className="text-xs text-darkgray">
+                    You have viewed all the posts from followed users</p>
             </div>)}
         </div>
     );

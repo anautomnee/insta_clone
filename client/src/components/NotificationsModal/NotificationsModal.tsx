@@ -27,7 +27,8 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
         onClick={closeModal}
     >
         <div className={`bg-white h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl transition-all duration-300
-            md:py-5 md:px-6 ${!isNotificationsOpen || isClosing  ? "w-0 opacity-0" : "md:w-[397px] w-full opacity-100" }`}
+            md:py-5 md:px-6 ${!isNotificationsOpen || isClosing  ?
+            "w-0 opacity-0" : "md:w-[397px] w-full opacity-100" }`}
              onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
             <div className="flex md:hidden justify-between p-3 border-b border-b-gray">
                 <img src={arrow_back} alt="Back" onClick={closeModal} />
@@ -39,7 +40,7 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
                 <p className="font-semibold mb-4">New</p>
                 <div className="flex flex-col gap-5">
 
-                    {notifications.length > 0 && notifications?.slice()?.reverse()?.slice(0,10)?.map((notification: Notification) => (<div
+                    {notifications.length > 0 && notifications?.map((notification: Notification) => (<div
                         key={notification?._id}
                         className="flex justify-between">
                         <div className="flex gap-3.5">
@@ -50,11 +51,13 @@ export const NotificationsModal = ({isNotificationsOpen, setIsNotificationsOpen,
                                 <span className="font-semibold mr-2">{notification?.actionMaker?.username}</span>
                                 <span>{notification?.type}</span>
                                 <span
-                                    className="text-darkgray ml-2">{formatDate(new Date(notification.createdAt))}</span>
+                                    className="text-darkgray ml-2">
+                                    {formatDate(new Date(notification.createdAt))}</span>
                             </p>
                         </div>
                         {(notification?.post?.photos || notification?.comment?.post?.photos) && (
-                            <img src={notification?.post?.photos[0].url || notification?.comment?.post.photos[0].url}
+                            <img src={notification?.post?.photos[0].url ||
+                                notification?.comment?.post.photos[0].url}
                                  alt="photo"
                                  className="w-11 h-11 object-cover"/>
                         )}

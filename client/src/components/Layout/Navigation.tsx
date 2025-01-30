@@ -1,11 +1,11 @@
+import {useState} from "react";
+import {Link, useLocation} from "react-router";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store.ts";
+import links from "./navLinks.ts";
 import logo from "../../assets/logo.svg";
 import ich from "../../assets/nav_icons/ich.png"
 import default_profile_pic from "../../assets/default_profile_pic.png";
-import links from "./navLinks.ts";
-import {Link, useLocation} from "react-router";
-import { useState} from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/store.ts";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
 import {NotificationsModal} from "../NotificationsModal/NotificationsModal.tsx";
 import {SearchModal} from "../SearchModal/SearchModal.tsx";
@@ -36,7 +36,8 @@ export const Navigation = () => {
                          alt="logo small"
                          className="block lgg:hidden"/>
                 </Link>
-                <div className="flex md:flex-col items-center justify-around lgg:md:items-start lgg:px-2 gap-4 md:mt-6 min-w-full">
+                <div className="flex md:flex-col items-center justify-around
+                lgg:md:items-start lgg:px-2 gap-4 md:mt-6 min-w-full">
                     <Link
                         to={links[0].href}
                         className="mx-auto lgg:mx-0"
@@ -45,7 +46,8 @@ export const Navigation = () => {
                              onMouseOver={() => setHoveredLink(links[0].name)}
                              onMouseLeave={() => setHoveredLink(null)}>
                             <img
-                                src={hoveredLink === links[0].name || location.pathname === '/' ? links[0].logoFill : links[0].logo}
+                                src={hoveredLink === links[0].name || location.pathname === '/' ?
+                                    links[0].logoFill : links[0].logo}
                                 alt={links[0].name}
                             />
                             <span className="hidden lgg:block">{links[0].name}</span>

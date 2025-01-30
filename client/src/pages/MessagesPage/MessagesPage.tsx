@@ -1,15 +1,13 @@
-import {useSelector} from "react-redux";
-import {RootState} from "../../store/store.ts";
-//import {useRedirectIfNotAuthenticated} from "../../uitls/customHooks.ts";
-import {Link, Outlet, useParams} from "react-router";
-import {UserState} from "../../store/types/userTypes.ts";
 import {useEffect, useState} from "react";
-import {fetchUserChats} from "../../uitls/apiCalls.ts";
+import {useSelector} from "react-redux";
+import {Link, Outlet, useParams} from "react-router";
+import {RootState} from "../../store/store.ts";
+import {UserState} from "../../store/types/userTypes.ts";
 import {Chat} from "../../store/types/instanceTypes.ts";
+import {fetchUserChats} from "../../uitls/apiCalls.ts";
 import {formatDate} from "../../uitls/utils.ts";
 
 export const MessagesPage = () => {
-    //const redirected: boolean = useRedirectIfNotAuthenticated();
     const [chats, setChats] = useState<Chat[]>([]);
     const user: UserState = useSelector((state: RootState) => state.user);
     const { username } = useParams();
@@ -22,8 +20,6 @@ export const MessagesPage = () => {
         }
         if (chats.length === 0) getChats();
     }, []);
-
-    //if (redirected) return null;
 
     return (
         <div className="flex h-full">
@@ -60,7 +56,8 @@ export const MessagesPage = () => {
                                 <div className="flex flex-col gap-1.5">
                                     <p className="text-sm">{chatUsername}</p>
                                     <p className="text-xs text-darkgray">
-                                        {chat?.last_message?.author?.username === user?.username ? "You" : chat?.last_message?.author?.username}{" "}
+                                        {chat?.last_message?.author?.username === user?.username ?
+                                            "You" : chat?.last_message?.author?.username}{" "}
                                         sent a message. · {formatDate(new Date(chat?.last_message?.createdAt))}
                                     </p>
                                 </div>

@@ -1,12 +1,12 @@
 import {ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useState} from "react";
-import {CondensedUser} from "../../store/types/instanceTypes.ts";
-import {addUserToSearchResults, getAllUsersForSearch} from "../../uitls/apiCalls.ts";
-import cancel from '../../assets/search_cancel.svg';
-import {Link} from "react-router";
-import arrow_back from "../../assets/arrow_back.svg";
 import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router";
 import {AppDispatch, RootState} from "../../store/store.ts";
+import cancel from '../../assets/search_cancel.svg';
+import arrow_back from "../../assets/arrow_back.svg";
+import {CondensedUser} from "../../store/types/instanceTypes.ts";
 import {addSearchResult} from "../../store/slices/userSlice.ts";
+import {addUserToSearchResults, getAllUsersForSearch} from "../../uitls/apiCalls.ts";
 
 type SearchModalProps = {
     isSearchOpen: boolean;
@@ -64,11 +64,16 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
         style={{backgroundColor: 'rgba(0, 0, 0, 0.65)'}}
         onClick={closeModal}
     >
-            <div className={`bg-white h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl transition-all duration-300
-            md:py-5 md:px-6 ${!isSearchOpen || isClosing  ? "w-0 opacity-0" : "md:w-[397px] w-full opacity-100" }`}
+            <div className={`bg-white h-[calc(100vh-81px)] md:h-screen md:rounded-r-xl 
+            transition-all duration-300 md:py-5 md:px-6 
+            ${!isSearchOpen || isClosing  ? "w-0 opacity-0" : "md:w-[397px] w-full opacity-100" }`}
                  onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
                 <div className="flex md:hidden justify-between p-3 border-b border-b-gray">
-                    <img src={arrow_back} alt="Back" onClick={closeModal}/>
+                    <img
+                        src={arrow_back}
+                        alt="Back"
+                        onClick={closeModal}
+                    />
                     <p className="font-semibold">Search</p>
                     <p></p>
                 </div>
@@ -78,7 +83,8 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
                         <input value={searchInput}
                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearch(e)}
                                placeholder="Search"
-                               className="bg-gray rounded-lg w-full py-2.5 pl-4 pr-10 placeholder:text-darkgray"/>
+                               className="bg-gray rounded-lg w-full py-2.5
+                                pl-4 pr-10 placeholder:text-darkgray"/>
                         <img className="absolute bottom-2.5 right-2"
                              src={cancel} alt="Cancel"
                              onClick={() => {
@@ -95,15 +101,22 @@ export const SearchModal = ({isSearchOpen, setIsSearchOpen}: SearchModalProps) =
                                         profile_image: user.profile_image,
                                         username: user.username,
                                     })}>
-                                <img src={user.profile_image} alt="profile_image"
-                                     className="w-10 h-10 object-cover rounded-[50%]"/>
+                                <img
+                                    src={user.profile_image}
+                                    alt="profile_image"
+                                    className="w-10 h-10 object-cover rounded-[50%]"
+                                />
                                 <p className="font-semibold">{user.username}</p>
                             </Link>
-                        ))) : (searchResults?.length > 0 && searchResults?.slice()?.reverse()?.slice(0, 5)?.map((user: CondensedUser) => (
+                        ))) : (searchResults?.length > 0 &&
+                            searchResults?.slice()?.reverse()?.slice(0, 5)?.map((user: CondensedUser) => (
                             <Link to={`/profile/${user.username}`}
                                   key={user._id} className="flex items-center gap-3">
-                                <img src={user.profile_image} alt="profile_image"
-                                     className="w-10 h-10 object-cover rounded-[50%]"/>
+                                <img
+                                    src={user.profile_image}
+                                    alt="profile_image"
+                                    className="w-10 h-10 object-cover rounded-[50%]"
+                                />
                                 <p className="font-semibold">{user.username}</p>
                             </Link>
                         )))}

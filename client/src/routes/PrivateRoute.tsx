@@ -16,7 +16,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
     }, [[location.pathname]]);
     if (isNotAuthenticated === null) return;
     if (isLoading) {
-        return <div>Loading...</div>; // Пока идет проверка токена, можно показать загрузочный экран
+        return <div>Loading...</div>;
     }
 
     return isNotAuthenticated ? (

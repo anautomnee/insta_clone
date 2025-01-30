@@ -1,7 +1,9 @@
 import default_profile_pic from "../assets/default_profile_pic.png";
 
 export const ProfilePageSkeleton = () => {
-    return (<div className="animate-pulse-short flex flex-col items-center gap-8 mx-auto max-w-[930px] md:my-9 lg:gap-16 w-full">
+    return (
+        <div className="animate-pulse-short flex flex-col items-center gap-8
+            mx-auto max-w-[930px] md:my-9 lg:gap-16 w-full">
             <div className="w-full text-center border-b border-b-gray md:hidden p-2 font-semibold">
                 <div className="w-32 h-6 bg-gray mx-auto"></div>
             </div>

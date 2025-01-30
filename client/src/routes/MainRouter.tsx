@@ -1,3 +1,4 @@
+import {useLocation, Routes, Route} from "react-router";
 import {
     EditProfilePage,
     ErrorPage,
@@ -10,7 +11,6 @@ import {
 } from "../pages";
 import {MessagesPage} from "../pages/MessagesPage/MessagesPage.tsx";
 import {MessagesMain} from "../components/MessagesMain/MessagesMain.tsx";
-import {useLocation, Routes, Route} from "react-router";
 import {PostModal} from "../components/PostModal/PostModal.tsx";
 
 export const MainRouter = () => {

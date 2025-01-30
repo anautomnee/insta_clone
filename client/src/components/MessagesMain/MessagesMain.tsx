@@ -1,9 +1,9 @@
+import {ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState} from "react";
 import {Link, useOutletContext, useParams} from "react-router";
+import { io } from "socket.io-client";
 import {Chat, CondensedUser, Message} from "../../store/types/instanceTypes.ts";
 import {UserState} from "../../store/types/userTypes.ts";
-import {ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState} from "react";
 import {backendURL, fetchChat} from "../../uitls/apiCalls.ts";
-import { io } from "socket.io-client";
 import {formatMessageTime} from "../../uitls/utils.ts";
 
 const TEN_MINUTES = 10 * 60 * 1000;
@@ -91,7 +91,8 @@ export const MessagesMain = () => {
     if (!user) return <p>Loading...</p>;
 
     return (<div className="w-full">
-        <Link to={`/profile/${receiver?.username}`} className="flex items-center gap-3 border-b border-b-gray p-4 w-full">
+        <Link to={`/profile/${receiver?.username}`} className="flex items-center gap-3
+         border-b border-b-gray p-4 w-full">
             <img src={receiver?.profile_image} alt={receiver?.username}
                  className="w-11 h-11 object-cover rounded-[50%]" />
             <p className="font-semibold">{receiver?.username}</p>
@@ -122,7 +123,8 @@ export const MessagesMain = () => {
                         <div className="flex justify-start">
                             {message.author.username === user?.username ? (<>
                                 <div
-                                    className="flex gap-4 mb-2 py-5 px-4 bg-purple text-white w-60 lg:w-[397px] rounded-2xl ml-auto">
+                                    className="flex gap-4 mb-2 py-5 px-4 bg-purple text-white
+                                     w-60 lg:w-[397px] rounded-2xl ml-auto">
                                     <p>{message.content}</p>
                                 </div>
                                 <img src={user?.profile_image} alt={user?.username}
@@ -130,7 +132,8 @@ export const MessagesMain = () => {
                             </>) : (<>
                                 <img src={message.author.profile_image} alt={user?.username}
                                      className="w-7 h-7 object-cover rounded-[50%] mr-2"/>
-                                <div className="flex gap-4 mb-2 py-5 px-4 bg-gray w-60 lg:w-[397px] rounded-2xl">
+                                <div className="flex gap-4 mb-2 py-5 px-4 bg-gray
+                                w-60 lg:w-[397px] rounded-2xl">
                                     <p>{message.content}</p>
                                 </div>
                             </>)}

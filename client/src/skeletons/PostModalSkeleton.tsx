@@ -12,7 +12,8 @@ export const PostModalSkeleton = () => {
             <div className="flex justify-center mt-6 h-[90%] md:h-full md:mt-0 md:items-center  w-full">
                 <div className="flex flex-col  w-[80vw] md:w-fit mx-6 opacity-100 z-10 rounded bg-white">
                     <div
-                        className="md:hidden flex w-full justify-between border-b border-b-gray px-4 py-2 font-semibold">
+                        className="md:hidden flex w-full justify-between border-b border-b-gray
+                        px-4 py-2 font-semibold">
                         <img
                             src={arrow_back}
                             alt="Back"
@@ -25,7 +26,8 @@ export const PostModalSkeleton = () => {
                             className="justify-self-end"
                         />
                     </div>
-                    <div className="animate-pulse-short flex flex-col md:flex-row justify-center  overflow-auto h-full">
+                    <div className="animate-pulse-short flex flex-col md:flex-row
+                    justify-center overflow-auto h-full">
                         <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px]
                         max-h-[360px] md:max-h-[680px]">
                             <div className="w-full h-full bg-gray"></div>
@@ -46,7 +48,9 @@ export const PostModalSkeleton = () => {
                                     />
                                 </div>
                                 <div className="flex gap-3 mx-3.5 my-3 text-xs">
-                                    <div className="min-w-6 max-w-6 h-6 object-cover rounded-[50%] bg-gray"></div>
+                                    <div className="min-w-6 max-w-6 h-6 object-cover
+                                        rounded-[50%] bg-gray">
+                                    </div>
                                     <div className="flex-col">
                                         <div className="flex gap-4">
                                             <div className="w-32 h-6 bg-gray"></div>
@@ -79,7 +83,9 @@ export const PostModalSkeleton = () => {
                                                 />
                                                 <div className="p-2.5 h-10 w-full"/>
                                             </div>
-                                            <button className="text-gray text-xs font-semibold pr-6 lg:pr-10">Send
+                                            <button
+                                                className="text-gray text-xs font-semibold pr-6 lg:pr-10">
+                                                Send
                                             </button>
                                         </div>
                                     </div>

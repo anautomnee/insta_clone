@@ -1,18 +1,18 @@
-import {Link} from "react-router";
-import more from "../../assets/more.svg";
-import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
-import liked from "../../assets/reactions/liked.svg";
-import like from "../../assets/reactions/like.svg";
-import {onLikeComment, onLikePost} from "../../uitls/likeFunctions.ts";
-import comment from "../../assets/reactions/comment.svg";
-import smiley from "../../assets/smiley.png";
-import Picker, {EmojiClickData} from "emoji-picker-react";
-import {Post} from "../../store/types/instanceTypes.ts";
 import {Dispatch, RefObject, SetStateAction, useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
+import Picker, {EmojiClickData} from "emoji-picker-react";
+import {Link} from "react-router";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store.ts";
-import {SubmitHandler, useForm} from "react-hook-form";
+import more from "../../assets/more.svg";
+import liked from "../../assets/reactions/liked.svg";
+import like from "../../assets/reactions/like.svg";
+import comment from "../../assets/reactions/comment.svg";
+import smiley from "../../assets/smiley.png";
+import {Post} from "../../store/types/instanceTypes.ts";
+import {onLikeComment, onLikePost} from "../../uitls/likeFunctions.ts";
 import {addComment} from "../../uitls/apiCalls.ts";
+import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
 
 type PostMainProps = {
     post: Post | null;
@@ -136,7 +136,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                                     </div>
                                 </div>
                             </div>
-                            <img src={userId && isLikedByUser(comment?.likes, userId) ? liked : like} alt={comment._id}
+                            <img src={userId && isLikedByUser(comment?.likes, userId)
+                                ? liked : like} alt={comment._id}
                                  className="w-2.5 h-2.5 cursor-pointer"
                                  onClick={(e) => onLikeComment(e, comment._id, post, setPost)}/>
                         </div>
@@ -165,8 +166,8 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                         {formatDate(new Date(post?.createdAt))}</p>}
                 </div>
                 <div className="border-t border-t-gray">
-                    {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 120
-                        characters</p>}
+                    {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">
+                        The comment should be less than 120 characters</p>}
                     {commentError && <p className="pl-3.5 pt-2 text-xs text-error">{commentError}</p>}
                     <form className="flex items-center justify-between pl-3.5 bg-white w-full"
                           onSubmit={handleSubmit(onComment)}>
@@ -177,7 +178,10 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
                             {showEmojiPicker && (
                                 <div className="absolute bottom-14">
-                                    <Picker width={300} height={300} searchDisabled={true} onEmojiClick={onEmojiClick}/>
+                                    <Picker width={300}
+                                            height={300}
+                                            searchDisabled={true}
+                                            onEmojiClick={onEmojiClick}/>
                                 </div>
                             )}
                             <input {...register('content', {required: true, maxLength: 120})}

@@ -1,11 +1,11 @@
-import {SubmitHandler, useForm} from "react-hook-form";
 import {Dispatch, SetStateAction, useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
+import Picker, {EmojiClickData} from "emoji-picker-react";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../../store/store.ts";
+import smiley from "../../assets/smiley.png";
 import {updatePost} from "../../store/actionCreators/postActionCreators.ts";
 import {Post} from "../../store/types/instanceTypes.ts";
-import smiley from "../../assets/smiley.png";
-import Picker, {EmojiClickData} from "emoji-picker-react";
 
 type EditPostFormProps = {
     postContent: string | undefined;
@@ -55,7 +55,8 @@ export const EditPostForm = ({postContent, postId, setPostType, setPost}: EditPo
         <form
             onSubmit={handleSubmit(onEditPost)}
             className="flex flex-col gap-4 p-5">
-            {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200
+            {errors.content && <p className="pl-3.5 pt-2 text-xs text-error">
+                The comment should be less than 2200
                 characters</p>}
             <textarea
                 defaultValue={postContent}

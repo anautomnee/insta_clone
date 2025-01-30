@@ -1,12 +1,12 @@
 import {ChangeEvent, Dispatch, MouseEvent, SetStateAction, useState} from "react";
 import {Link} from "react-router";
-import upload from '../../assets/upload.png';
-import arrow_back from '../../assets/arrow_back.svg';
-import smiley from '../../assets/smiley.png';
 import {SubmitHandler, useForm} from "react-hook-form";
 import Picker, {EmojiClickData} from "emoji-picker-react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/store.ts";
+import upload from '../../assets/upload.png';
+import arrow_back from '../../assets/arrow_back.svg';
+import smiley from '../../assets/smiley.png';
 import {createPost} from "../../store/actionCreators/postActionCreators.ts";
 import {addPost} from "../../store/slices/userSlice.ts";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel.tsx";
@@ -130,7 +130,8 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
             <div className="bg-white opacity-100 mt-8 md:mt-20 mx-auto rounded-xl
             xl:w-[913px] lg:w-[800px] md:w-[510px] w-[90vw]"
             onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
-                {status === 'FAILED' && error && <div className="p-4 text-error text-center">Image should be less than 5MB and svg/jpg/png</div>}
+                {status === 'FAILED' && error && <div className="p-4 text-error text-center">
+                    Image should be less than 5MB and svg/jpg/png</div>}
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex justify-between p-4 border-b border-b-gray">
@@ -150,14 +151,16 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
                         <input
                             type="submit"
                             disabled={currentContent.length === 0 || !photos?.length}
-                            className={currentContent.length === 0 || !photos?.length ? "text-gray" : "text-blue cursor-pointer"}
+                            className={currentContent.length === 0 || !photos?.length ? "text-gray" :
+                                "text-blue cursor-pointer"}
                             value="Share"
                         />
                     </div>
-                    {errors.photos && <p className="pl-3.5 pt-2 text-xs text-error">Photo should be less than 5MB</p>}
+                    {errors.photos && <p className="pl-3.5 pt-2 text-xs text-error">
+                        Photo should be less than 5MB</p>}
                     {errors.content &&
-                        <p className="pl-3.5 pt-2 text-xs text-error">The comment should be less than 2200
-                            characters</p>}
+                        <p className="pl-3.5 pt-2 text-xs text-error">
+                            The comment should be less than 2200 characters</p>}
 
                 </form>
                 <div className="flex flex-col md:flex-row">
@@ -175,7 +178,8 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
                         )}
                         <input type="file"
                                {...register("photos", { required: "Photos are required" })}
-                               className="cursor-pointer opacity-0 absolute top-0 left-0 bottom-0 right-0 w-full h-full"
+                               className="cursor-pointer opacity-0 absolute
+                               top-0 left-0 bottom-0 right-0 w-full h-full"
                                onChange={handleFileChange}
                                multiple />
 

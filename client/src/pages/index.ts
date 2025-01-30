@@ -8,4 +8,5 @@ import {EditProfilePage} from "./EditProfilePage/EditProfilePage.tsx";
 import {ExplorePage} from "./ExplorePage/ExplorePage.tsx";
 import {PostPage} from "./PostPage/PostPage.tsx";
 
-export {RegisterPage, LoginPage, ResetPage, HomePage, ErrorPage, ProfilePage, EditProfilePage, ExplorePage, PostPage};
+export {RegisterPage, LoginPage, ResetPage, HomePage,
+    ErrorPage, ProfilePage, EditProfilePage, ExplorePage, PostPage};

@@ -2,8 +2,8 @@ import {ChangeEvent, useState} from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store.ts";
-import {editProfile, fetchUser} from "../../store/actionCreators/userActionCreators.ts";
 import website_link from "../../assets/website_link.svg";
+import {editProfile, fetchUser} from "../../store/actionCreators/userActionCreators.ts";
 
 interface FormInputs {
     username: string;
@@ -77,9 +77,13 @@ export const EditProfilePage = () => {
     };
 
     return (
-        <form className="flex flex-col mx-auto my-9 max-w-[610px]" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            className="flex flex-col mx-auto my-9 max-w-[610px]"
+            onSubmit={handleSubmit(onSubmit)}
+        >
             <p className="font-semibold text-xl mb-11">Edit profile</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-8 p-4 bg-gray rounded-[20px]">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center
+             mb-8 p-4 bg-gray rounded-[20px]">
                 <div className="flex gap-4">
                     <img
                         src={preview || user.profile_image}
@@ -127,9 +131,11 @@ export const EditProfilePage = () => {
             <div className="relative h-16 mb-16 w-full">
         <textarea
             {...register("about", { maxLength: 150 })}
-            className="border border-gray z-0 rounded-xl h-16 w-full pl-4 pr-20 py-1 overflow-y-scroll resize-none"
+            className="border border-gray z-0 rounded-xl h-16
+            w-full pl-4 pr-20 py-1 overflow-y-scroll resize-none"
         />
-                <p className="absolute bottom-2 right-3 text-darkgray text-xs">{watch("about").length}/150</p>
+                <p className="absolute bottom-2 right-3
+                 text-darkgray text-xs">{watch("about").length}/150</p>
             </div>
             {errors.about && <p className="pt-2 text-xs text-error">{errors.about.message}</p>}
 
@@ -144,7 +150,8 @@ export const EditProfilePage = () => {
             </button>
 
             {showNotification && (
-                <div className="fixed bottom-4 right-4 bg-blue text-white px-4 py-2 rounded shadow-md flex items-center gap-2">
+                <div className="fixed bottom-4 right-4 bg-blue text-white px-4 py-2
+                 rounded shadow-md flex items-center gap-2">
                     <span>Profile edited</span>
                     <button
                         onClick={(e) => {

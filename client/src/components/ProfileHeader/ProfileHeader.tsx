@@ -1,12 +1,12 @@
-import {User} from "../../store/types/instanceTypes.ts";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router";
 import {AppDispatch, RootState} from "../../store/store.ts";
+import website_link from "../../assets/website_link.svg";
 import {selectIfFollowing} from "../../store/selectors/userSelector.ts";
+import {User} from "../../store/types/instanceTypes.ts";
 import {followUser, unfollowUser} from "../../uitls/apiCalls.ts";
 import {addFollowing, removeFollowing} from "../../store/slices/userSlice.ts";
-import {useEffect, useState} from "react";
-import {Link} from "react-router";
-import website_link from "../../assets/website_link.svg";
 
 export const ProfileHeader= ({user, profileUsername}: {user: User | null, profileUsername: string}) => {
     const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -53,27 +53,40 @@ export const ProfileHeader= ({user, profileUsername}: {user: User | null, profil
     return (
         <>
             <div className="flex gap-4 px-6 md:gap-12 lg:gap-20">
-                <img className="rounded-[50%] border border-gray
-                w-28 h-28 object-cover md:min-w-[150px] md:h-[150px]" src={user?.profile_image} alt="Profile pic"/>
+                <img
+                    className="rounded-[50%] border border-gray
+                    w-28 h-28 object-cover md:min-w-[150px] md:h-[150px]"
+                     src={user?.profile_image} alt="Profile pic"
+                />
                 <div>
                     <div className="flex flex-col items-start md:flex-row md:items-center gap-2 mb-3">
                         <p className="text-lg mr-3">{user?.username}</p>
-                        {!ifUser ? <div className="flex gap-2 mb-4">
-                            {!isFollowing && <button className="rounded-lg bg-blue text-sm text-white
-                            h-7 w-20 sm:w-28 md:w-[132px] cursor-pointer"
-                            onClick={onFollow}>Follow</button>}
-                            {isFollowing && <button className="rounded-lg  text-sm bg-[#EFEFEF]
-                            h-7 w-20 sm:w-28 md:w-[132px]"
-                            onClick={onUnfollow}>Unfollow</button>}
-                            <Link to={`/messages/${user.username}`} className="rounded-lg bg-[#EFEFEF] text-sm
-                            h-7 w-28 sm:w-36 md:w-[190px] cursor-pointer">
-                                <p className="text-center pt-1">Message</p>
+                        {!ifUser ?
+                            <div className="flex gap-2 mb-4">
+                                {!isFollowing &&
+                                    <button
+                                        className="rounded-lg bg-blue text-sm text-white
+                                        h-7 w-20 sm:w-28 md:w-[132px] cursor-pointer"
+                                        onClick={onFollow}>Follow
+                                    </button>}
+                                {isFollowing &&
+                                    <button
+                                        className="rounded-lg  text-sm bg-[#EFEFEF]
+                                        h-7 w-20 sm:w-28 md:w-[132px]"
+                                        onClick={onUnfollow}>Unfollow
+                                    </button>}
+                                <Link to={`/messages/${user.username}`}
+                                      className="rounded-lg bg-[#EFEFEF] text-sm
+                                      h-7 w-28 sm:w-36 md:w-[190px] cursor-pointer">
+                                    <p className="text-center pt-1">Message</p>
+                                </Link>
+                            </div> :
+                            <Link to={`${window.location.pathname}/edit`}>
+                                <button className="rounded-lg bg-[#EFEFEF] text-sm
+                                h-7 w-28 sm:w-36 md:w-[190px]">Edit profile
+                                </button>
                             </Link>
-                        </div> : <Link to={`${window.location.pathname}/edit`}>
-                            <button className="rounded-lg bg-[#EFEFEF] text-sm
-                            h-7 w-28 sm:w-36 md:w-[190px]">Edit profile
-                            </button>
-                        </Link>}
+                        }
                     </div>
                     <div className="flex gap-3.5 sm:gap-8 md:gap-16 md:mb-5 text-sm md:text-md">
                         <p><b>{user?.posts.length}</b> posts</p>

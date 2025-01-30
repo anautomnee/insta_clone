@@ -21,7 +21,7 @@ export const PhotoCarousel = ({photos, type, croppedStyle=false, previews}: Phot
         setCurrentIndex((prevIndex) => (prevIndex === photos.length - 1 ? 0 : prevIndex + 1));
     };
 
-    let currentImageAspectRatio = croppedStyle
+    const currentImageAspectRatio = croppedStyle
             ? previews && previews[currentIndex]?.width > previews[currentIndex]?.height
                 ? "16 / 9"
                 : "3 / 4"
@@ -29,7 +29,8 @@ export const PhotoCarousel = ({photos, type, croppedStyle=false, previews}: Phot
 
 
     return (
-        <div className={`relative flex justify-center items-center w-full max-w-[473px] ${type ? 'h-[473px]' : 'h-full'}`}>
+        <div className={`relative flex justify-center items-center w-full max-w-[473px] 
+            ${type ? 'h-[473px]' : 'h-full'}`}>
             {/* Image */}
             {croppedStyle ? <div
                 className={` ${
@@ -63,13 +64,15 @@ export const PhotoCarousel = ({photos, type, croppedStyle=false, previews}: Phot
             {photos.length > 1 && (
                 <>
                     <button
-                        className="absolute z-10 top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full px-2.5"
+                        className="absolute z-10 top-1/2 left-2 transform -translate-y-1/2
+                         bg-black bg-opacity-50 text-white rounded-full px-2.5"
                         onClick={handlePrev}
                     >
                         &#8249;
                     </button>
                     <button
-                        className="absolute  z-10 top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full px-2.5"
+                        className="absolute  z-10 top-1/2 right-2 transform -translate-y-1/2
+                         bg-black bg-opacity-50 text-white rounded-full px-2.5"
                         onClick={handleNext}
                     >
                         &#8250;
