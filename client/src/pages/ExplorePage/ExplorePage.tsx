@@ -46,12 +46,14 @@ export const ExplorePage = () => {
             { threshold: 1.0 }
         );
 
-        if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+        const ref = loadMoreRef.current;
+
+        if (ref) observer.observe(ref);
 
         return () => {
-            if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+            if (ref) observer.unobserve(ref);
         };
-    }, [photos ]);
+    }, [photos]);
 
     const getBlocks = () => {
         const blocks = [];

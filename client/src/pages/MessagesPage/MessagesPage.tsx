@@ -19,7 +19,7 @@ export const MessagesPage = () => {
             setChats(result);
         }
         if (chats.length === 0) getChats();
-    }, []);
+    }, [chats.length]);
 
     return (
         <div className="flex h-full">

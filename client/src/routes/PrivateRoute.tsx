@@ -13,7 +13,7 @@ export const PrivateRoute = ({ children }: { children: ReactNode }) => {
             setIsLoading(false);
         }
         handleCheck();
-    }, [[location.pathname]]);
+    }, [location.pathname]);
     if (isNotAuthenticated === null) return;
     if (isLoading) {
         return <div>Loading...</div>;

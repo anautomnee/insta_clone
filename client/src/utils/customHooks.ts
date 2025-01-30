@@ -41,7 +41,7 @@ export const useFetchUserAfterReload = (user: UserState): void => {
         };
 
         checkToken();
-    }, [user]);
+    }, [user, dispatch, navigate]);
 };
 
 
