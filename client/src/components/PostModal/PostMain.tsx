@@ -80,7 +80,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                         <span className="font-semibold">{post?.author?.username}</span>
                     </div>
                 </Link>
-                <img
+                {post?.author?._id === userId ? <img
                     src={more}
                     alt="More"
                     className="w-6 mr-2 cursor-pointer"
@@ -89,7 +89,7 @@ export const PostMain = ({post, setPost, moreRef}: PostMainProps) => {
                             moreRef.current.hidden = false;
                         }
                     }}
-                />
+                /> : <p></p>}
             </div>
             <div className="flex gap-3 mx-3.5 my-3 text-xs">
                 <Link

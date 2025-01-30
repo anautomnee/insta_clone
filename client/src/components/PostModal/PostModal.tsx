@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useRef, useState} from "react";
 import { useNavigate, useParams} from "react-router";
-import {useDispatch, } from "react-redux";
-import {AppDispatch} from "../../store/store.ts";
+import {useDispatch, useSelector,} from "react-redux";
+import {AppDispatch, RootState} from "../../store/store.ts";
 import more from "../../assets/more.svg";
 import arrow_back from "../../assets/arrow_back.svg";
 import {Post} from "../../store/types/instanceTypes.ts";
@@ -16,6 +16,7 @@ export const PostModal = () => {
     const [post, setPost] = useState<Post | null>(null);
     const [postType, setPostType] = useState<'preview' | 'edit'>('preview');
     const moreRef = useRef<HTMLDivElement>(null);
+    const {_id} = useSelector((state: RootState)=> state.user);
     const dispatch = useDispatch<AppDispatch>();
 
     const {postId} = useParams();
@@ -38,9 +39,9 @@ export const PostModal = () => {
 
     return (
     <>
-        <div hidden ref={moreRef}>
-            <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType} />
-        </div>
+        {post?.author?._id === _id && <div hidden ref={moreRef}>
+            <PostMore modalRef={moreRef} postId={post?._id} setPostType={setPostType}/>
+        </div>}
         <div
             className="fixed z-20 h-[calc(100vh-81px)] md:h-screen w-screen
                 md:w-[calc(100vw-60px)] lgg:w-[calc(100vw-244px)] top-0 left-0 md:left-[60px] lgg:left-[244px]"
@@ -57,7 +58,8 @@ export const PostModal = () => {
                             className="cursor-pointer"
                             onClick={closeModal}/>
                         {post?.author.username}
-                        <img
+                        {post?.author?._id === _id ? <p></p> :
+                            <img
                             src={more}
                             alt="More"
                             className="justify-self-end"
@@ -67,8 +69,9 @@ export const PostModal = () => {
                                 }
                             }}
                         />
-                    </div>
-                    <div className="flex flex-col md:flex-row justify-center  overflow-auto h-full">
+                        }
+                </div>
+                <div className="flex flex-col md:flex-row justify-center  overflow-auto h-full">
                         <div className="flex justify-center items-center md:min-w-[280px] lg:min-w-[353px]
                         max-h-[360px] md:max-h-[680px]">
                             {post?.photos && post?.photos?.length > 1 ?
@@ -81,12 +84,14 @@ export const PostModal = () => {
                                 className="w-full object-contain"/>
                         }
                         </div>
-                    {postType === "preview" ? <div className="relative border-l  border-gray
-                    w-full h-[460px] md:min-h-full md:w-[423px] overflow-y-auto">
-                        <PostMain
+                    {postType === "preview" ?
+                            <div className="relative border-l  border-gray
+                            w-full h-[460px] md:min-h-full md:w-[423px] overflow-y-auto">
+                            <PostMain
                             post={post}
                             setPost={setPost}
-                            moreRef={moreRef} /></div> :
+                            moreRef={moreRef} />
+                        </div> :
                         <EditPostForm
                             postContent={post?.content}
                             postId={post?._id}

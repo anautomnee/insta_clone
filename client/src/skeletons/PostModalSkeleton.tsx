@@ -41,11 +41,7 @@ export const PostModalSkeleton = () => {
                                             className="w-6 h-6 rounded-[50%] object-cover bg-gray"></div>
                                         <div className="w-32 h-6 bg-gray"></div>
                                     </div>
-                                    <img
-                                        src={more}
-                                        alt="More"
-                                        className="w-6 mr-2 opacity-30"
-                                    />
+                                    <p></p>
                                 </div>
                                 <div className="flex gap-3 mx-3.5 my-3 text-xs">
                                     <div className="min-w-6 max-w-6 h-6 object-cover
