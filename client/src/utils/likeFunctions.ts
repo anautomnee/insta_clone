@@ -1,8 +1,9 @@
 import React, {Dispatch, MouseEvent} from "react";
 import like from "../assets/reactions/like.svg";
-import {likeComment, likePost, unLikeComment, unLikePost} from "./apiCalls.ts";
+import {likePost, unLikePost} from "./apiCalls/postApi.ts";
+import {unLikeComment, likeComment} from "./apiCalls/commentApi.ts";
 import liked from "../assets/reactions/liked.svg";
-import {Post} from "../store/types/instanceTypes.ts";
+import {LikesFields, Post} from "../store/types/instanceTypes.ts";
 
 export const onLikeComment = async (e: MouseEvent<HTMLImageElement>, commentId: string, post: Post | null, setPost: Dispatch<React.SetStateAction<Post | null>>) => {
     const target = e.target as HTMLImageElement;
@@ -102,4 +103,10 @@ export const onLikePostFromHomepage = async (e: MouseEvent<HTMLImageElement>, po
 
         target.src = like;
     }
+};
+
+export const isLikedByUser = (likedBy: LikesFields[], userId: string) => {
+    if (!userId) return;
+    const res = likedBy.filter(like => like.user === userId);
+    return res.length > 0;
 };

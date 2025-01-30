@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {AppDispatch} from "../store/store.ts";
 import {fetchUser} from "../store/actionCreators/userActionCreators.ts";
 import {UserState} from "../store/types/userTypes.ts";
-import {axiosInstance} from "./apiCalls.ts";
+import {axiosInstance} from "./apiCalls";
 import {AxiosError} from "axios";
 
 export const useScreenWidth = () => {

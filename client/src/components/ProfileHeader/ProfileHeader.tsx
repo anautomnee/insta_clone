@@ -5,7 +5,7 @@ import {AppDispatch, RootState} from "../../store/store.ts";
 import website_link from "../../assets/website_link.svg";
 import {selectIfFollowing} from "../../store/selectors/userSelector.ts";
 import {User} from "../../store/types/instanceTypes.ts";
-import {followUser, unfollowUser} from "../../uitls/apiCalls.ts";
+import {followUser, unfollowUser} from "../../utils/apiCalls/userApi.ts";
 import {addFollowing, removeFollowing} from "../../store/slices/userSlice.ts";
 
 export const ProfileHeader= ({user, profileUsername}: {user: User | null, profileUsername: string}) => {

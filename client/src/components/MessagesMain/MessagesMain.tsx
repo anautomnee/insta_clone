@@ -3,8 +3,9 @@ import {Link, useOutletContext, useParams} from "react-router";
 import { io } from "socket.io-client";
 import {Chat, CondensedUser, Message} from "../../store/types/instanceTypes.ts";
 import {UserState} from "../../store/types/userTypes.ts";
-import {backendURL, fetchChat} from "../../uitls/apiCalls.ts";
-import {formatMessageTime} from "../../uitls/utils.ts";
+import {fetchChat} from "../../utils/apiCalls/chatApi.ts";
+import {backendURL} from "../../utils/apiCalls"
+import {formatMessageTime} from "../../utils/formatFunctions.ts";
 
 const TEN_MINUTES = 10 * 60 * 1000;
 

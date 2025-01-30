@@ -4,8 +4,8 @@ import {Link, Outlet, useParams} from "react-router";
 import {RootState} from "../../store/store.ts";
 import {UserState} from "../../store/types/userTypes.ts";
 import {Chat} from "../../store/types/instanceTypes.ts";
-import {fetchUserChats} from "../../uitls/apiCalls.ts";
-import {formatDate} from "../../uitls/utils.ts";
+import {fetchUserChats} from "../../utils/apiCalls/chatApi.ts";
+import {formatDate} from "../../utils/formatFunctions.ts";
 
 export const MessagesPage = () => {
     const [chats, setChats] = useState<Chat[]>([]);

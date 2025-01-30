@@ -1,8 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 import {Link} from "react-router";
-import { getRandomPosts} from "../../uitls/apiCalls.ts";
+import { getRandomPosts} from "../../utils/apiCalls/postApi.ts";
 import {Post} from "../../store/types/instanceTypes.ts";
-import useScrollToTop from "../../uitls/customHooks.ts";
+import useScrollToTop from "../../utils/customHooks.ts";
 import {SearchPageSkeleton} from "../../skeletons/SearchPageSkeleton.tsx";
 
 export const ExplorePage = () => {

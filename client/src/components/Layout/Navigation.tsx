@@ -9,7 +9,7 @@ import default_profile_pic from "../../assets/default_profile_pic.png";
 import {CreatePost} from "../CreatePost/CreatePost.tsx";
 import {NotificationsModal} from "../NotificationsModal/NotificationsModal.tsx";
 import {SearchModal} from "../SearchModal/SearchModal.tsx";
-import {useFetchUserAfterReload} from "../../uitls/customHooks.ts";
+import {useFetchUserAfterReload} from "../../utils/customHooks.ts";
 
 export const Navigation = () => {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);

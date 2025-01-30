@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {EditProfileData, fetchUserData} from "../types/userTypes.ts";
-import {axiosInstance} from "../../uitls/apiCalls.ts";
+import {axiosInstance} from "../../utils/apiCalls";
 
 export const fetchUser = createAsyncThunk(
     'user/fetchUser',

@@ -14,9 +14,9 @@ import {SearchModal} from "../../components/SearchModal/SearchModal.tsx";
 import {NotificationsModal} from "../../components/NotificationsModal/NotificationsModal.tsx";
 import {PhotoCarousel} from "../../components/PhotoCarousel/PhotoCarousel.tsx";
 import {HomePageSkeleton} from "../../skeletons/HomePageSkeleton.tsx";
-import {fetchFollowedPosts} from "../../uitls/apiCalls.ts";
-import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
-import {onLikePostFromHomepage} from "../../uitls/likeFunctions.ts";
+import {fetchFollowedPosts} from "../../utils/apiCalls/postApi.ts";
+import {formatDate} from "../../utils/formatFunctions.ts";
+import {onLikePostFromHomepage, isLikedByUser} from "../../utils/likeFunctions.ts";
 
 export const HomePage = () => {
     const [posts, setPosts] = useState<Post[]>([]);

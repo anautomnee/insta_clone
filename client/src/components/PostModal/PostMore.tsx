@@ -1,6 +1,6 @@
 import {Dispatch, MouseEvent, RefObject, SetStateAction, useState} from "react";
 import {useLocation, useParams} from "react-router";
-import {deletePost} from "../../uitls/apiCalls.ts";
+import {deletePost} from "../../utils/apiCalls/postApi.ts";
 
 type EditPostProps = {
     modalRef: RefObject<HTMLDivElement>;

@@ -1,5 +1,3 @@
-import {LikesFields} from "../store/types/instanceTypes.ts";
-
 export const formatDate = (date: Date | null | undefined ) => {
     const now = Date.now();
     if (date) {
@@ -58,12 +56,4 @@ export const formatMessageTime = (date: string | Date): string => {
         const year = d.getFullYear();
         return `${day < 10 ? `0${day}` : day}.${month < 10 ? `0${month}` : month}.${year}, ${formattedHours}:${formattedMinutes}`;
     }
-};
-
-
-
-export const isLikedByUser = (likedBy: LikesFields[], userId: string) => {
-    if (!userId) return;
-    const res = likedBy.filter(like => like.user === userId);
-    return res.length > 0;
 };

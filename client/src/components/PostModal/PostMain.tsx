@@ -10,9 +10,10 @@ import like from "../../assets/reactions/like.svg";
 import comment from "../../assets/reactions/comment.svg";
 import smiley from "../../assets/smiley.png";
 import {Post} from "../../store/types/instanceTypes.ts";
-import {onLikeComment, onLikePost} from "../../uitls/likeFunctions.ts";
-import {addComment} from "../../uitls/apiCalls.ts";
-import {formatDate, isLikedByUser} from "../../uitls/utils.ts";
+import {onLikeComment, onLikePost} from "../../utils/likeFunctions.ts";
+import {addComment} from "../../utils/apiCalls/commentApi.ts";
+import {formatDate} from "../../utils/formatFunctions.ts";
+import {isLikedByUser} from "../../utils/likeFunctions.ts";
 
 type PostMainProps = {
     post: Post | null;

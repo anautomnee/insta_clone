@@ -1,6 +1,6 @@
 import {Dispatch, MouseEvent, SetStateAction, useState} from "react";
 import {Notification} from "../../store/types/instanceTypes.ts";
-import {formatDate} from "../../uitls/utils.ts";
+import {formatDate} from "../../utils/formatFunctions.ts";
 import arrow_back from '../../assets/arrow_back.svg'
 
 type NotificationsModalProps = {

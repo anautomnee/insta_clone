@@ -6,7 +6,7 @@ import {User} from "../../store/types/instanceTypes.ts";
 import {PostModal} from "../../components/PostModal/PostModal.tsx";
 import {ProfileHeader} from "../../components/ProfileHeader/ProfileHeader.tsx";
 import {ProfilePageSkeleton} from "../../skeletons/ProfilePageSkeleton.tsx";
-import {fetchProfile} from "../../uitls/apiCalls.ts";
+import {fetchProfile} from "../../utils/apiCalls/userApi.ts";
 
 export const ProfilePage = () => {
     const {username} = useParams();

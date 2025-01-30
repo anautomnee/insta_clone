@@ -6,7 +6,7 @@ import cancel from '../../assets/search_cancel.svg';
 import arrow_back from "../../assets/arrow_back.svg";
 import {CondensedUser} from "../../store/types/instanceTypes.ts";
 import {addSearchResult} from "../../store/slices/userSlice.ts";
-import {addUserToSearchResults, getAllUsersForSearch} from "../../uitls/apiCalls.ts";
+import {addUserToSearchResults, getAllUsersForSearch} from "../../utils/apiCalls/userApi.ts";
 
 type SearchModalProps = {
     isSearchOpen: boolean;

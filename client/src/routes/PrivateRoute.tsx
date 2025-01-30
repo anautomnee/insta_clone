@@ -1,6 +1,6 @@
 import {ReactNode, useEffect, useState} from "react";
 import {Navigate, useLocation} from "react-router";
-import {checkJWTToken} from "../uitls/apiCalls.ts";
+import {checkJWTToken} from "../utils/apiCalls/authApi.ts";
 
 export const PrivateRoute = ({ children }: { children: ReactNode }) => {
     const [isNotAuthenticated, setIsNotAuthenticated] = useState<boolean | null>(null);
