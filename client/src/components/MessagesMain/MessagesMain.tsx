@@ -80,6 +80,7 @@ export const MessagesMain = () => {
         if (e.key === "Enter") {
             if (!receiver) return;
             socket.emit("sendMessage", {authorId: user._id, receiverId: receiver._id, content: newMessage});
+            console.log(newMessage)
             setNewMessage("");
         }
     }

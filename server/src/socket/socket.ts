@@ -16,13 +16,14 @@ export const initializeSocket = (server: http.Server) => {
         // Assign the user to a room based on their ID
         socket.on("joinRoom", (userId: string) => {
             socket.join(userId);
-            //console.log(`User ${userId} joined their room: ${userId}`);
+            console.log(`User ${userId} joined their room: ${userId}`);
         });
 
         // Listen for a new message event
         socket.on("sendMessage", async ({ authorId, receiverId, content }) => {
             try {
                 // Find or create the chat between users
+                console.log("sendMessage", content);
                 let chat = await Chat.findOne({
                     $or: [
                         { user1: authorId, user2: receiverId },
