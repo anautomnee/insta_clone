@@ -4,16 +4,17 @@ import { io } from "socket.io-client";
 import {Chat, CondensedUser, Message} from "../../store/types/instanceTypes.ts";
 import {UserState} from "../../store/types/userTypes.ts";
 import {fetchChat} from "../../utils/apiCalls/chatApi.ts";
-import {backendURL} from "../../utils/apiCalls"
 import {formatMessageTime} from "../../utils/formatFunctions.ts";
 
 const TEN_MINUTES = 10 * 60 * 1000;
 
-const socket = io(backendURL, {
+const socket = io("https://insta-clone-71mt.onrender.com", {
     autoConnect: true, // Allow automatic connection
     reconnection: true, // Enable reconnection
     reconnectionAttempts: 5, // Limit the number of reconnection attempts
-    reconnectionDelay: 1000, // Delay between attempts in ms
+    reconnectionDelay: 1000, // Delay between attempts in ms,
+    withCredentials: true,
+    transports: ["websocket"],
 });
 
 type OutletContextType = {

@@ -5,7 +5,7 @@ import Message from "../db/models/Message";
 import 'dotenv/config';
 
 export const initializeSocket = (server: http.Server) => {
-    const origin = process.env.CLIENT_URL || "http://localhost:5173";
+    const origin = "http://localhost:5173";
     console.log("initializing socket", origin);
     const io = new Server(server, {
         cors: {
