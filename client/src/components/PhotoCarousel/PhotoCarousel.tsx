@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {PreviewType} from "../CreatePost/CreatePost.tsx";
+import {PreviewType} from "../../utils/customHooks.ts";
 
 type PhotoCarouselProps = {
     photos: string[];

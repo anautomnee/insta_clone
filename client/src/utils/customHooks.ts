@@ -6,7 +6,6 @@ import {fetchUser} from "../store/actionCreators/userActionCreators.ts";
 import {UserState} from "../store/types/userTypes.ts";
 import {axiosInstance} from "./apiCalls";
 import {AxiosError} from "axios";
-import {PreviewType} from "../components/CreatePost/CreatePost.tsx";
 import {EmojiClickData} from "emoji-picker-react";
 import {createPost} from "../store/actionCreators/postActionCreators.ts";
 import {addPost} from "../store/slices/userSlice.ts";
@@ -46,6 +45,13 @@ export const useFetchUserAfterReload = (user: UserState): void => {
 
         checkToken();
     }, [user, dispatch, navigate]);
+};
+
+
+export type PreviewType = {
+    url: string;
+    width: number;
+    height: number;
 };
 
 export const useCreatePost = (userId: string | null, setIsCreatePostOpen: (isOpen: boolean) => void) => {
