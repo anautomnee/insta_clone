@@ -5,8 +5,7 @@ import Message from "../db/models/Message";
 import 'dotenv/config';
 
 export const initializeSocket = (server: http.Server) => {
-    const origin = "http://localhost:5173";
-    console.log("initializing socket", origin);
+    const origin = process.env.CLIENT_URL || "http://localhost:5173";
     const io = new Server(server, {
         cors: {
             origin: origin,
@@ -19,14 +18,14 @@ export const initializeSocket = (server: http.Server) => {
         // Assign the user to a room based on their ID
         socket.on("joinRoom", (userId: string) => {
             socket.join(userId);
-            console.log(`User ${userId} joined their room: ${userId}`);
+            //console.log(`User ${userId} joined their room: ${userId}`);
         });
 
         // Listen for a new message event
         socket.on("sendMessage", async ({ authorId, receiverId, content }) => {
             try {
                 // Find or create the chat between users
-                console.log("sendMessage", content);
+                //console.log("sendMessage", content);
                 let chat = await Chat.findOne({
                     $or: [
                         { user1: authorId, user2: receiverId },

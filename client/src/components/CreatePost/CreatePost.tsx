@@ -33,7 +33,6 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
     const [previews, setPreviews] = useState<PreviewType[]>([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
     const [creating, setCreating] = useState<boolean>(false);
-    //console.log(previews)
 
     const { status, error } = useSelector((state: RootState) => state.post);
 
@@ -82,8 +81,8 @@ export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen
             });
 
             Promise.all(previewPromises).then((previews) => {
-                console.log(previews); // Array of objects with url, width, and height
                 setPreviews(previews); // Update previews state with image data
+                setValue('photos', files)
             });
         }
     };
