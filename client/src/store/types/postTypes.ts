@@ -21,7 +21,7 @@ export type PostState = {
 }
 
 export type CreatePost = {
-    photos: FileList,
+    photos: File[],
     content: string,
 }
 
