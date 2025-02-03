@@ -1,14 +1,12 @@
-import {ChangeEvent, MouseEvent, useState} from "react";
+import {MouseEvent} from "react";
 import {Link} from "react-router";
-import Picker, {EmojiClickData} from "emoji-picker-react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../store/store.ts";
+import Picker from "emoji-picker-react";
 import upload from '../../assets/upload.png';
 import arrow_back from '../../assets/arrow_back.svg';
 import smiley from '../../assets/smiley.png';
-import {createPost} from "../../store/actionCreators/postActionCreators.ts";
-import {addPost} from "../../store/slices/userSlice.ts";
 import {PhotoCarousel} from "../PhotoCarousel/PhotoCarousel.tsx";
+import {useCreatePost} from "../../utils/customHooks.ts";
+
 interface CreatePostProps {
     userId: string | null;
     profileImage: string;
@@ -16,97 +14,28 @@ interface CreatePostProps {
     setIsCreatePostOpen: (isOpen: boolean) => void;
 }
 
-type PreviewType = {
-    url: string;
-    width: number;
-    height: number;
-};
-
 export const CreatePost = ({ userId, username, profileImage, setIsCreatePostOpen }: CreatePostProps) => {
-    const [content, setContent] = useState<string>("");
-    const [photos, setPhotos] = useState<File[]>([]);
-    const [previews, setPreviews] = useState<PreviewType[]>([]);
-    const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
-    const [creating, setCreating] = useState<boolean>(false);
-
-    const { status, error } = useSelector((state: RootState) => state.post);
-    const dispatch = useDispatch<AppDispatch>();
-
-    // Handle file input change
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files ? Array.from(e.target.files) : [];
-
-        if (files.length > 0) {
-            const fileArray = Array.from(files);
-            const previewPromises = fileArray.map((file) => {
-                return new Promise<PreviewType>((resolve) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-
-                    reader.onload = () => {
-                        const img = new Image();
-                        img.src = reader.result as string;
-
-                        img.onload = () => {
-                            resolve({
-                                url: reader.result as string,
-                                width: img.width,
-                                height: img.height,
-                            });
-                        };
-                    };
-                });
-            });
-
-            Promise.all(previewPromises).then((previews) => {
-                setPreviews(previews); // Update previews state
-                setPhotos(fileArray); // Update photos state
-            });
-        }
-    };
-
-    // Handle emoji click
-    const onEmojiClick = (emojiData: EmojiClickData) => {
-        setContent((prevContent) => prevContent + emojiData.emoji); // Append emoji to content
-    };
+    const {
+        content,
+        setContent,
+        photos,
+        previews,
+        showEmojiPicker,
+        setShowEmojiPicker,
+        creating,
+        status,
+        error,
+        handleFileChange,
+        onEmojiClick,
+        handleSubmit,
+        resetForm,
+    } = useCreatePost(userId, setIsCreatePostOpen);
 
     // Close the create post modal
     const closeCreatePost = (e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         setIsCreatePostOpen(false);
         resetForm();
-    };
-
-    // Reset form state
-    const resetForm = () => {
-        setContent("");
-        setPhotos([]);
-        setPreviews([]);
-    };
-
-    // Handle form submission
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (content.length === 0 || photos.length === 0) {
-            alert("Please add content and photos before submitting.");
-            return;
-        }
-
-        setCreating(true);
-
-        try {
-            const result = await dispatch(createPost({ photos, content })).unwrap();
-            if (result && userId) {
-                dispatch(addPost(result));
-                setIsCreatePostOpen(false);
-                resetForm();
-            }
-        } catch (error) {
-            console.error("Unexpected error:", error);
-        } finally {
-            setCreating(false);
-        }
     };
 
     return (
