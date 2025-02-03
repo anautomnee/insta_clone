@@ -38,35 +38,44 @@ export const createPost = async (req: Request, res: Response) => {
 
         const uploadedPhotos = await Promise.all(
             (req as MulterRequest).files.map(async (file) => {
-                // Analyze image orientation
-                const { width, height } = await sharp(file.buffer).metadata();
-                if (!height || !width) return;
-                const isVertical = height > width;
+                try {
+                    // Get image metadata
+                    const { width, height } = await sharp(file.buffer).metadata();
+                    if (!width || !height) return;
 
-                // Set aspect ratio based on orientation
-                const aspectRatio = isVertical ? "3:4" : "16:9";
+                    let transformation = {}; // Default to no transformation
 
-                return new Promise<string>((resolve, reject) => {
-                    cloudinary.uploader.upload_stream(
-                        {
-                            folder: 'posts',
-                            transformation: [
-                                { aspect_ratio: aspectRatio, crop: "fill", gravity: "auto" },
-                            ],
-                        },
-                        (error, result) => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                if (!result) return;
-                                resolve(result.secure_url); // Get the secure URL
+                    // Determine aspect ratio
+                    if (width / height >= 1.5) {
+                        // Width is much larger -> Apply 16:9
+                        transformation = { aspect_ratio: "16:9", crop: "fill", gravity: "auto" };
+                    } else if (height / width >= 1.5) {
+                        // Height is much larger -> Apply 3:4
+                        transformation = { aspect_ratio: "3:4", crop: "fill", gravity: "auto" };
+                    }
+
+                    return new Promise<string>((resolve, reject) => {
+                        cloudinary.uploader.upload_stream(
+                            {
+                                folder: "posts",
+                                transformation: [transformation], // Apply transformation only if necessary
+                            },
+                            (error, result) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    if (!result) return;
+                                    resolve(result.secure_url); // Return uploaded URL
+                                }
                             }
-                        }
-                    ).end(file.buffer); // Upload the buffer data
-                });
+                        ).end(file.buffer); // Upload the buffer data
+                    });
+                } catch (error) {
+                    console.error("Image processing error:", error);
+                    return null;
+                }
             })
         );
-
 
         // Save uploaded photo URLs to the `Photo` collection
         const photoDocuments = await Promise.all(
